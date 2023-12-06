@@ -143,6 +143,9 @@ code {
     display: block;
 }
 
+.code-snippet {
+    font-size: small;
+}
 
 @media screen and (max-width: 800px) {
     .menu {
