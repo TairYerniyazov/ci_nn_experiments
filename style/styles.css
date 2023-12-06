@@ -1,0 +1,165 @@
+body, p, h1 {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica", sans-serif;
+}
+
+.wrapper {
+    max-width: 800px;
+    padding: 0px 20px 0 20px;
+    margin: 0 auto;
+}
+
+header {
+    color: white;
+    background-color: #333333;
+}
+
+.main_header h1 {
+    margin-top: 30px;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.main_header p {
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.main_header {
+    padding: 20px;
+    display: flex;
+}
+
+.main_header div {
+    padding: 30px;
+    vertical-align: middle;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    padding: 0 20px 0 20px 0;
+}
+
+.menu p {
+    margin: 5px;
+    width: 120px;
+    text-align: center;
+    border: 3px solid white;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.menu-item-on {
+    background-color: white;
+    font-weight: bold;
+    color: #333333;
+}
+
+.menu-item-off {
+    transition-delay: 300ms;
+    transition: 300ms;
+}
+
+.menu-item-off:hover {
+    background-color: white;
+    color: #333333;
+    transition: 300ms;
+}
+
+.content p {
+    margin-top: 20px;
+}
+
+code {
+    font-family: monospace;
+    max-width: inherit;
+    font-size: inherit;
+ 
+            background: #ffeff0;
+            word-wrap: break-word;
+            box-decoration-break: clone;
+            padding: .1rem .3rem .2rem;
+            border-radius: .2rem;
+        
+}
+
+.code-snippet {
+    margin: 30px 0 30px 0;
+    max-width: inherit;
+}
+
+.plot {
+    display: flex;
+    max-width: 800px;
+    max-height: 400px;
+    margin: 40px 0 40px 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.plot img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+#main_logo {
+    max-width: 80px;
+}
+
+#main_logo img {
+    width: 100%;
+}
+
+#main_logo {
+    padding: 30px 0 0 0;
+}
+
+.page {
+    display: none;
+}
+
+#main-page {
+    display: block;
+}
+
+
+@media screen and (max-width: 800px) {
+    .menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 10px;
+    }
+    .menu p {
+        margin: 0px;
+        width: 100%;
+        text-align: center;
+        border: 1px solid white;
+        border-radius: 0px;
+    }
+
+    header .wrapper {
+        padding: 0px;
+    }
+
+    header .menu {
+        padding-bottom: 0px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .main_header div {
+        padding: 10px;
+    }
+
+    #main_logo {
+      padding: 10px 5px 0 0;  
+    }
+}

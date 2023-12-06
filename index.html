@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NN Experiments</title>
+    <link rel="stylesheet" href="style/styles.css">
+    <link rel="stylesheet" href="style/prism.css">
+</head>
+
+<body>
+    <header>
+        <div class="wrapper">
+            <div class="main_header">
+                <div id="main_logo"><img src="img/uj_logo_white.png"></img></div>
+                <div>
+                    <h1>Inteligencja obliczeniowa</h1>
+                    <p>Grupa 1.</p>
+                </div>
+            </div>
+            <div class="menu">
+                <p class="menu-item-on menu-item">Zadania</p>
+                <p class="menu-item-off menu-item">Piotr Dziedzic</p>
+                <p class="menu-item-off menu-item">Hubert Musiał</p>
+                <p class="menu-item-off menu-item">Hubert Pamuła</p>
+                <p class="menu-item-off menu-item">Tair Yerniyazov</p>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <!-- GŁÓWNA STRONA -->
+        <div class="wrapper page" id="main-page">
+            <h3>Zadania</h2>
+            <p>🔲 2 sieci SOM;
+            <br>🔲 2 sieci FF;
+            
+                <h3>Przykład sprawozdania</h2>
+
+            <p> Sieć Kohonena, inaczej SOM (z ang. Self Organizing Map – mapa samoorganizująca) – rodzaj sztucznej sieci neuronowej
+                realizującej uczenie nienadzorowane. Zaprezentowana po raz pierwszy w 1982 roku przez fińskiego uczonego Teuvo
+                Kohonena.
+
+            <p> Jest to przykład sieci konkurencyjnej, a więc takiej, w której sygnały wyjściowe neuronów porównuje się ze sobą w
+                celu
+                wskazania zwycięzcy (zwycięski neuron może np. wskazywać klasyfikację sygnału wejściowego). Sieć wykorzystuje
+                koncepcję
+                sąsiedztwa. W wyniku uczenia tej sieci powstaje mapa topologiczna, w której neurony reprezentujące podobne klasy
+                powinny
+                znajdować się blisko siebie. Dzięki temu możliwe jest zaobserwowanie pewnych relacji pomiędzy klasami. Aprioryczna
+                interpretacja tej mapy nie jest możliwa, gdyż sieć uczy się bez nauczyciela. Na podstawie analizy konkretnych
+                przykładów
+                danych wejściowych zazwyczaj można jednak ustalić, jakie znaczenie mają poszczególne rejony tej mapy.</p>
+            
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                            # Importing some of the libraries needed
+                            import pandas as pd                     # dataframes
+                            import numpy as np                      # math operations
+                            import matplotlib.pyplot as plt         # plotting charts
+                            
+                            # Loading the initial data set using the URL adres
+                            from pathlib import Path                # for handling paths on different devices
+                            from zipfile import ZipFile             # for extracting data from zip archives
+                            import gdown # downloading data from Google Drive
+                        </code></pre>
+            </div>
+            
+            <p>Sieć uczona jest za pomocą algorytmu iteracyjnego. Na początku wagom każdego z neuronów przypisywane są losowe
+                wartości.
+                Następnie dla każdego obiektu ze zbioru uczącego wykonywane są następujące kroki:
+            <p>Wybór zwycięskiego neuronu. Jest to ten neuron, którego wagi są najbardziej zbliżone do wektora wejściowego (wektora
+                cech obiektu). Modyfikacja wag zwycięskiego neuronu w taki sposób, aby jeszcze bardziej upodobnić go do wektora
+                wejściowego.
+                Modyfikacja wag neuronów sąsiednich względem zwycięskiego, wyznaczonych na podstawie topologii sieci (w przypadku
+                zastosowania metody „zwycięzca bierze wszystko” ten krok jest pomijany).
+            
+            <div class="plot"><img src="img/example.png"></img></div>
+        </div>
+
+        <!-- STRONA PIOTRA D. -->
+        <div class="wrapper page">
+            <h3>FFNN - Palmer Penguin</h3>
+            <div class="plot"><img src="img/penguins_logo.png"></img></div>
+        </div>
+
+
+        <!-- STRONA HUBERTA M. -->
+        <div class="wrapper page">
+            <h3>SOM - Palmer Penguin</h3>
+            <div class="plot"><img src="img/penguins_logo.png"></img></div>
+        </div>
+
+
+        <!-- STRONA HUBERTA P. -->
+        <div class="wrapper page">
+            <h3>FFNN - Heart Disease</h3>
+            <div class="plot"><img src="img/hear_logo.png"></img></div>
+        </div>
+
+        <!-- STRONA TAIRA Y. -->
+        <div class="wrapper page">
+            <h3>FFNN - FFNN Disease</h3>
+            <div class="plot"><img src="img/hear_logo.png"></img></div>
+        </div>
+
+        
+    </div>
+    <script src="script/script.js"></script>
+    <script src="script/prism.js"></script>
+</body>
+
+</html>
