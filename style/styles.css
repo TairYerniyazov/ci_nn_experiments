@@ -5,6 +5,10 @@ html, body {
     min-height: 100%;
 }
 
+body{
+    font-family: 'Playfair Display', sans-serif;
+}   
+
 p, h1 {
     margin: 0;
     padding: 0;
@@ -91,6 +95,7 @@ footer p {
 
 .content {
     min-height: 80%;
+    color: #333333;
 }
 
 .content p {
@@ -112,7 +117,7 @@ code {
     display: flex;
     max-width: 800px;
     max-height: 400px;
-    margin: 40px 0 40px 0;
+    margin: 40px auto;
     overflow: hidden;
     text-align: center;
 }
@@ -145,6 +150,22 @@ code {
 
 .code-snippet {
     font-size: small;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
+.menu span {
+    line-height: 34px;
+}
+
+.menu span:hover {
+    color: wheat;
 }
 
 @media screen and (max-width: 800px) {

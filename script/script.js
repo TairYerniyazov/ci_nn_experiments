@@ -23,3 +23,12 @@ menu_items.forEach(function(item, item_index) {
         this.setAttribute("class", "menu-item-on menu-item");
     });
 });
+
+// Changing fonts
+var listOfFonts = ["'Playfair Display', sans-serif", "'Nova Square', sans-serif", "'Open Sans', sans-serif"];
+var next_font = 0;
+
+document.getElementById("font-changer").addEventListener('click', function() {
+    next_font = (next_font + 1) % listOfFonts.length;
+    document.getElementsByTagName('body')[0].style.fontFamily = listOfFonts[next_font];
+})

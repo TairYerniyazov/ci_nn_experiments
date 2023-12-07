@@ -9,13 +9,10 @@
     <link rel="icon" href="img/favicon.ico">
     <link rel="stylesheet" href="style/styles.css">
     <link rel="stylesheet" href="style/prism.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nova+Square">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-            /* font-size: 48px; */
-        }
-    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
@@ -34,17 +31,14 @@
                 <p class="menu-item-off menu-item">Hubert Musiał</p>
                 <p class="menu-item-off menu-item">Hubert Pamuła</p>
                 <p class="menu-item-off menu-item">Tair Yerniyazov</p>
+                <span class="material-symbols-outlined" id="font-changer">custom_typography</span>
             </div>
         </div>
     </header>
     <div class="content">
         <!-- GŁÓWNA STRONA -->
         <div class="wrapper page" id="main-page">
-            <h3>Zadania</h2>
-            <p>🔲 2 sieci SOM;
-            <br>🔲 2 sieci FF;
-            
-                <h3>Przykład sprawozdania</h2>
+            <h3>Przykład sprawozdania</h2>
 
             <p> Sieć Kohonena, inaczej SOM (z ang. Self Organizing Map – mapa samoorganizująca) – rodzaj sztucznej sieci neuronowej
                 realizującej uczenie nienadzorowane. Zaprezentowana po raz pierwszy w 1982 roku przez fińskiego uczonego Teuvo
@@ -72,6 +66,12 @@
                             from pathlib import Path                # for handling paths on different devices
                             from zipfile import ZipFile             # for extracting data from zip archives
                             import gdown # downloading data from Google Drive
+
+                            # Importing Keras&TF
+                            import tensorflow as tf
+                            from tf import keras
+
+                            print("The model is ready.")
                         </code></pre>
             </div>
             
@@ -90,6 +90,8 @@
         <!-- STRONA PIOTRA D. -->
         <div class="wrapper page">
             <h3>FFNN - Palmer Penguin</h3>
+            <p>Data were collected and made available by Dr. Kristen Gorman and the Palmer Station,
+                Antarctica LTER, a member of the Long Term Ecological Research Network.</p>
             <div class="plot"><img src="img/penguins_logo.png"></img></div>
         </div>
 
@@ -97,6 +99,8 @@
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
             <h3>SOM - Palmer Penguin</h3>
+            <p>Data were collected and made available by Dr. Kristen Gorman and the Palmer Station, 
+            Antarctica LTER, a member of the Long Term Ecological Research Network.</p>
             <div class="plot"><img src="img/penguins_logo.png"></img></div>
         </div>
 
@@ -104,13 +108,21 @@
         <!-- STRONA HUBERTA P. -->
         <div class="wrapper page">
             <h3>FFNN - Heart Disease</h3>
-            <div class="plot"><img src="img/hear_logo.png"></img></div>
+            <p>This database contains 76 attributes, but all published experiments refer to using a subset of 14 of them.
+                In particular, the Cleveland database is the only one that has been used by ML researchers to date.
+                The "goal" field refers to the presence of heart disease in the patient. It is integer valued from 0
+                (no presence) to 4. Experiments with the Cleveland database have concentrated on simply attempting to
+                distinguish presence (values 1,2,3,4) from absence (value 0).
         </div>
 
         <!-- STRONA TAIRA Y. -->
         <div class="wrapper page">
-            <h3>FFNN - FFNN Disease</h3>
-            <div class="plot"><img src="img/hear_logo.png"></img></div>
+            <h3>SOM - Heart Disease</h3>
+            <p>This database contains 76 attributes, but all published experiments refer to using a subset of 14 of them.  
+            In particular, the Cleveland database is the only one that has been used by ML researchers to date.  
+            The "goal" field refers to the presence of heart disease in the patient.  It is integer valued from 0 
+            (no presence) to 4. Experiments with the Cleveland database have concentrated on simply attempting to 
+            distinguish presence (values 1,2,3,4) from absence (value 0).
         </div>
 
         
