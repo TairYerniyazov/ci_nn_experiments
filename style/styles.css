@@ -11,6 +11,10 @@ a {
     font-weight: bold;
 }
 
+ol li {
+    padding: 5px 0 5px 0;
+}
+
 code {
     font-weight: bold;
     font-family: monospace;

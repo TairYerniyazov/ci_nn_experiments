@@ -38,53 +38,34 @@
     <div class="content">
         <!-- GŁÓWNA STRONA -->
         <div class="wrapper page" id="main-page">
-            <h3>Przykład sprawozdania</h2>
-
-            <p> Sieć Kohonena, inaczej SOM (z ang. Self Organizing Map – mapa samoorganizująca) – rodzaj sztucznej sieci neuronowej
-                realizującej uczenie nienadzorowane. Zaprezentowana po raz pierwszy w 1982 roku przez fińskiego uczonego Teuvo
-                Kohonena.
-
-            <p> Jest to przykład sieci konkurencyjnej, a więc takiej, w której sygnały wyjściowe neuronów porównuje się ze sobą w
-                celu
-                wskazania zwycięzcy (zwycięski neuron może np. wskazywać klasyfikację sygnału wejściowego). Sieć wykorzystuje
-                koncepcję
-                sąsiedztwa. W wyniku uczenia tej sieci powstaje mapa topologiczna, w której neurony reprezentujące podobne klasy
-                powinny
-                znajdować się blisko siebie. Dzięki temu możliwe jest zaobserwowanie pewnych relacji pomiędzy klasami. Aprioryczna
-                interpretacja tej mapy nie jest możliwa, gdyż sieć uczy się bez nauczyciela. Na podstawie analizy konkretnych
-                przykładów
-                danych wejściowych zazwyczaj można jednak ustalić, jakie znaczenie mają poszczególne rejony tej mapy.</p>
-            
-            <div class="code-snippet">
-                <pre class="line-numbers"><code class="language-python">
-                            # Importing some of the libraries needed
-                            import pandas as pd                     # dataframes
-                            import numpy as np                      # math operations
-                            import matplotlib.pyplot as plt         # plotting charts
-                            
-                            # Loading the initial data set using the URL adres
-                            from pathlib import Path                # for handling paths on different devices
-                            from zipfile import ZipFile             # for extracting data from zip archives
-                            import gdown # downloading data from Google Drive
-
-                            # Importing Keras&TF
-                            import tensorflow as tf
-                            from tf import keras
-
-                            print("The model is ready.")
-                        </code></pre>
-            </div>
-            
-            <p>Sieć uczona jest za pomocą algorytmu iteracyjnego. Na początku wagom każdego z neuronów przypisywane są losowe
-                wartości.
-                Następnie dla każdego obiektu ze zbioru uczącego wykonywane są następujące kroki:
-            <p>Wybór zwycięskiego neuronu. Jest to ten neuron, którego wagi są najbardziej zbliżone do wektora wejściowego (wektora
-                cech obiektu). Modyfikacja wag zwycięskiego neuronu w taki sposób, aby jeszcze bardziej upodobnić go do wektora
-                wejściowego.
-                Modyfikacja wag neuronów sąsiednich względem zwycięskiego, wyznaczonych na podstawie topologii sieci (w przypadku
-                zastosowania metody „zwycięzca bierze wszystko” ten krok jest pomijany).
-            
-            <div class="plot"><img src="img/example.png"></img></div>
+            <h2>Zadania</h2>
+            <p>Dla obu wybranych zbiorów danych należy zaproponować sieć Feedforward oraz sieć SOM.
+                Zadanie polega na przeprowadzeniu, opisaniu i podsumowaniu 4 eksperymentów.
+            </p>
+            <ol>
+                <li><b>Opis zbiorów danych:</b> należy scharakteryzować zbiory danych:
+                    <ul>
+                        <li>Palmer Penguins;</li>
+                        <li>Heart Disease;</li>
+                    </ul>
+                <li><b>Przygotowanie danych:</b> 
+                    <ul>
+                        <li>Opis wstępnej obróbki danych i sposobu podania ich sieci/kodowania - wpływ na liczbę neuronów.</li>
+                        <li>Podział na zbiory: treningowy, testowy i walidujący (jak i dlaczego tak). 
+                            Być może konieczne jest uwzględnienie rodzaju
+                            sieci. Jeśli tak to dlaczego, jeśli nie to dlaczego?</li>
+                    </ul>
+                </li>
+                <li><b>Struktura sieci:</b> przedstawić wybrane na początku konfiguracje obu sieci (dla obu problemów). 
+                    Wszystkie decyzje uzasadnić.</li>
+                <li><b>Uczenie sieci:</b> wskazać wybrane algorytmy i parametry uczenia sieci. Przedstawić osiągane rezultaty. 
+                    Decyzje uzasadnić.</li>
+                <li><b>Wyniki</b>: ocenić osiągnięte wyniki tj. dokładność i precyzję, złożoność i zbieżność (wykład). Tam, gdzie się da
+                przedstawić i zinterpretować krzywą ROC.</li>
+                <li><b>Dostrajanie parametrów:</b> krytyczna część prac, czyli co, czemu i jak było zmieniane, jakie dawało to efekty – dlaczego?</li>
+                <li><b>Podsumowanie:</b> na zakończenie należy podsumować otrzymane wyniki dla 4 sieci. Zestawić je parami: raz dla danych, raz dla
+                rodzaju sieci i wyciągnąć wnioski z otrzymanych wyników.</li>
+            </ol>
         </div>
 
         <!-- STRONA PIOTRA D. -->
