@@ -133,11 +133,12 @@ footer p {
 
 .plot {
     display: flex;
-    max-width: 800px;
-    max-height: 400px;
-    margin: 40px auto;
+    max-width: inherit;
+    max-height: 600px;
+    margin: 20px auto;
     overflow: hidden;
     text-align: center;
+    padding: 20px;
 }
 
 .plot img {
