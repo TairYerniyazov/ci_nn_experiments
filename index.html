@@ -165,12 +165,6 @@
                 Name: num, dtype: float64
                 </pre>
             </div>
-            <p>Oczywiscie, niektóre atrybute są bardziej istotne, inne mniej. Teraz
-                nie możemy stwierdzać nic poza określeniem współczynnika korelacji.
-                Jeśli połączymy razem wartości opisujące wiek oraz puls pacjenta, uzyskamy nietrywialny wykres,
-                na którym dobrze widać medianę próbek względem stosunku tych liczb:
-            </p>
-            <div class="plot"><img src="img/som_hd/correlation_1.png"></img></div>
             <p>Złą wiadomością jest to, że zbiór, który i tak zawiera za dużo atrybutów i za małą
                 liczbę instancji, posiada rekordy cechujące się obecnością brakujących wartości
                 w poszczególnych kolumnach (<code>ca</code> oraz <code>thal</code>). Mamy 2 rekordy z
@@ -221,6 +215,12 @@
                     <li><u>thal</u> - thal = niedokrwistość tarczowatokrwinkowa (trzy typy).</li>
                 </ul>
             </p>
+            <p>Oczywiscie, niektóre atrybute są bardziej istotne, inne mniej. Teraz
+                nie możemy stwierdzać nic poza określeniem współczynnika korelacji.
+                Jeśli połączymy razem wartości opisujące wiek oraz puls pacjenta, uzyskamy nietrywialny wykres,
+                na którym dobrze widać medianę próbek względem stosunku tych liczb:
+            </p>
+            <div class="plot"><img src="img/som_hd/correlation_1.png"></img></div>
             <h2>Przygotowanie danych</h2>
             <p>W tym rozdziale będziemy pokazywali kluczowe kawałki kodu. Całość można znaleźć tu:
                 <a href="#">notatnik Jupyter (Google Colab)</a>
