@@ -237,6 +237,9 @@
             </p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
+                    # Rzutowanie wszystkich kolumn na liczby zmiennoprzecinkowe
+                    X = X.astype("float")
+
                     # Imputacja wartości
                     from sklearn.impute import SimpleImputer
                     import numpy as np
@@ -246,6 +249,66 @@
                     imputed_X_columns = imputer.transform(X[['ca', 'thal']])
                     
                     X.loc[:, ('ca', 'thal')] = imputed_X_columns
+                </code></pre>
+            </div>
+            <p>Kolejna rzecz, którą musimy załatwić, polega na przerzucenia wartości przewidywanego
+                atrybutu na liczby 0 i 1, gdyż wszystko powyżej 0 wskazuje na obecność choroby i nie 
+                dodaje żadnego innego znaczenia. Zróbmy to teraz:
+            </p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    # Zamiana przewidywanego atrybutu na wartości binarne zgodnie z opisem zbioru
+                    y.loc[y['num'] > 0, 'num'] = 1.0
+                </code></pre>
+            </div>
+            </p>Następnie na naszej liście zadań do zrobienia mamy oczwywiście przetworzenie atrybutów
+            kategorialnych. Tak jak wspomnieliśmy wcześniej, niektóre z nich są binarne, więc z nimi
+            nie będzie żadnego problemu, gdyż mieszczą się w przedziale od 0 do 1. Inne mają porządek
+            semantyczny i określają stopień konkretnej cechy, więc też je możemy bezpiecznie zostawić, a
+            później standaryzować jako atrybuty numeryczne. Zostaje nam problem tych atrybutów, które
+            są stricte kategorialne, tzn. nie mają żadnego porządku semantycznego i pokazują typy/kategorii
+            konkretnych cech.
+            <p>Możemy te atrybutu (<code>cp</code> oraz <code>thal</code>) rozbić na kilka kolumn.
+            Każda taka kolumna będzie binarna i będzie określała występowanie poszczególnej kategorii.
+            Mówiąc inaczej, kodujemy ten wcześniejszy atrybut kategorialny metodą gorącej jedynki
+            (z ang. <b>One-hot Encoding</b>). Poniżej przedstawiony jest kawałek kodu, który to robi
+            dla atrybutu <code>cp</code>:
+            </p> 
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    X_cp = X[['cp']]
+                    
+                    # Zakodujmy najpierw "gorącojedynkowo" wszystkie cztery typy 'cp'
+                    from sklearn.preprocessing import OneHotEncoder
+                    
+                    cat_encoder = OneHotEncoder()
+                    X_cp_1hot = cat_encoder.fit_transform(X_cp)
+
+                    # Teraz mamy dodatkowe 4 kolumny (każda odpowiada za obecność 
+                    # określonego rodzaju bólu w klatce piersiowej):
+                    print(X_cp_1hot.toarray())
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    [[1. 0. 0. 0.]
+                    [0. 0. 0. 1.]
+                    [0. 0. 0. 1.]
+                    ...
+                    [0. 0. 0. 1.]
+                    [0. 1. 0. 0.]
+                    [0. 0. 1. 0.]]
+                </pre>
+                <pre class="line-numbers"><code class="language-python">
+                    # Pierwotne etykiety (numery typu bólu, 1-4) mamy wciąż pod ręką
+                    cat_encoder.categories_
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    [array([1., 2., 3., 4.])]
+                </pre>
+                <pre class="line-numbers"><code class="language-python">
+                    # Dodajmy teraz te typy zakodowane binarnie do naszych danych i wyrzućmy kolumnę 'cp'
+                    for i in range(4):
+                        X[f"cp_type_{i + 1}"] = X_cp_1hot.toarray()[:, i].reshape(-1, 1)
+                    X.drop(columns=["cp"], inplace=True)
                 </code></pre>
             </div>
         </div>
