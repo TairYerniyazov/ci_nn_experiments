@@ -37,7 +37,7 @@
     </header>
     <div class="content">
         <!-- GŁÓWNA STRONA -->
-        <div class="wrapper page" id="main-page">
+        <div class="wrapper page" >
             <h3>Przykład sprawozdania</h2>
 
             <p> Sieć Kohonena, inaczej SOM (z ang. Self Organizing Map – mapa samoorganizująca) – rodzaj sztucznej sieci neuronowej
@@ -116,13 +116,105 @@
         </div>
 
         <!-- STRONA TAIRA Y. -->
-        <div class="wrapper page">
-            <h3>SOM - Heart Disease</h3>
-            <p>This database contains 76 attributes, but all published experiments refer to using a subset of 14 of them.  
-            In particular, the Cleveland database is the only one that has been used by ML researchers to date.  
-            The "goal" field refers to the presence of heart disease in the patient.  It is integer valued from 0 
-            (no presence) to 4. Experiments with the Cleveland database have concentrated on simply attempting to 
-            distinguish presence (values 1,2,3,4) from absence (value 0).
+        <div class="wrapper page" id="main-page">
+            <h2>Opis zbioru danych</h2>
+            <p>Zbiór danych <b><a href="https://archive.ics.uci.edu/dataset/45/heart+disease">
+            "Heart Disease (Cleveland Clinic)"</a></b> dotyczy pacjentów, część z których ma chorobę serca.
+            Mamy do dyspozycji 303 instancje zawierające 14 atrybutów numerycznych i kategorialnych.
+            W trakcie dokonywania krótkiej analizy (<a href='https://colab.research.google.com/drive/1dRjVmMjxnA88s9SXnwcu2DvbYx6zUVKu?usp=sharing'>notatnik Google Colab</a>) podczas pracy naszego zespołu nad pierwszą częścią
+            projektu zauważyliśmy dosyć nierównomierny rozkład poszczególnych atrybutów. Na szczęście
+            dla wielu kolumn mamy rozkłady zbliżone do normalnych, więc po standaryzacji danych cały zbiór
+            będzie wyglądał sensownie z punktu widzenia trenowania sieci. 
+            <div class="row-with-images">
+                <div><img src="img/som_hd/dataset_distribution_1.png"></img></div>
+                <div><img src="img/som_hd/dataset_distribution_2.png"></img></div>
+                <div><img src="img/som_hd/dataset_distribution_3.png"></img></div>
+            </div>
+            Korzystając ze standardowych narzędzi dostępnych w bibliotece Pandas możemy łatwo
+            uzyskać pełną macierz korelacji cech z przewidywaną wartością. Powinniśmy pamiętać
+            przede wszystkim, że taki przegląd pozwala zaledwie na zapoznanie się ze zbiorem i może
+            posłużyć nam jako wsparcie heurystyczne podczas pracy nad tzw. inżynierią cech
+            (z ang. <b>Feature Engineering</b>). Współczynnik korelacji nie gwarantuje nam poprawnego
+            odzwierciedlenia relacji nieliniowych, które z pewnością występują w naszym złożonym zbiorze.
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    # Pobranie repozytorium
+                    !pip install ucimlrepo
+
+                    # Zapis danych w postaci pandas dataframes
+                    X = heart_diseases.data.features
+                    y = heart_diseases.data.targets
+
+                    # Wyliczenie macierzy korelacji
+                    corr_matrix = heart_diseases.corr()
+                    corr_matrix["num"].sort_values(ascending=False)
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                num 1.000000
+                oldpeak 0.504092
+                cp 0.407075
+                exang 0.397057
+                slope 0.377957
+                sex 0.224469
+                age 0.222853
+                restecg 0.183696
+                trestbps 0.157754
+                chol 0.070909
+                fbs 0.059186
+                thalach -0.415040
+                Name: num, dtype: float64
+                </pre>
+            </div>
+            <p>Złą wiadomością jest to, że zbiór, który i tak zawiera za dużo atrybutów i za małą
+                liczbę instancji, posiada rekordy cechujące się obecnością brakujących wartości
+                w poszczególnych kolumnach (<code>ca</code> oraz <code>thal</code>). Mamy 2 rekordy z
+                z wartościami <code>NaN</code> (Not a Number) w kolumnie <code>ca</code> oraz 4 rekordy, które
+                są wypełniony tymi samymi pseudo-wartościami w kolumnie <code>thal</code>.
+            </p>
+            <p>Dobrą wiadomością jest stosunek liczby osób chorych do zdrowych. Mamy
+                prawie że idealny rozbicie na <b>2 połówki (54% zdrowych i 46% chorych)</b>, więc
+                nie musimy zastanawiać się nad metodami redukcji uprzedzeń występujących w zbiorze
+                danych treningowych (idealnie oczywiście jest mieć w pełnie równomierny rozkład
+                wartości przewidywanych w klasyfikacji binarnej, gdyż łatwiej będzie określić
+                najniższy próg dokładności).
+            </p>
+            <p>Rozważmy teraz opis każdego z atrybutów danych wejściowych, które zostały dołączone
+                do plików źródłowych autorów tego zbioru, gdyż w kolejnym etapie nam to się przyda:
+            </p>
+            <p>
+                <b>Numeryczne</b> (w tym te, które mają ograniczony zakres):
+                <ul>
+                    <li><u>age</u> - wiek;</li>
+                    <li><u>trestbps</u> - spoczynkowe ciśnienie krwi;</li>
+                    <li><u>chol</u> - cholesterol w surowic;y</li>
+                    <li><u>thalach</u> - osiągnięte maksymalne tętno;</li>
+                    <li><u>oldpeak</u>- obniżenie odcinka ST wywołane wysiłkiem fizycznym w 
+                        stosunku do odpoczynku;</li>
+                    <li><u>cp</u> - liczba głównych naczyń (0-3) pokolorowanych metodą 
+                        fluorosopii.</li>
+                </ul>
+
+                <b>Kategorialne biarne</b>:
+                <ul>
+                    <li><u>sex</u> - płeć;</li>
+                    <li><u>fbs</u> - cukier we krwi na czczo;</li>
+                    <li><u>exang</u> - dławica piersiowa wywołana wysiłkiem fizycznym.</li>
+                </ul>
+
+                <b>Kategorialne uporządkowane</b>:
+                <ul>
+                    <li><u>restecq</u> - spoczynkowe wyniki elektrokardiograficzne 
+                        (0 - norma, 1 - anomalia, 2 - hipertrofia);</li>
+                    <li><u>slope</u> - nachylenie szczytowego odcinka ST podczas wysiłku 
+                        (0 - wznoszące się, 2 - płaskie, 3 - opadający).</li>
+                </ul>
+    
+                <b>Stricte kategorialne</b>:
+                <ul>
+                    <li><u>cp</u> - rodzaj bólu w klatce piersiowej (cztery typy);</li>
+                    <li><u>thal</u> - thal = niedokrwistość tarczowatokrwinkowa (trzy typy).</li>
+                </ul>
+            </p>
         </div>
 
         

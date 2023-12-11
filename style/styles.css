@@ -5,6 +5,19 @@ html, body {
     min-height: 100%;
 }
 
+a {
+    color: inherit;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+code {
+    font-weight: bold;
+    font-family: monospace;
+    max-width: inherit;
+    font-size: inherit;
+}
+
 body{
     font-family: 'Playfair Display', sans-serif;
 }   
@@ -28,6 +41,7 @@ header {
 footer {
     color: white;
     background-color: #333333;
+    margin-top: 20px;
 }
 
 footer p {
@@ -102,15 +116,15 @@ footer p {
     margin-top: 20px;
 }
 
-code {
-    font-family: monospace;
-    max-width: inherit;
-    font-size: inherit;
-}
-
 .code-snippet {
     margin: 30px 0 30px 0;
     max-width: inherit;
+}
+
+.code-snippet code {
+    margin: 30px 0 30px 0;
+    max-width: inherit;
+    font-weight: normal;
 }
 
 .plot {
@@ -168,6 +182,25 @@ code {
     color: wheat;
 }
 
+.row-with-images {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.row-with-images div {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.row-with-images img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
 @media screen and (max-width: 800px) {
     .menu {
         display: flex;
@@ -190,6 +223,15 @@ code {
 
     header .menu {
         padding-bottom: 0px;
+    }
+
+    .row-with-images {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .row-with-images img {
+        max-width: 80%;
     }
 }
 
