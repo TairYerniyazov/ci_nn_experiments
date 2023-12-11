@@ -121,7 +121,7 @@
             <p>Zbiór danych <b><a href="https://archive.ics.uci.edu/dataset/45/heart+disease">
             "Heart Disease (Cleveland Clinic)"</a></b> dotyczy pacjentów, część z których ma chorobę serca.
             Mamy do dyspozycji 303 instancje zawierające 14 atrybutów numerycznych i kategorialnych.
-            W trakcie dokonywania krótkiej analizy (<a href='https://colab.research.google.com/drive/1dRjVmMjxnA88s9SXnwcu2DvbYx6zUVKu?usp=sharing'>notatnik Google Colab</a>) podczas pracy naszego zespołu nad pierwszą częścią
+            W trakcie dokonywania krótkiej analizy (<a href='https://colab.research.google.com/drive/1dRjVmMjxnA88s9SXnwcu2DvbYx6zUVKu?usp=sharing'>notatnik Jupyter, Google Colab)</a> podczas pracy naszego zespołu nad pierwszą częścią
             projektu zauważyliśmy dosyć nierównomierny rozkład poszczególnych atrybutów. Na szczęście
             dla wielu kolumn mamy rozkłady zbliżone do normalnych, więc po standaryzacji danych cały zbiór
             będzie wyglądał sensownie z punktu widzenia trenowania sieci. 
@@ -165,6 +165,12 @@
                 Name: num, dtype: float64
                 </pre>
             </div>
+            <p>Oczywiscie, niektóre atrybute są bardziej istotne, inne mniej. Teraz
+                nie możemy stwierdzać nic poza określeniem współczynnika korelacji.
+                Jeśli połączymy razem wartości opisujące wiek oraz puls pacjenta, uzyskamy nietrywialny wykres,
+                na którym dobrze widać medianę próbek względem stosunku tych liczb:
+            </p>
+            <div class="plot"><img src="img/som_hd/correlation_1.png"></img></div>
             <p>Złą wiadomością jest to, że zbiór, który i tak zawiera za dużo atrybutów i za małą
                 liczbę instancji, posiada rekordy cechujące się obecnością brakujących wartości
                 w poszczególnych kolumnach (<code>ca</code> oraz <code>thal</code>). Mamy 2 rekordy z
@@ -215,9 +221,34 @@
                     <li><u>thal</u> - thal = niedokrwistość tarczowatokrwinkowa (trzy typy).</li>
                 </ul>
             </p>
+            <h2>Przygotowanie danych</h2>
+            <p>W tym rozdziale będziemy pokazywali kluczowe kawałki kodu. Całość można znaleźć tu:
+                <a href="#">notatnik Jupyter (Google Colab)</a>
+            </p>
+            <p>Przede wszystkim powinniśmy jakoś postąpić z brakującymi wartościami. Ze zwględu na to,
+                że każdy rekord zawiera 13 cech, to możemy te dwie znane nam kolumny douzupełnić wartością
+                średnią. Nie stać nas na to, żeby wyrzucić te rekordy, bo i tak mamy zaledwie
+                303 instancje, ani nie stać nas na wyrzucenie całych tych kolumn, gdyż już na etapie
+                sprawdzenie zależności liniowych (korelacji) z atrybutem przewidywanym wykazały się
+                dosyć poważnie. Uwaga: dozupełniać chcemy teraz, zanim zaczniemy dzielić zbiór na zbiory testowy,
+                treningowy i walidacyjny. W żadnym przypadku nie patrzymy na parametry statystyczne, tylko
+                mechanicznie rozrzucamy te liczby, by nie podglądać danych, które później zostaną częścią
+                zbioru testowego:
+            </p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    # Imputacja wartości
+                    from sklearn.impute import SimpleImputer
+                    import numpy as np
+                    
+                    imputer = SimpleImputer(missing_values = np.NaN, strategy="median")
+                    imputer.fit(X[['ca', 'thal']])
+                    imputed_X_columns = imputer.transform(X[['ca', 'thal']])
+                    
+                    X.loc[:, ('ca', 'thal')] = imputed_X_columns
+                </code></pre>
+            </div>
         </div>
-
-        
     </div>
 
     <footer>
