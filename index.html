@@ -186,7 +186,7 @@
                 <ul>
                     <li><u>age</u> - wiek;</li>
                     <li><u>trestbps</u> - spoczynkowe ciśnienie krwi;</li>
-                    <li><u>chol</u> - cholesterol w surowic;y</li>
+                    <li><u>chol</u> - cholesterol w surowicy</li>
                     <li><u>thalach</u> - osiągnięte maksymalne tętno;</li>
                     <li><u>oldpeak</u>- obniżenie odcinka ST wywołane wysiłkiem fizycznym w 
                         stosunku do odpoczynku;</li>
@@ -311,6 +311,90 @@
                     X.drop(columns=["cp"], inplace=True)
                 </code></pre>
             </div>
+            <p>Podzielmy teraz nasze dane na trzy zbiory: <b>10% testowy, 90% treningowy (w 
+                tym 20% walidacyjny)</b>. Dodatkowo,
+                zastosujmy standaryzację danych (oprócz atrybutów binarnych):
+            <div class="code-snippet"><pre class="line-numbers"><code class="language-python">
+                from sklearn.model_selection import train_test_split
+        
+                # Podział na zbióry: testowy, treningowy
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.10, random_state=42)
+                
+                # Standaryzacja
+                from sklearn.preprocessing import StandardScaler
+
+                num_columns = ['age', 'trestbps', 'chol', 'restecg', 'thalach', 'oldpeak', 'slope', 'ca']
+                cat_columns = ['sex', 'fbs', 'exang', 'cp_type_1', 'cp_type_2', 'cp_type_3', 'cp_type_4', 'thal_3', 'thal_6', 'thal_7']
+                X_train_cat = X_train.loc[:, cat_columns]
+                X_train_num = X_train.loc[:, num_columns]
+
+                std_scaler = StandardScaler()
+                X_train_num_scaled = std_scaler.fit_transform(X_train_num)
+                X_train = np.concatenate((X_train_num_scaled, X_train_cat.to_numpy()), axis=1)
+                
+                y_train = y_train.to_numpy()
+            </code></pre></div>
+            <p>Jeśli chodzi o dane do walidacji, to sensownym rozwiązaniem wydaje się być
+                stosowanie K-składową walidacji krzyżowej (z ang. <b>K-Fold Cross Validation</b>):
+                <div class="code-snippet"><pre class="line-numbers"><code class="language-python">
+                    k_folds = 5
+                    num_val_samples = len(X_train) // k_folds
+                    num_last_val_samples = len(X_train) % k_folds
+                    
+                    X_validation_sets = []
+                    y_validation_sets = []
+                    
+                    X_train_sets = []
+                    y_train_sets = []
+                    
+                    for i in range(k_folds):
+                        print('Processing fold #', i)
+                        X_validation_sets.append(X_train[i * num_val_samples: (i + 1) * num_val_samples])
+                        y_validation_sets.append(y_train[i * num_val_samples: (i + 1) * num_val_samples])
+                        X_train_sets.append(np.concatenate([X_train[:i * num_val_samples],
+                        X_train[(i + 1) * num_val_samples:]], 
+                        axis=0))
+                        y_train_sets.append(np.concatenate([y_train[:i * num_val_samples],
+                        y_train[(i + 1) * num_val_samples:]],
+                        axis=0))
+                    
+                        # Dodajemy resztę do ostaniego zbioru walidacyjnego
+                        if i == (k_folds - 1):
+                        X_validation_sets[k_folds - 1] = np.concatenate((X_validation_sets[k_folds - 1], X_train[- num_last_val_samples:]),
+                        axis=0)
+                        y_validation_sets[k_folds - 1] = np.concatenate((y_validation_sets[k_folds - 1], y_train[- num_last_val_samples:]),
+                        axis=0)
+                </code></pre></div>
+            <p>Teraz bodajże wszystkie atrybuty mają wartości przedstawione numerycznie, 
+                a te, które określają kategorie, mają albo porządek, albo są zakodowane binarnie. 
+                Zatem po standaryzacji danych, będziemy mieli zachowane zależności i odległości
+                tych danych. Czas na to, żeby uznać zbiór za przygotowany do naszych eksperymentów.
+            </p>
+            <h2>Struktura sieci SOM</h2>
+            <p>Wiemy, oczywiście, że mamy do czynienia z problemem klasyfikacji, więc moglibyśmy 
+                od razu w przestrzeni neuronów ustawić tylko dwie jednostki (jedna odpowiadałaby
+                wówczas za osób chorych, inny za zdrowych). Jednak nie będzie to
+                prawdziwa SOM, tylko zwyczajne wykonanie algorytmu LVQ, stosując uczenie nadzorowane.
+        
+            <p>Spróbujmy zatem postąpić inaczej. Wyobraźmy sobie, że nie wiemy, że mamy dane naszych 
+                pacjęntów i nie wiemy, czy wgl oni się wyodrębniają w jakieś osobne kategorie czy nie. 
+                Wtedy mamy uczenie nienadzorowane, więc klastry "osoby chore" i "osoby zdrowe" 
+                powstaną naturalnie (co najmniej w teorii, bo możliwe, że sięc nam zamiast tego np.
+                rozdzieli ludzi na kobiet i mężczyzn, ale to jest mniej prawdopodobne, bo 17 kolumn 
+                wskazują prawdopodobnie na to, że płeć nie stanowi za dużą różnicę w przypadku danych
+                medycznych dotyczących chorób serca).
+
+            <p><b>Architektura sieci:<b><p>
+            <ul>
+                <li><u>Siatka</u> - 2D, 9x9;</li>
+                <li><u>Liczba neuronów</u> - 81 (zasada heurystyczna dla treningowego zbioru danych
+                    o rozmiarze 272 rekordy);</li>
+                <li><u>Wymiar wektorów wag</u> - 18 (co odpowiada liczbie atrybutów);</li>
+                <li><u>Odległość</u> - metryka Euklidesowa</li>
+                <li><u>Liczenie sąsiedztwa</u> - metryka Manhattan;</li>
+                <li><u>Redukcja współczynników</u> - zależy od maksymalnych wartości oraz całkowitej
+                liczby iteracji.</li>
+            </ul>
         </div>
     </div>
 
