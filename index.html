@@ -565,6 +565,7 @@
                         <div><img src="img/som_hd/5.png"></img></div>
                         <div><img src="img/som_hd/6.png"></img></div>
                     </div>
+                    <h2>Wyniki</h2>
                     <p>Możemy zobaczyć końcowy wynik (po wcześniejszej walidacji, oczywiście, którą przedstawimy w kolejnej części):</p>
                     <div class="code-snippet">
                         <pre class="line-numbers"><code class="language-python">
@@ -579,8 +580,25 @@
                                 accuracy = accuracy_score(ground_truth_values, predictions)
                                 print(f"\tDokładność (zbiór testowy): {accuracy}\n")
                         </code></pre>
+                        <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                            Dokładność (zbiór testowy): 0.8064516129032258
+                        </pre>
                     </div>
-                    <p style="font-size: large;"><b>Dokładność (zbiór testowy): 80,65%</b></p>
+                    <h2>Dostrajanie parametrów</h2>
+                    <p>Stosujemy algorytm zmniejszenia współczynnika uczenia się oraz dystansu. Prędkość zależy
+                        od liczby iteracji. Zatem zakodowane te dwa hyperparametry w tę liczbę, która zmienia nam
+                        wyniki walidacji i pozwala wykryć, kiedy należy się zatrzymać, by uniknąć nadmiernego dopasowania.
+                    </p> 
+                    <div class="plot plot-small-width"><img src="img/som_hd/7.png"></img></div>
+                    <p>Możemy też specjalnie użyć za dużej siatki. Wtedy zobaczymy dużo neuronów, które wciąż mają
+                        losowe wagi, a więc uznawane są za niezainicjalizowane. Widać również, że z punktu widzenia
+                        kwantyzacji macierz odległości próbuje tworzyć za dużo klastrów.
+                    </p>
+                    <div class="row-with-images">
+                        <div><img src="img/som_hd/8.png"></img></div>
+                        <div><img src="img/som_hd/9.png"></img></div>
+                        <div><img src="img/som_hd/10.png"></img></div>
+                    </div>
                 </div>
         </div>
     </div>
