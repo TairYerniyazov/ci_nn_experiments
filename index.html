@@ -130,6 +130,292 @@
             korelacji jest zawsze symetryczna, gdyż odzwierciedla relacje liniowe, a więc można zawsze to odwrócić (prawie, ale nie ma to
             wpływu na korelację, gdyż gdy jedna z kolumn jest wartością stałą, to w dwóch miejscach się ustawia 0). 
             Wdzłuż przekątnej są same jedynki, gdyż każdy atrybut ma 100% korelacji z samym sobą z definicji.</p>
+            <h2>Przygotowanie danych</h2>
+            <p>W tym rozdziale będziemy pokazywali kluczowe kawałki kodu. Całość można znaleźć tu:
+                <a href="#">notatnik Jupyter (Google Colab)</a>
+            </p>
+            <p>Zaczniemy od przetworzenie atrybutów
+                kategorycznych. Mamy tutaj atrybuty, które
+                są stricte kategoryczne (sex, species), tzn. nie mają żadnego porządku semantycznego i pokazują typy/kategorii
+                konkretnych cech.</p>
+            <p>Możemy te atrybuty (<code>sex</code> oraz <code>species</code>) rozbić na kilka kolumn.
+                Każda taka kolumna będzie binarna i będzie określała występowanie poszczególnej kategorii.
+                Mówiąc inaczej, kodujemy ten wcześniejszy atrybut kategorialny metodą gorącej jedynki
+                (z ang. <b>One-hot Encoding</b>). Poniżej przedstawiony jest kawałek kodu, który za to odpowiada
+            </p>
+            <pre class="line-numbers"><code class="language-python">
+                            # Zmiana kategorycznych wartosci na numeryczne
+            
+                            # Kodowanie danych kategorycznych (one-hot encoding)
+                            label_encoder = LabelEncoder()
+            
+                            # One-hot encoding dla kolumny 'species'
+                            palmer_penguins = pd.get_dummies(palmer_penguins, columns=['species'], prefix=['species'])
+            
+                            # One-hot encoding dla kolumny 'sex'
+                            palmer_penguins = pd.get_dummies(palmer_penguins, columns=['sex'], prefix='sex')
+            
+                            print(palmer_penguins)
+                            </code></pre>
+            <div class="plot"><img src="img/ff_penguins/encoded.png"></img></div>
+            <p>Teraz powinniśmy się zastanowić jak postąpić z brakującymi wartościami. Możemy nieznane nam atrybuty
+                douzupełnić wartością średnią. Nie stać nas na to, żeby wyrzucić te rekordy, bo i tak mamy zaledwie
+                344 instancje. Uwaga: dozupełniać chcemy teraz, zanim zaczniemy dzielić zbiór na zbiory testowy,
+                treningowy i walidacyjny. W żadnym przypadku nie patrzymy na parametry statystyczne, tylko
+                mechanicznie rozrzucamy te liczby, by nie podglądać danych, które później zostaną częścią
+                zbioru testowego:
+            </p>
+            <pre class="line-numbers">
+                            <code class="language-python">
+                        # Sprawdzenie, ile jest brakujących danych w każdej kolumnie
+                        brakujace_dane = palmer_penguins.isnull().sum()
+            
+                        # Wyświetlenie liczby brakujących danych w każdej kolumnie
+                        print(brakujace_dane)
+                            </code>
+                        </pre>
+            <div class="plot"><img src="img/ff_penguins/missing_values.png"></img></div>
+            <pre class="line-numbers">
+                            <code class="language-python">
+                        # Uzupełnianie wartości nieokreślonych średnią
+            
+                        
+                        # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
+                        srednia_bill_length_mm = palmer_penguins['bill_length_mm'].mean()
+            
+                        # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
+                        palmer_penguins['bill_length_mm'].fillna(srednia_bill_length_mm, inplace=True)
+            
+                        # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
+                        srednia_bill_depth_mm = palmer_penguins['bill_depth_mm'].mean()
+            
+                        # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
+                        palmer_penguins['bill_depth_mm'].fillna(srednia_bill_depth_mm, inplace=True)
+            
+                        # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
+                        srednia_flipper_length_mm   = palmer_penguins['flipper_length_mm'].mean()
+            
+                        # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
+                        palmer_penguins['flipper_length_mm'].fillna(srednia_flipper_length_mm, inplace=True)
+            
+                        # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
+                        srednia_body_mass_g = palmer_penguins['body_mass_g'].mean()
+            
+                        # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
+                        palmer_penguins['body_mass_g'].fillna(srednia_body_mass_g, inplace=True)
+                            </code>
+                        </pre>
+            <p>Podzielmy teraz nasze dane na trzy zbiory: <b>10% testowy, 90% treningowy (w
+                    tym 20% walidacyjny)</b>. Dodatkowo,
+                zastosujmy standaryzację danych
+            </p>
+            <pre class="line-numbers"><code class="language-python">
+                        X = palmer_penguins.drop(["species_Adelie", "species_Chinstrap", "species_Gentoo"], axis=1)  # Wektory cech
+                        y = palmer_penguins[["species_Adelie", "species_Chinstrap", "species_Gentoo"]]  # Wektory klas
+                        
+                        # Podział danych na zbiór treningowy (90%) i testowy (10%)
+                        X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+                        
+                        # Kolejny podział zbioru X_temp na zbiór walidacyjny (20%) i treningowy (80%)
+                        X_train, X_valid, y_train, y_valid = train_test_split(X_temp, y_temp, test_size=0.2, random_state=42)
+                        
+                        scaler = StandardScaler()
+                        
+                        # Standaryzacja zbioru treningowego
+                        X_train_scaled = scaler.fit_transform(X_train)
+                        X_train_scaled_df = pd.DataFrame(X_train_scaled, columns = X_train.columns)
+                        
+                        # Standaryzacja zbioru walidacyjnego
+                        X_valid_scaled = scaler.transform(X_valid)
+                        X_valid_scaled_df = pd.DataFrame(X_valid_scaled, columns = X_valid.columns)
+                        
+                        # Standaryzacja zbioru testowego
+                        X_test_scaled = scaler.transform(X_test)
+                        X_test_scaled_df = pd.DataFrame(X_test_scaled, columns = X_test.columns)
+                </code></pre>
+            <p>Teraz wszystkie atrybuty mają wartości przedstawione numerycznie,
+                a te, które określają kategorie, mają albo porządek, albo są zakodowane binarnie.
+                Zatem po standaryzacji danych, będziemy mieli zachowane zależności i odległości
+                tych danych. Czas na to, żeby uznać zbiór za przygotowany do naszych eksperymentów.
+            </p>
+            <h2>Struktura sieci FeedForward</h2>
+            <p>Sieć FeedForward (inaczej nazywana sztucznym neuronem, jednokierunkową siecią neuronową lub siecią jednokierunkową)
+                to jedna z podstawowych architektur sztucznych sieci neuronowych. Jest to rodzaj sieci neuronowej, w której
+                informacja
+                przemieszcza się tylko w jednym kierunku, od warstwy wejściowej do warstw ukrytych i na koniec do warstwy
+                wyjściowej,
+                bez żadnych cykli czy sprzężeń zwrotnych.
+            </p>
+            
+            <div class="plot"><img src="img/ff_penguins/siec_feed_forward.webp"></img></div>
+            <pre class="line-numbers">
+                            <code class="language-python">
+                                # Sieć Feed Forward
+                                model = Sequential()
+            
+                                # Dodanie warstw ukrytych
+                                model.add(Dense(10, input_dim=X_train_scaled.shape[1], activation='relu'))
+            
+                                # Dodanie warstwy wyjściowej - zakładamy trzy klasy (species_Adelie, species_Chinstrap, species_Gentoo)
+                                model.add(Dense(3, activation='softmax'))
+                            </code>
+                        </pre>
+            <p>Struktura sieci:
+            <p><code>Warstwa wejściowa (Input Layer):</code></p>
+            <p>Zdefiniowana jako input_dim=X_train_scaled.shape[1],
+                gdzie X_train_scaled.shape[1] to liczba cech w danych wejściowych po standaryzacji.
+                To oznacza, że każdy neuron w tej warstwie odpowiada jednej zmiennej wejściowej w danych.
+                Funkcja aktywacji: Brak funkcji aktywacji. Warstwa wejściowa jest liniową reprezentacją danych wejściowych.
+            </p>
+            <p><code>Pierwsza warstwa ukryta (Hidden Layer 1):</code></p>
+            <p>
+                Liczba neuronów: 10. Jest to arbitralnie wybrana liczba neuronów, które mają uczyć się nieliniowych zależności w
+                danych.
+                Funkcja aktywacji: ReLU (Rectified Linear Unit). ReLU jest często używana w warstwach ukrytych i ma postać f(x) =
+                max(0, x),
+                co oznacza, że jest nieliniowa i pomaga modelowi uczyć się nieliniowych wzorców.
+            </p>
+            <p><code>Warstwa wyjściowa (Output Layer):</code></p>
+            <p>
+                Liczba neuronów: 3. Liczba neuronów w warstwie wyjściowej odpowiada liczbie klas lub etykiet, które model ma
+                przewidywać (species_Adelie, species_Chinstrap, species_Gentoo).
+                Funkcja aktywacji: Softmax. Funkcja softmax jest często używana w warstwie wyjściowej do rozwiązywania problemów
+                klasyfikacji wieloklasowej.
+                Przekształca wyniki na prawdopodobieństwa przynależności do każdej z klas.
+            </p>
+            </p>
+            <p>Wizualizacja modelu z pomocą biblioteki keras</p>
+            <pre class="line-numbers">
+                            <code class="language-python">
+                                model.summary()
+                                keras.utils.plot_model(model, to_file='test.png', show_shapes=True)
+                            </code>
+                        </pre>
+            <div class="plot"><img src="img/ff_penguins/model_visualization.png"></img></div>
+            <div class="plot"><img src="img/ff_penguins/keras_visualization.png"></img></div>
+            <h2>Uczenie sieci</h2>
+            <p>Zanim przystąpimy do procesu uczenia się sieci, chcemy najpierw model "skompilować" tzn. skonfigurować go w
+                odpowiedni sposób aby był już gotowy do procesu uczenia się. Określimy jak model ma być trenowany i
+                jakie metryki zostaną obliczane podczas treningu</p>
+            <p><code>loss</code></p>
+            <p>Określa funkcję kosztu (ang. loss function), która jest używana do oceny różnicy
+                między przewidywaniami modelu a rzeczywistymi etykietami
+                (lub wartościami docelowymi). W tym przypadku używamy 'categorical_crossentropy'.
+                Funkcja ta jest często stosowana w tego typu problemach.
+            </p>
+            <p><code>kilka słów o categorical crossentropy</code></p>
+            <p>
+                Categorical Cross-Entropy (czasami nazywana po prostu Cross-Entropy lub Log-Loss) to funkcja kosztu,
+                która jest szeroko stosowana w problemach klasyfikacji wieloklasowej w uczeniu maszynowym i głębokim uczeniu.
+                Jest to miara oceny różnicy między przewidywaniami modelu a rzeczywistymi etykietami (lub wartościami docelowymi)
+                w przypadku, gdy zadanie polega na przyporządkowaniu obserwacji do jednej z wielu klas.
+            </p>
+            <p>1. Zakres i interpretacja: Funkcja kosztu Categorical Cross-Entropy jest używana w problemach klasyfikacji,
+                gdzie dane należy przyporządkować do jednej z wielu klas (np. rozpoznawanie obrazów różnych gatunków zwierząt).
+                Zakres wyników tej funkcji to liczby nieujemne, a jej wartość minimalna wynosi 0. Im niższa wartość funkcji kosztu,
+                tym lepiej model dokonuje klasyfikacji.
+            </p>
+            <p>2. Rozkład prawdopodobieństwa: Przedstawmy sobie, że mamy C klas, a model generuje rozkład prawdopodobieństwa
+                przynależności
+                obserwacji do tych klas. Oznaczmy ten rozkład jako p(y|x), gdzie y to wektor prawdopodobieństw przynależności do
+                każdej z klas.
+                Model trenowany jest tak, aby ten rozkład prawdopodobieństwa był jak najbliższy rzeczywistemu rozkładowi etykiet
+                (ground truth),
+                który możemy oznaczyć jako q(y).</p>
+            <p>3. Obliczenie kosztu: Koszt Categorical Cross-Entropy mierzy różnicę między rozkładem prawdopodobieństwa
+                przewidywanym przez model (p(y|x))
+                a rzeczywistym rozkładem (q(y)). Wzór na obliczenie kosztu dla pojedynczej próbki wygląda następująco:
+            
+                Loss = -Σ(q(y) * log(p(y|x)))
+            </p>
+            <p>W praktyce oblicza się tę sumę dla wszystkich klas (od 1 do C) i średnią po wszystkich próbkach treningowych.
+                Ten wzór jest zapisem krzyżowej entropii (cross-entropy) między dwoma rozkładami prawdopodobieństwa.
+                Warto zaznaczyć, że wartości logarytmów są zawsze ujemne, więc wartość funkcji kosztu jest nieujemna.</p>
+            <p>
+                4. Cel optymalizacji: Celem procesu treningu jest minimalizacja wartości Categorical Cross-Entropy.
+                Oznacza to, że model jest uczony w taki sposób, aby jego przewidywania (rozkład p(y|x))
+                były jak najbliższe rzeczywistym etykietom (q(y)).
+            </p>
+            <p><code>optimizer</code></p>
+            <p>Określa algorytm optymalizacji, który będzie używany do aktualizacji wag modelu podczas treningu.
+                W przykładzie 'adam' wskazuje na algorytm optymalizacji Adam.
+                Adam jest popularnym algorytmem optymalizacji stosowanym w uczeniu maszynowym,
+                który adaptacyjnie dostosowuje tempo uczenia w trakcie treningu. </p>
+            <p><code>kilka słów o algorytmie Adam</code></p>
+            <p>
+                Adam (Adaptive Moment Estimation) to zaawansowany algorytm optymalizacji gradientowej stosowany w uczeniu maszynowym
+                i głębokim uczeniu.
+                Jest popularny ze względu na swoją skuteczność w praktyce i zdolność do dostosowywania tempo uczenia w trakcie
+                treningu.
+            </p>
+            <p>
+                Adam łączy w sobie dwie innowacje w dziedzinie optymalizacji: średnią ruchomą pierwszego momentu (ang. first moment)
+                i średnią ruchomą drugiego momentu (ang. second moment). Oto podstawowe kroki, które podejmuje algorytm Adam w
+                trakcie treningu:
+            </p>
+            <p>1. Inicjalizacja zmiennych:
+            
+                Algorytm inicjuje dwie zmienne: średnią ruchomą pierwszego momentu (zwana też eksponentjalnie ważoną średnią ruchomą
+                gradientu) i średnią ruchomą drugiego momentu.
+                Te zmienne inicjalizowane są na początku treningu jako wektory zerowe.
+            </p>
+            <p>
+                2. Obliczenie gradientu:
+            
+                W każdej iteracji treningu obliczane są gradienty funkcji kosztu względem parametrów modelu.
+            </p>
+            
+            <p>
+                3. Aktualizacja pierwszego momentu (momentum):
+            
+                Pierwsza zmienna (moment) to średnia ruchoma gradientu (pierwszego momentu) z poprzednich iteracji.
+                Jest to wygładzona wersja gradientu, która pomaga modelowi uniknąć utknięcia w lokalnym minimum.
+            </p>
+            
+            <p>
+                4. Aktualizacja drugiego momentu (second moment):
+            
+                Druga zmienna (moment) to średnia ruchoma kwadratu gradientu (drugiego momentu) z poprzednich iteracji.
+                Jest to wskaźnik wariancji gradientu, co pozwala na adaptacyjne dostosowywanie tempa uczenia.
+            </p>
+            
+            <p>
+                5. Korekta obu momentów:
+            
+                Ponieważ oba momenty są inicjalizowane jako wektory zerowe, mogą być obarczone obciążeniem w kierunkach, w których
+                gradienty są rzadkie.
+                W celu korekty obciążenia algorytm Adam wykorzystuje skalowanie korekcyjne (bias correction), aby kompensować tę
+                inicjalizację.
+            </p>
+            <p>
+                6. Aktualizacja wag modelu:
+            
+                Parametry modelu (wagi) są aktualizowane na podstawie obliczonych momentów i gradientów.
+                Dzięki uwzględnieniu obu momentów, algorytm Adam dostosowuje tempo uczenia w zależności od złożoności problemu i
+                gradientów.
+            </p>
+            </p>
+            <p><code>metrics</code></p>
+            <p>Określa metryki, które zostaną obliczane podczas treningu i oceny modelu. W przykładzie używamy ['accuracy'],
+                co oznacza, że podczas treningu i oceny modelu będzie obliczana dokładność (ang. accuracy), czyli stosunek poprawnie
+                sklasyfikowanych próbek do wszystkich próbek</p>
+            <pre class="line-numbers">
+                            <code class="language-python">
+                                # Kompilacja modelu
+                                model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+                            </code>
+                        </pre>
+            <p>Teraz model jest gotowy do trenowania z użyciem danych treningowych i określonych kryteriów oceny.
+                Podczas procesu uczenia funkcja kosztu jest minimalizowana, a wag modelu są aktualizowane zgodnie z wybranym
+                algorytmem optymalizacji.
+                Metryki są obliczane, aby monitorować postęp treningu i ocenić wydajność modelu na danych walidacyjnych lub
+                testowych.</p>
+            <pre class="line-numbers">
+                            <code class="language-python">
+                                # Trenowanie modelu
+                                history = model.fit(X_train, y_train, epochs=10, batch_size=10, validation_data=(X_valid, y_valid))
+                            </code>
+                        </pre>
         </div>
 
 
