@@ -147,6 +147,14 @@ footer p {
     object-fit: contain;
 }
 
+.plot-small-height {
+    max-height: 400px;
+}
+
+.plot-small-width {
+    max-width: 800px;
+}
+
 #main_logo {
     width: 60px;
     display: flex;

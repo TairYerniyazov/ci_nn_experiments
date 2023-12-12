@@ -70,10 +70,55 @@
 
         <!-- STRONA PIOTRA D. -->
         <div class="wrapper page">
-            <h3>FFNN - Palmer Penguin</h3>
-            <p>Data were collected and made available by Dr. Kristen Gorman and the Palmer Station,
-                Antarctica LTER, a member of the Long Term Ecological Research Network.</p>
-            <div class="plot"><img src="img/penguins_logo.png"></img></div>
+            <div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
+            <h2>Opis zbioru danych</h2>
+            <p>Zbiór został stworzony i udostępniony przez dr Kristen Gorman i stację Palmer Station na Antarktydzie,
+                członka Długoterminowej Sieci Badań Ekologicznych wspieranego przez granty za pośrednictwem
+                National Science Foundation, Office of Polar Programs (NSF-OOP). Dane zebrano w ramach badań mających
+                na celu zbadanie zachowań żerowych pingwinów antarktycznych i ich związku ze zmiennością środowiska</p>
+            <p>Dane pierwotnie zamieszczono w 3 oddzielnych zbiorach. Każdy odpowiadał jednemu z trzech gatunków
+                Adelie (152 pingwiny), Gentoo (124 pingwiny) i Chinstrap 68 pingwinów. Połączono je w jeden zbiór danych
+                o pingiwnach Palmera (344 pingwiny)
+            </p>
+            <div class="plot plot-small-height"><img src="img/ff_penguins/penguins_count.png"></img></div>
+            <p>Mamy zatem 344 instacncje zawierające 8 atrybutów numerycznych i kategorycznych. Przedstawmy teraz krótko
+                każdy z nich, w celu lepszego zrozumienia zagadnienia</p>
+            <p>
+                <b>Numeryczne</b> (w tym te, które mają ograniczony zakres):
+            <ul>
+                <li><u>bill_length_mm</u> - Długość dzioba</li>
+                <li><u>bill_depth_mm</u> - Wysokość dzioba</li>
+                <li><u>flipper_length_mm</u> - Długość płetwy</li>
+                <li><u>body_mass_g</u> - Masa Ciała pingwina</li>
+                <li><u>year</u> - Rok w którym pingwin został zbadany</li>
+            </ul>
+
+            <b>Kategoryczne biarne</b>:
+            <ul>
+                <li><u>sex</u> - Płeć pingwina</li>
+            </ul>
+
+            <b>Kategoryczne</b>:
+            <ul>
+                <li><u>Species</u> - Gatunek pingwina</li>
+                <li><u>Island</u> - Wyspa którą pingwin zamieszkiwał</li>
+            </ul>
+            </p>
+            <p>Niestety 2 atrubuty "Year" oraz "Island" są dla nas bezużytczne w problemie klasyfikacji więc nie bierzemy
+                ich pod uwagę w dalszych rozważaniach. Zatem liczba naszych "features" tak naprawdę zredukowała się do 5</p>
+            <div class="plot plot-small-height"><img src="img/ff_penguins/bill_data_example.png"></img></div>
+            <p>Zbadaliśmy rozkład 3 najistotniejszych cech czyli Bill Depth, Bill Length,
+                Flipper Length i otrzymaliśmy następujące wyniki</p>
+            <div class="plot plot-small-width"><img src="img/ff_penguins/bill_depth_distribution.png"></img></div>
+            <div class="plot plot-small-width"><img src="img/ff_penguins/bill_length_distribution.png"></img></div>
+            <div class="plot plot-small-width"><img src="img/ff_penguins/flipper_length_distribution.png"></img></div>
+            <p>Korzystając ze standardowych narzędzi dostępnych w bibliotece Pandas możemy łatwo
+                uzyskać pełną macierz korelacji cech z przewidywaną wartością. Powinniśmy pamiętać
+                przede wszystkim, że taki przegląd pozwala zaledwie na zapoznanie się ze zbiorem i może
+                posłużyć nam jako wsparcie heurystyczne podczas pracy nad tzw. inżynierią cech
+                (z ang. <b>Feature Engineering</b>). Współczynnik korelacji nie gwarantuje nam poprawnego
+                odzwierciedlenia relacji nieliniowych, które z pewnością występują w naszym złożonym zbiorze.</p>
+            <div class="plot"><img src="img/ff_penguins/heatmapa.png"></img></div>
         </div>
 
 
@@ -82,7 +127,7 @@
             <h3>SOM - Palmer Penguin</h3>
             <p>Data were collected and made available by Dr. Kristen Gorman and the Palmer Station, 
             Antarctica LTER, a member of the Long Term Ecological Research Network.</p>
-            <div class="plot"><img src="img/penguins_logo.png"></img></div>
+            <div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
         </div>
 
 
