@@ -70,7 +70,7 @@
             <h2>Notatniki Jupyter</h2>
             <p>Google Colab</p>
             <ol>
-                <li><a href="#">FFNN Palmer Penguins</a></li>
+                <li><a href="https://colab.research.google.com/drive/1baNi0ls9fdn9ztc2AR0PuS4e6hMK1em0?usp=sharing">FFNN Palmer Penguins</a></li>
                 <li><a href="#">SOM Palmer Penguins</a></li>
                 <li><a href="#">FFNN Heart Disease</a></li>
                 <li><a href="https://colab.research.google.com/drive/1aFp_SQcUAk8FIX2B24jQNYbMutnl50P_?usp=sharing">SOM Heart Disease</a></li>
@@ -556,13 +556,29 @@ Test loss: 0.0098, Test accuracy: 1.0000
         </div>
         
 
-
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
-            <div class="plot plot-tiny-width"><img src="img/penguins_logo.png"></img></div>
             <h3>SOM - Palmer Penguin</h3>
+            <div class="plot plot-tiny-width"><img src="img/penguins_logo.png"></img></div>
+            <h2>Opis zbioru danych & Przygotowanie danych</h2>
+            <p>Zawarty na stronie Piotra Dziedzica
+            <h2>Struktura sieci SOM</h2>
+            Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
+            <p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z
+                generalną architekturą sieci:
+            <p><b>Architektura sieci:</b>
+            <p>
+            <ul>
+                <li><u>Siatka</u> - 2D, 9x9;</li>
+                <li><u>Liczba neuronów</u> - 81 (zasada heurystyczna dla treningowego zbioru danych
+                    o rozmiarze 272 rekordy);</li>
+                <li><u>Wymiar wektorów wag</u> - 18 (co odpowiada liczbie atrybutów);</li>
+                <li><u>Odległość</u> - metryka Euklidesowa</li>
+                <li><u>Liczenie sąsiedztwa</u> - metryka Manhattan;</li>
+                <li><u>Redukcja współczynników</u> - zależy od maksymalnych wartości oraz całkowitej
+                    liczby iteracji.</li>
+            </ul>
         </div>
-
 
         <!-- STRONA HUBERTA P. -->
         <div class="wrapper page">
