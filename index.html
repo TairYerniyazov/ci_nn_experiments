@@ -769,11 +769,11 @@
                             Dense(units3, activation='sigmoid')
                         ])
                     def compile_model(model, learning_rate, momentum):
-                        model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate, momentum), loss='binary_crossentropy', metrics=['accuracy'])
+                        model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=learning_rate, momentum=momentum), loss='binary_crossentropy', metrics=['accuracy'])
                     def fit_model(model, X_train, y_train, batch_size, epochs):
                         model.fit(X_train, y_train, batch_size, epochs, verbose=0) #validation_data=(X_val, y_val)
                     def plot_models(subplot, X_train, y_train, change, max, multiplier=1, min=0, model_type="Without dropout", title=""):
-                        step = int((max-min)/20)     # Here is the magic place where we set how long program will work
+                        step = int((max-min)/50)     # Here is the magic place where we set how long program will work
                         if(step<1): step = 1
                         batch_size = 32
                         epochs = 100
@@ -787,8 +787,8 @@
                         for i in range(min, max+1, step):
                             if "batch_size" in change: batch_size = multiplier*i
                             if "epoch" in change: epochs = multiplier*i
-                            if "learning_rate" in change: compile_model(model, multiplier*i, learning_rate)
-                            if "momentum" in change: compile_model(model, i, multiplier*momentum)
+                            if "learning_rate" in change: compile_model(model, multiplier*i, momentum)
+                            if "momentum" in change: compile_model(model, learning_rate, multiplier*momentum)
                             X, Xv, y, yv = train_test_split(X_train, y_train, test_size=(.15/.85))
                             fit_model(model, X, y, batch_size=batch_size, epochs=epochs)
                             print("Done "+str(((subplot[2]-2)/(subplot[0]*subplot[1])+(i/max+1)/(subplot[0]*subplot[1]))*100)
