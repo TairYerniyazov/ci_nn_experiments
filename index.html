@@ -579,7 +579,7 @@
 
         <!-- STRONA HUBERTA P. -->
         <div class="wrapper page">
-            <h1>FFNN - Heart Disease</h1>
+            <h2>FFNN - Heart Disease</h2>
             <p>Nagłówki zostaną po angielsku dla spójności z <a href="https://drive.google.com/file/d/1qiDcnclMQwPquOmphOMx-5t5TrzHximV/view?usp=sharing">notatnikiem</a>, który jest cały po angielsku (na którego to podstawie jest ten artykuł).</p>
             <h2>Table of contents</h2>
             <ol>
@@ -678,7 +678,7 @@
                 </pre>
             </div>
             <h2>Network structure</h2>
-            <p>Sieć będzie mała, ponieważ po pierwsze zbiór danych jest mały, a po drugie rozwiązywanym problem jest klasyfikacja binarna. Stosujemy prosty (bo do wyboru mamy jeszcze inne, bardziej skomplikowane i samoobsługowe) Stochastic Gradient Descent, którego działanie było omawiane na przedmiocie Metody Numeryczne. Wartości hiperparametrów takich jak learning_rate i momentum, wynikają tym etapie (od jakichś trzeba zacząć) z empirycznych obserwacji, że dla wielu modeli stosujących SGD te były dobre.</p>
+            <p>Sieć będzie mała, ponieważ po pierwsze zbiór danych jest mały, a po drugie rozwiązywanym problemem jest klasyfikacja binarna. Stosujemy prosty (bo do wyboru mamy jeszcze inne, bardziej skomplikowane i samoobsługowe) Stochastic Gradient Descent, którego działanie było omawiane na przedmiocie Metody Numeryczne. Wartości hiperparametrów takich jak learning_rate i momentum, wynikają na tym etapie (od jakichś trzeba zacząć) z empirycznych obserwacji, że dla wielu modeli stosujących SGD te były optymalne.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     units1 = 20
@@ -695,24 +695,117 @@
                 </code></pre>
             </div>
             <h2>Network training</h2>
+            <p>Funkcja train_test_split wybiera losowe lekko ponad 15% zbioru treningowego (stanowiące 15% całego zbioru pierwotnego). Domyślna wartość parametru batch_size funkcji model.fit wynosi 32, zaś domyślnie epochs = 1, dlatego przyjąłem na dobry początek 100.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
-                    units1 = 20
-                    units2 = 10
-                    units3 = 1
-                    model = Sequential([
-                        Dense(units1, activation='relu', input_shape=(X_train.shape[1],)),
-                        Dense(units2, activation='relu'),
-                        # Dropout(0.2),
-                        Dense(units3, activation='sigmoid')
-                    ])
-                    model.compile(optimizer=tf.keras.optimizers.SGD(
-                        learning_rate=0.01, momentum=0.9), loss='binary_crossentropy', metrics=['accuracy'])
+                    X, Xv, y, yv = train_test_split(X_train, y_train, test_size=(.15/.85))
+                    history = model.fit(X, y, epochs=100, validation_data=(Xv, yv), verbose=0)
                 </code></pre>
             </div>
             <h2>Results</h2>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    plt.figure(figsize=(15, 5))
+
+                    plt.subplot(1, 3, 1)
+                    plt.plot(history.history['loss'], label='Training Loss')
+                    plt.plot(history.history['val_loss'], label='Validation Loss')
+                    plt.title('Loss on Training and Validation Data')
+                    plt.xlabel('Epochs')
+                    plt.ylabel('Loss')
+                    plt.legend()
+
+                    plt.subplot(1, 3, 2)
+                    plt.plot(history.history['accuracy'], label='Training Accuracy')
+                    plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+                    plt.title('Accuracy on Training and Validation Data')
+                    plt.xlabel('Epochs')
+                    plt.ylabel('Accuracy')
+                    plt.legend()
+
+                    # false positive rate (fpr), true positive rate (tpr)
+                    fpr, tpr, thresholds = roc_curve(y_test, model.predict(X_test))
+                    roc_auc = auc(fpr, tpr) # Area Under Curve (AUC)
+                    plt.subplot(1, 3, 3)
+                    plt.plot(fpr, tpr, color='blue', lw=2, label='ROC curve (AUC = %0.2f)' % roc_auc)
+                    plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
+                    plt.xlabel('False Positive Rate')
+                    plt.ylabel('True Positive Rate')
+                    plt.title('Receiver Operating Characteristic (ROC) Curve')
+                    plt.legend(loc='lower right')
+
+                    plt.tight_layout()
+                    plt.show()
+                </code></pre>
+            </div>
+            <div class="plot"><img src="img/ff_hd/first_network.png"></img></div>
+            <p>Widocznie mieliśmy szczęście z domyślnymi hiperparametrami, ponieważ już teraz sieć rozpoznaje około 85% przypadków. Poniżej jest zdjęcie ze strony zbioru, dzięki czemu teraz i na końcu będziemy mogli porównać nasz model z tym, co jest uważane za przedział dokładności dla klasyfikacyjnej sieci neuronowej.</p>
+            <div class="plot"><img src="img/ff_hd/baseline_model_performance.png"></img></div>
             <h2>Results analysis</h2>
+            <p>Z pierwszego treningu wynika, że sieć się nie douczyła, ponieważ Training Loss > Validation Loss oraz Training Accuracy < Validation Accuracy. Jednakże od około połowy epochs widzimy więcej fluktuacji, niż trendu zmian w związku z czym może trzeba będzie poprawić np. batch_size lub learning_rate.</p>
             <h2>Parameter tuning</h2>
+            <p></p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    def default_model():
+                        return Sequential([
+                            Dense(units1, activation='relu', input_shape=(X_train.shape[1],)),
+                            Dense(units2, activation='relu'),
+                            Dense(units3, activation='sigmoid')
+                        ])
+                    def dropout_model(dropout=0.2):
+                        return Sequential([
+                            Dense(units1, activation='relu', input_shape=(X_train.shape[1],)),
+                            Dense(units2, activation='relu'),
+                            Dropout(dropout),
+                            Dense(units3, activation='sigmoid')
+                        ])
+                    def compile_model(model, learning_rate, momentum):
+                        model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate, momentum), loss='binary_crossentropy', metrics=['accuracy'])
+                    def fit_model(model, X_train, y_train, batch_size, epochs):
+                        model.fit(X_train, y_train, batch_size, epochs, verbose=0) #validation_data=(X_val, y_val)
+                    def plot_models(subplot, X_train, y_train, change, max, multiplier=1, min=0, model_type="Without dropout", title=""):
+                        step = int((max-min)/20)     # Here is the magic place where we set how long program will work
+                        if(step<1): step = 1
+                        batch_size = 10
+                        epochs = 100
+                        learning_rate = 0.001
+                        momentum = 0.9
+                        if(model_type == "With dropout"): model = dropout_model()
+                        else: model = default_model()
+                        compile_model(model, learning_rate, momentum)
+                        validation_losses = []
+                        validation_accuracies = []
+                        for i in range(min, max+1, step):
+                            if "batch_size" in change: batch_size = multiplier*i
+                            if "epoch" in change: epochs = multiplier*i
+                            if "learning_rate" in change: compile_model(model, multiplier*i, momentum)
+                            if "momentum" in change: compile_model(model, i, multiplier*momentum)
+                            X, Xv, y, yv = train_test_split(X_train, y_train, test_size=(.15/.85))
+                            fit_model(model, X, y, batch_size=batch_size, epochs=epochs)
+                            print("Done "+str(((subplot[2]-2)/(subplot[0]*subplot[1])+(i/max+1)/(subplot[0]*subplot[1]))*100)
+                            +"% ("+str(i)+"/"+str(max+1)+" from "+str(subplot)+")")
+                            # X_test, y_test instead of Xv, yv only when nothing will be changed later
+                            test_loss, test_accuracy = model.evaluate(Xv, yv)
+                            validation_losses.append(test_loss)
+                            validation_accuracies.append(test_accuracy)
+                        # plt.subplot(subplot[0], subplot[1], subplot[2])
+                        # plt.plot([multiplier*i for i in range(min, max+1, step)], validation_losses, label='Validation loss')
+                        # plt.plot([multiplier*i for i in range(min, max+1, step)], validation_accuracies, label='Validation accuracy')
+                        # plt.title(str(model_type)+" "+str(title))
+                        # plt.xlabel(" ".join([str(item) for item in change]))
+                        # plt.legend()
+
+                        ax1 = plt.subplot(subplot[0], subplot[1], subplot[2])
+                        ax1.plot([multiplier*i for i in range(min, max+1, step)], validation_accuracies, color="#198038")
+                        ax1.set_ylabel('Validation accuracy', color="#198038")
+                        ax2 = ax1.twinx()
+                        ax2.plot([multiplier*i for i in range(min, max+1, step)], validation_losses, color="#1192e8")
+                        ax2.set_ylabel('Validation loss', color="#1192e8")
+                        plt.title(str(model_type)+" "+str(title))
+                        plt.xlabel(" ".join([str(item) for item in change]))
+                </code></pre>
+            </div>
 
             <!-- Template:
             <div class="code-snippet">
