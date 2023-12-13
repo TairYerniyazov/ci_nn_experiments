@@ -561,12 +561,42 @@
                 <div class="plot"><img src="img/ff_hd/corr_matrix.png"></img></div>
             </div>
             <h2>Data preparation</h2>
+            <div class="code-snippet">
+                <p>Brakujących wartości było tylko kilka, dlatego je wypełniamy. Nie chcemy wyrzucać wartości, bo zbiór jest mały (303 instancje).</p>
+                <pre class="line-numbers"><code class="language-python">
+                    for column in X.isna().sum()[X.isna().sum() > 0].index.values:
+                        X[column].fillna(X[column].median(), inplace=True)
+                </code></pre>
+                <p>Następnie dane kategoryczne rozdzielamy na tyle column ile jest kategorii i w danym wierszu wstawaimy 1 w jedną z kolumn, zaś w pozostałe 0. Wymaga tego nasza sieć do poprawnej interpretacji danych.</p>
+                <pre class="line-numbers"><code class="language-python">
+                    dummy_X = pd.get_dummies(X, columns=heart_diseases.variables[heart_diseases.variables['type'] == 'Categorical']['name'].values)
+                </code></pre>
+                <pre class="line-numbers"><code class="language-python">
+                    np_X = normalize(dummy_X.values, axis=0)
+                    np_y = normalize(y.values)
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    
+                </pre>
+                <div class="plot"><img src="img/ff_hd/corr_matrix.png"></img></div>
+            </div>
             <h2>Division into training and test sets</h2>
             <h2>Network structure</h2>
             <h2>Network training</h2>
             <h2>Results</h2>
             <h2>Results analysis</h2>
             <h2>Parameter tuning</h2>
+
+            <!-- Template:
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    
+                </pre>
+                <div class="plot"><img src="img/ff_hd/corr_matrix.png"></img></div>
+            </div> -->
         </div>
 
 
