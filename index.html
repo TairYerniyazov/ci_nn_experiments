@@ -512,43 +512,88 @@
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
             <h3>SOM - Palmer Penguin</h3>
-            <div class="plot plot-tiny-width"><img src="img/penguins_logo.png"></img></div>
-            <h2>Opis zbioru danych & Przygotowanie danych</h2>
-            <p>Zawarty na stronie Piotra Dziedzica
+			<div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
+			<h2>Opis zbioru danych & Przygotowanie danych</h2>
+			<p>Zawarty na stronie Piotra Dziedzica
             <h2>Struktura sieci SOM</h2>
-            Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
-            <p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z
-                generalną architekturą sieci:
-            <p><b>Architektura sieci:</b>
-            <p>
+			Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
+			<p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z generalną architekturą sieci:
+			<p><b>Architektura sieci:</b><p>
             <ul>
-                <li><u>Siatka</u> - 2D, 9x9;</li>
-                <li><u>Liczba neuronów</u> - 81 (zasada heurystyczna dla treningowego zbioru danych
-                    o rozmiarze 272 rekordy);</li>
-                <li><u>Wymiar wektorów wag</u> - 18 (co odpowiada liczbie atrybutów);</li>
+                <li><u>Siatka</u> - 2D, 10x10; - dająca liczbe 100</li>
+                <li><u>Liczba neuronów</u> - 100 (zasada heurystyczna dla treningowego zbioru danych
+                    o rozmiarze 343 dałaby ~9x10, ale zwiększyliśmy do 10x10 dla ładniejszych wykresów);</li>
+                <li><u>Wymiar wektorów wag</u> - 3-6 Zależy od eksperymentu;</li>
                 <li><u>Odległość</u> - metryka Euklidesowa</li>
-                <li><u>Liczenie sąsiedztwa</u> - metryka Manhattan;</li>
-                <li><u>Redukcja współczynników</u> - zależy od maksymalnych wartości oraz całkowitej
-                    liczby iteracji.</li>
+                <li><u>Liczenie sąsiedztwa</u> - metryka Gaussian;</li>
+                <li><u>Redukcja współczynników</u> - wykonywana przez minisom.</li>
             </ul>
+			
+			Startowe wartości wszystkich neuronów są losowane przez minisom.
+			
+			<p><b>Uczenie sieci & Wyniki:</b><p>
+			
+			<p>Do utworzenia map dopasowania, SOM jest trenowany 100000 razy.
+			<p>Do utworzenia wykresów dokładności korzystamy z osobnych SOM trenowanych na 5 różnych datasetach utworzonych za pomocą walidacji krzyżowej.
+
+			<p>Rozważmy najpierw eksperyment dla wszystkich parametrów.
+			<p>Tak jak wcześniej omówiliśmy, odrzucamy kategorie "year" i "island". Omijamy także "species":
+			<div class="plot plot-small-width"><img src="img/som_penguins/BaseMap.png"></img></div>
+			<p>Widać tutaj klasteryzację, zwłaszcza dla pingwinów reprezentowanych przez niebieskie romby.
+			<p>Widać także klaster czerwony i zielony, jednakże te lubią się mieszać.
+			<div class="plot plot-small-width"><img src="img/som_penguins/BaseValidation.png"></img></div>
+			<p>W obu przypadkach, dokładność tego modelu jest w granicach 63-68%. Jako że dane są szeregowane losowo, te wartości potrafią się zmieniać.
+			<p>
+			<p>Teraz przetestujmy SOM bez atrybutu "płci":
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexMap.png"></img></div>
+			<p>Wygląda na to że nasza mapa się obróciła o 180 stopni. Wciąż widać klastry.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexValidation.png"></img></div>
+			<p>Utrata danych o płci zmniejszyła true positive rate o około 10 punktów procentowych.
+			<p>
+			<p>Teraz spróbujmy usunąć oba atrybuty o dziobie, zostawiając tylko długość płetwy i masę ciała.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbillMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbillValidation.png"></img></div>
+			<p>Jak widać, te dwa atrybuty wystarczą aby wciąż widzieć klastry, chociaż są one coraz bardziej rozrzucone. Dodatkowo, nasz SOM jest mniej dodatkowe o kolejne ~10 punktów procentowych.
+			<p> 
+			<p> Rozważmy teraz coś innego, zamiast usuwać infomacje o dziobie, usuńmy atrybut odpowiadający za masę ciała.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassMap.png"></img></div>
+			<p> Jak widać, teraz wszystkie 3 klastry są bardzo rozdzielone i bardzo widoczne. Nie jest to dziwne, bo pingwiny gatunku Chinstrap i Adelie mają bardzo podobne masy ciał.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassValidation.png"></img></div>
+			<p> Czemu tutaj jest tak mała dokładność chociaż klasty są bardziej widoczne? Bo mniej są trenowane?
+			<p>
+			<p> Rozważmy jeszcze dwa eksperymenty. Usuńmy dodatkowo oprócz masy ciała, płci jeszcze długość płetwy, która też jest bardzo podobna dla gatunków Chinstap i Adelie:
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassflipperMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassflipperValidation.png"></img></div>
+			<p> Wciąż wyraźnie widać 3 klastry, ale dokładność się nam zmniejszyła do poziomu 36%, to prawie jak losowe zgadywanie!
+			<p>
+			<p> Jeszcze rozważmy jeden przykład: zamiast usuwać informację o płetwie, rozważmy usunięcie informacji o głębokości dzioba:
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassbilldepthMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassbilldepthValidation.png"></img></div>
+			<p> Usuwając jeden z wyróżniających atrybutów, znowu klastry się wymieszały. Tym razem zielony i niebieski się mieszają a nasza dokładność jest jeszcze gorsza niż wcześniej.
+			<p>
+			<p>
+			<p><b>Dostrajanie Parametrów:</b><p>
         </div>
 
 
 
         <!-- STRONA HUBERTA P. -->
         <div class="wrapper page">
-            <h3>FFNN - Heart Disease</h3>
-            <p>Nagłówki zostaną po angielsku dla spójności z <a href="https://drive.google.com/file/d/1qiDcnclMQwPquOmphOMx-5t5TrzHximV/view?usp=sharing">notatnikiem</a>, który jest cały po angielsku (na którego to podstawie jest ten artykuł)</p>
-            # Table of contents
-1. Dataset description
-2. Data preparation
-3. Division into training and test sets
-4. Network structure
-5. Network training
-6. Results
-7. Results analysis
-8. Parameter tuning
-            <p>Dokładny opis zbioru danych został wykonany na podstronie Taira Yerniyazova w związku z czym tu przedstawię to skrótowo</p>
+            <h1>FFNN - Heart Disease</h1>
+            <p>Nagłówki zostaną po angielsku dla spójności z <a href="https://drive.google.com/file/d/1qiDcnclMQwPquOmphOMx-5t5TrzHximV/view?usp=sharing">notatnikiem</a>, który jest cały po angielsku (na którego to podstawie jest ten artykuł).</p>
+            <h2>Table of contents</h2>
+            <ol>
+                <li>Dataset description</li>
+                <li>Data preparation</li>
+                <li>Division into training and test sets</li>
+                <li>Network structure</li>
+                <li>Network training</li>
+                <li>Results</li>
+                <li>Results analysis</li>
+                <li>Parameter tuning</li>
+            </ol>
+            <h2>Dataset description</h2>
+            <p>Dokładny opis zbioru danych został wykonany na podstronie Taira Yerniyazova w związku z czym tu przedstawię to skrótowo.</p>
             Najpierw potrzebne biblioteki oraz zbiór danych.
             Wykorzystam ucimlrepo do łatwego importowania zestawów danych z UC Irvine Machine Learning Repository.
             <div class="code-snippet">
@@ -597,6 +642,88 @@
                 </code></pre>
                 <div class="plot"><img src="img/ff_hd/corr_matrix.png"></img></div>
             </div>
+            <h2>Data preparation</h2>
+            <p>Brakujących wartości było tylko kilka, dlatego je wypełniamy. Nie chcemy wyrzucać wartości, bo zbiór jest mały (303 instancje).</p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    for column in X.isna().sum()[X.isna().sum() > 0].index.values:
+                        X[column].fillna(X[column].median(), inplace=True)
+                </code></pre>
+            </div>
+            <p>Następnie dane kategoryczne rozdzielamy na tyle column ile jest kategorii i w danym wierszu wstawaimy 1 w jedną z kolumn, zaś w pozostałe 0. Wymaga tego nasza sieć do poprawnej interpretacji danych.</p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    dummy_X = pd.get_dummies(X, columns=heart_diseases.variables[heart_diseases.variables['type'] == 'Categorical']['name'].values)
+                </code></pre>
+            </div>
+            <p>Na końcu normalizujemy dane, aby wszystkie były dla sieci tak samo ważne. Wywołanie funkcji normalize dla zbioru y, w którym pierwotnie są liczby ze zbioru {0, 1, 2, 3, 4}, spowoduje, że 0 zostaną 0, a pozostałę liczby staną się 1. Wynika to ze specyfikacji zbioru danych. Autorzy nie rozróżniają liczb większych od 1.</p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    np_X = normalize(dummy_X.values, axis=0)
+                    np_y = normalize(y.values)
+                </code></pre>
+            </div>
+            <h2>Division into training and test sets</h2>
+            <p>Cały zbiór dzielę na razie tylko na zbiór treningowy i testowy. Testowe 15% zbioru zostanie użyte dopiero na samym końcu po dobraniu hiperparametrów, żeby ocenić jak sieć sobie poradzi na danych, których nie widziała ani ona, ani programista dostosowywujący hiperparametry. Do dostosowywania hiperparametrów będziemy używali czegoś zbliżonego do cross-validation, tzn. za każdym razem do ewaluacji widocznej na późniejszych wykresach będzie używane 15% ze zbioru treningowego, zaś zbiorem, na którym sieć się rzeczywiście będzie trenować będzie 70% pierwotnego zbioru. Jednak wybierany zbiór 15% do walidacji będzie losowany dla każdego treningu, dzięki czemu sieć będzie się mogła uśredniając trenować dla 85% pierwotnego zbioru.</p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    X_train, X_test, y_train, y_test = train_test_split(np_X, np_y, test_size=.15, random_state=1)
+                    # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=(.15/.85))
+                    print(X_train.shape, X_test.shape) # , X_val.shape
+                    print(y_train.shape, y_test.shape) # , y_val.shape
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    (257, 25) (46, 25)
+                    (257, 1) (46, 1)
+                </pre>
+            </div>
+            <h2>Network structure</h2>
+            <p>Sieć będzie mała, ponieważ po pierwsze zbiór danych jest mały, a po drugie rozwiązywanym problem jest klasyfikacja binarna. Stosujemy prosty (bo do wyboru mamy jeszcze inne, bardziej skomplikowane i samoobsługowe) Stochastic Gradient Descent, którego działanie było omawiane na przedmiocie Metody Numeryczne. Wartości hiperparametrów takich jak learning_rate i momentum, wynikają tym etapie (od jakichś trzeba zacząć) z empirycznych obserwacji, że dla wielu modeli stosujących SGD te były dobre.</p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    units1 = 20
+                    units2 = 10
+                    units3 = 1
+                    model = Sequential([
+                        Dense(units1, activation='relu', input_shape=(X_train.shape[1],)),
+                        Dense(units2, activation='relu'),
+                        # Dropout(0.2),
+                        Dense(units3, activation='sigmoid')
+                    ])
+                    model.compile(optimizer=tf.keras.optimizers.SGD(
+                        learning_rate=0.01, momentum=0.9), loss='binary_crossentropy', metrics=['accuracy'])
+                </code></pre>
+            </div>
+            <h2>Network training</h2>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    units1 = 20
+                    units2 = 10
+                    units3 = 1
+                    model = Sequential([
+                        Dense(units1, activation='relu', input_shape=(X_train.shape[1],)),
+                        Dense(units2, activation='relu'),
+                        # Dropout(0.2),
+                        Dense(units3, activation='sigmoid')
+                    ])
+                    model.compile(optimizer=tf.keras.optimizers.SGD(
+                        learning_rate=0.01, momentum=0.9), loss='binary_crossentropy', metrics=['accuracy'])
+                </code></pre>
+            </div>
+            <h2>Results</h2>
+            <h2>Results analysis</h2>
+            <h2>Parameter tuning</h2>
+
+            <!-- Template:
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    
+                </pre>
+                <div class="plot"><img src="img/ff_hd/corr_matrix.png"></img></div>
+            </div> -->
         </div>
 
 
