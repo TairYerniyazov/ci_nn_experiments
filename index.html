@@ -511,7 +511,7 @@
 
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
-            <h3>SOM - Palmer Penguin</h3>
+            <h2>SOM - Palmer Penguin</h3>
 			<div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
 			<h2>Opis zbioru danych & Przygotowanie danych</h2>
 			<p>Zawarty na stronie Piotra Dziedzica
@@ -573,6 +573,14 @@
 			<p>
 			<p>
 			<p><b>Dostrajanie Parametrów:</b><p>
+			<p> Za pomocą testów udało nam się wywnioskować że zmiana learning rate z 50% do 90% skutkuje zmniejszeniem dokładności w każdym z eksperymentów. Jest to bardzo zauważalne w eksperymencie bez płci i masy ciała, gdzie % trafionych zgadnięć schodzi z 53% do 36%. Jest jednak jeden wyjątek do tego, albowiem model bez masy ciała i długości płetwy zwiększył swoją dokładność z 36% do 67%.
+			<div class="plot plot-small-width"><img src="img/som_penguins/BeforeLearningRate09.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/AfterLearningRate09.png"></img></div>
+			<p>
+			<p> Postanowiliśmy także przetestować zmniejszenie learning rate z 50% do 5%. Tutaj wyniki są o wiele bardziej pozytywne. Każdy z eksperymentów oprócz pierwszego miał zwiększony wskaźnik trafności. Najwiekszą różnicę można zauważyć było w eksperymencie bez atrybutu płci i masy ciała, gdzie trafność zwiększyła się do 73%.
+			<div class="plot plot-small-width"><img src="img/som_penguins/AfterLearningRate005.png"></img></div>
+			<p>
+			<p> Spróbowaliśmy zwiększyć rozmiar mapy do 20x20, ale to poskutkowało zmniejszeniem trafności do 28-36% w każdym z przypadków.  
         </div>
 
 
