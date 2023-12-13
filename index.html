@@ -98,16 +98,16 @@
                 <li><u>bill_depth_mm</u> - Wysokość dzioba</li>
                 <li><u>flipper_length_mm</u> - Długość płetwy</li>
                 <li><u>body_mass_g</u> - Masa Ciała pingwina</li>
-                <li><u>year</u> - Rok w którym pingwin został zbadany</li>
             </ul>
-        
+
             <b>Kategoryczne biarne</b>:
             <ul>
                 <li><u>sex</u> - Płeć pingwina</li>
             </ul>
-        
+
             <b>Kategoryczne</b>:
             <ul>
+                <li><u>year</u> - Rok w którym pingwin został zbadany</li>
                 <li><u>Species</u> - Gatunek pingwina</li>
                 <li><u>Island</u> - Wyspa którą pingwin zamieszkiwał</li>
             </ul>
@@ -120,6 +120,12 @@
             <div class="plot"><img src="img/ff_penguins/bill_depth_distribution.png"></img></div>
             <div class="plot"><img src="img/ff_penguins/bill_length_distribution.png"></img></div>
             <div class="plot"><img src="img/ff_penguins/filpper_length_distribution.png"></img></div>
+            <p>Mamy dobrą dystrybucję trzech istotnych atrybutów numerycznych, która wygląda na rozkład normalny.
+                Zatem, pod warunkiem, że dane ze zbioru testowego, a później produkcyjnego (przemilczmy, że klasyfikacja
+                pingwinów nam się nie przyda w Krakowie....)
+                będą się cechowały taką samą wariancją, to model dobrze sobie poradzi, gdyż spodziewamy się, że odchylenie
+                standardowe będzie ograniczało liczbę
+                tzw. "Outliers"'ów, czyli wartości odbiegających od mediany i średniej.</p>
             <p>Korzystając ze standardowych narzędzi dostępnych w bibliotece Pandas możemy łatwo
                 uzyskać pełną macierz korelacji cech z przewidywaną wartością. Powinniśmy pamiętać
                 przede wszystkim, że taki przegląd pozwala zaledwie na zapoznanie się ze zbiorem i może
@@ -127,9 +133,18 @@
                 (z ang. <b>Feature Engineering</b>). Współczynnik korelacji nie gwarantuje nam poprawnego
                 odzwierciedlenia relacji nieliniowych, które z pewnością występują w naszym złożonym zbiorze.</p>
             <div class="plot"><img src="img/ff_penguins/heatmapa.png"></img></div>
+            <p>W pierwszym rzędzie macierzy widać wzdłuż kolumn, że wartości liczbowe odgrywają kluczową rolę w predykcji
+                atrybuty "species".
+                Odwrotna obserwacja ma miejsce w przypadku płci (można przypuszczać, że female penguins nie zbyt mocno się
+                różnią od male penguins).
+                Dla przypomnienia: macierz korelacji (o ile współczynnik korelacji nie jest równy 0 dla któregoś atrybutu,
+                który wtedy po prostu jest wartością stałą) jest zawsze symetryczna, gdyż odzwierciedla relacje liniowe, a więc
+                można zawsze to odwrócić.
+                Wdzłuż przekątnej są same jedynki, gdyż każdy atrybut ma 100% korelacji z samym sobą z definicji.</p>
             <h2>Przygotowanie danych</h2>
             <p>W tym rozdziale będziemy pokazywali kluczowe kawałki kodu. Całość można znaleźć tu:
-                <a href="#">notatnik Jupyter (Google Colab)</a>
+                <a href="https://colab.research.google.com/drive/1baNi0ls9fdn9ztc2AR0PuS4e6hMK1em0?usp=sharing">notatnik Jupyter
+                    (Google Colab)</a>
             </p>
             <p>Zaczniemy od przetworzenie atrybutów
                 kategorycznych. Mamy tutaj atrybuty, które
@@ -142,48 +157,48 @@
             </p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
-                    # Zmiana kategorycznych wartosci na numeryczne
-                    
-                    # Kodowanie danych kategorycznych (one-hot encoding)
-                    label_encoder = LabelEncoder()
-                    
-                    # One-hot encoding dla kolumny 'species'
-                    palmer_penguins = pd.get_dummies(palmer_penguins, columns=['species'], prefix=['species'])
-                    
-                    # One-hot encoding dla kolumny 'sex'
-                    palmer_penguins = pd.get_dummies(palmer_penguins, columns=['sex'], prefix='sex')
-                    
-                    print(palmer_penguins)
-                </code></pre>
+                            # Zmiana kategorycznych wartosci na numeryczne
+                            
+                            # Kodowanie danych kategorycznych (one-hot encoding)
+                            label_encoder = LabelEncoder()
+                            
+                            # One-hot encoding dla kolumny 'species'
+                            palmer_penguins = pd.get_dummies(palmer_penguins, columns=['species'], prefix=['species'])
+                            
+                            # One-hot encoding dla kolumny 'sex'
+                            palmer_penguins = pd.get_dummies(palmer_penguins, columns=['sex'], prefix='sex')
+                            
+                            print(palmer_penguins)
+                        </code></pre>
                 <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
-        bill_length_mm bill_depth_mm    flipper_length_mm   body_mass_g \
-    168         42.0            13.5             210.0       4150.0
-    37          42.2            18.5             180.0       3550.0
-    269         48.8            16.2             222.0       6000.0
-    156         47.6            14.5             215.0       5400.0
-    226         46.4            15.0             216.0       4700.0
-    ..          ...             ...              ...         ...
-    89          38.9            18.8             190.0       3600.0
-    277         50.0            19.5             196.0       3900.0
-    182         47.3            15.3             222.0       5250.0
-    338         45.7            17.0             195.0       3650.0
-    221         50.7            15.0             223.0       5550.0
-    
-        sex_female  sex_male
-    168      1.0     0.0
-    37       1.0     0.0
-    269      0.0     1.0
-    156      0.0     1.0
-    226      1.0     0.0
-    ..       ...     ...
-    89       1.0     0.0
-    277      0.0     1.0
-    182      0.0     1.0
-    338      1.0     0.0
-    221      0.0     1.0
+                bill_length_mm bill_depth_mm    flipper_length_mm   body_mass_g \
+            168         42.0            13.5             210.0       4150.0
+            37          42.2            18.5             180.0       3550.0
+            269         48.8            16.2             222.0       6000.0
+            156         47.6            14.5             215.0       5400.0
+            226         46.4            15.0             216.0       4700.0
+            ..          ...             ...              ...         ...
+            89          38.9            18.8             190.0       3600.0
+            277         50.0            19.5             196.0       3900.0
+            182         47.3            15.3             222.0       5250.0
+            338         45.7            17.0             195.0       3650.0
+            221         50.7            15.0             223.0       5550.0
+            
+                sex_female  sex_male
+            168      1.0     0.0
+            37       1.0     0.0
+            269      0.0     1.0
+            156      0.0     1.0
+            226      1.0     0.0
+            ..       ...     ...
+            89       1.0     0.0
+            277      0.0     1.0
+            182      0.0     1.0
+            338      1.0     0.0
+            221      0.0     1.0
 
-    [247 rows x 6 columns]
-                </pre>
+            [247 rows x 6 columns]
+                        </pre>
             </div>
             <p>Teraz powinniśmy się zastanowić jak postąpić z brakującymi wartościami. Możemy nieznane nam atrybuty
                 douzupełnić wartością średnią. Nie stać nas na to, żeby wyrzucić te rekordy, bo i tak mamy zaledwie
@@ -194,57 +209,57 @@
             </p>
             <div class="code-snippet">
                 <pre class="line-numbers">
-                    <code class="language-python">
-                        # Sprawdzenie, ile jest brakujących danych w każdej kolumnie
-                        brakujace_dane = palmer_penguins.isnull().sum()
-            
-                        # Wyświetlenie liczby brakujących danych w każdej kolumnie
-                        print(brakujace_dane)
-                    </code>
-                </pre>
+                            <code class="language-python">
+                                # Sprawdzenie, ile jest brakujących danych w każdej kolumnie
+                                brakujace_dane = palmer_penguins.isnull().sum()
+                    
+                                # Wyświetlenie liczby brakujących danych w każdej kolumnie
+                                print(brakujace_dane)
+                            </code>
+                        </pre>
                 <code>
-                    <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
-    bill_length_mm          2
-    bill_depth_mm           2
-    flipper_length_mm       2
-    body_mass_g             2
-    species_Adelie          0
-    species_Chinstrap       0
-    species_Gentoo          0
-    sex_female              0
-    sex_male                0
-    dtype: int64
-                    </pre>
-                </code>
+                            <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+            bill_length_mm          2
+            bill_depth_mm           2
+            flipper_length_mm       2
+            body_mass_g             2
+            species_Adelie          0
+            species_Chinstrap       0
+            species_Gentoo          0
+            sex_female              0
+            sex_male                0
+            dtype: int64
+                            </pre>
+                        </code>
                 <pre class="line-numbers">
-                    <code class="language-python">
-                        # Uzupełnianie wartości nieokreślonych średnią
-            
-                        # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
-                        srednia_bill_length_mm = palmer_penguins['bill_length_mm'].mean()
-            
-                        # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
-                        palmer_penguins['bill_length_mm'].fillna(srednia_bill_length_mm, inplace=True)
-            
-                        # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
-                        srednia_bill_depth_mm = palmer_penguins['bill_depth_mm'].mean()
-            
-                        # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
-                        palmer_penguins['bill_depth_mm'].fillna(srednia_bill_depth_mm, inplace=True)
-            
-                        # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
-                        srednia_flipper_length_mm   = palmer_penguins['flipper_length_mm'].mean()
-            
-                        # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
-                        palmer_penguins['flipper_length_mm'].fillna(srednia_flipper_length_mm, inplace=True)
-            
-                        # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
-                        srednia_body_mass_g = palmer_penguins['body_mass_g'].mean()
-            
-                        # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
-                        palmer_penguins['body_mass_g'].fillna(srednia_body_mass_g, inplace=True)
-                    </code>
-                </pre>
+                            <code class="language-python">
+                                # Uzupełnianie wartości nieokreślonych średnią
+                    
+                                # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
+                                srednia_bill_length_mm = palmer_penguins['bill_length_mm'].mean()
+                    
+                                # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
+                                palmer_penguins['bill_length_mm'].fillna(srednia_bill_length_mm, inplace=True)
+                    
+                                # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
+                                srednia_bill_depth_mm = palmer_penguins['bill_depth_mm'].mean()
+                    
+                                # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
+                                palmer_penguins['bill_depth_mm'].fillna(srednia_bill_depth_mm, inplace=True)
+                    
+                                # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
+                                srednia_flipper_length_mm   = palmer_penguins['flipper_length_mm'].mean()
+                    
+                                # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
+                                palmer_penguins['flipper_length_mm'].fillna(srednia_flipper_length_mm, inplace=True)
+                    
+                                # Oblicz średnią wartość kolumny 'bill_length_mm' (ignorując wartości null)
+                                srednia_body_mass_g = palmer_penguins['body_mass_g'].mean()
+                    
+                                # Uzupełnij brakujące wartości w kolumnie 'bill_length_mm' średnią wartością
+                                palmer_penguins['body_mass_g'].fillna(srednia_body_mass_g, inplace=True)
+                            </code>
+                        </pre>
             </div>
             <p>Podzielmy teraz nasze dane na trzy zbiory: <b>10% testowy, 90% treningowy (w
                     tym 20% walidacyjny)</b>. Dodatkowo,
@@ -252,34 +267,34 @@
             </p>
             <div class="code-snippet">
                 <pre class="line-numbers">
-                    <code class="language-python">
-                        X = palmer_penguins.drop(["species_Adelie", "species_Chinstrap", "species_Gentoo"], axis=1)  # Wektory cech
-                        y = palmer_penguins[["species_Adelie", "species_Chinstrap", "species_Gentoo"]]  # Wektory klas
-                        
-                        # Podział danych na zbiór treningowy (90%) i testowy (10%)
-                        X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
-                        
-                        # Kolejny podział zbioru X_temp na zbiór walidacyjny (20%) i treningowy (80%)
-                        X_train, X_valid, y_train, y_valid = train_test_split(X_temp, y_temp, test_size=0.2, random_state=42)
-                        
-                        scaler = StandardScaler()
-                        
-                        # Standaryzacja zbioru treningowego
-                        X_train_scaled = scaler.fit_transform(X_train)
-                        X_train_scaled_df = pd.DataFrame(X_train_scaled, columns = X_train.columns)
-                        
-                        # Standaryzacja zbioru walidacyjnego
-                        X_valid_scaled = scaler.transform(X_valid)
-                        X_valid_scaled_df = pd.DataFrame(X_valid_scaled, columns = X_valid.columns)
-                        
-                        # Standaryzacja zbioru testowego
-                        X_test_scaled = scaler.transform(X_test)
-                        X_test_scaled_df = pd.DataFrame(X_test_scaled, columns = X_test.columns)
-                    </code>
-                </pre>
+                            <code class="language-python">
+                                X = palmer_penguins.drop(["species_Adelie", "species_Chinstrap", "species_Gentoo"], axis=1)  # Wektory cech
+                                y = palmer_penguins[["species_Adelie", "species_Chinstrap", "species_Gentoo"]]  # Wektory klas
+                                
+                                # Podział danych na zbiór treningowy (90%) i testowy (10%)
+                                X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+                                
+                                # Kolejny podział zbioru X_temp na zbiór walidacyjny (20%) i treningowy (80%)
+                                X_train, X_valid, y_train, y_valid = train_test_split(X_temp, y_temp, test_size=0.2, random_state=42)
+                                
+                                scaler = StandardScaler()
+                                
+                                # Standaryzacja zbioru treningowego
+                                X_train_scaled = scaler.fit_transform(X_train)
+                                X_train_scaled_df = pd.DataFrame(X_train_scaled, columns = X_train.columns)
+                                
+                                # Standaryzacja zbioru walidacyjnego
+                                X_valid_scaled = scaler.transform(X_valid)
+                                X_valid_scaled_df = pd.DataFrame(X_valid_scaled, columns = X_valid.columns)
+                                
+                                # Standaryzacja zbioru testowego
+                                X_test_scaled = scaler.transform(X_test)
+                                X_test_scaled_df = pd.DataFrame(X_test_scaled, columns = X_test.columns)
+                            </code>
+                        </pre>
             </div>
             <p>Teraz wszystkie atrybuty mają wartości przedstawione numerycznie,
-                a te, które określają kategorie, mają albo porządek, albo są zakodowane binarnie.
+                a te, które określają kategorie są zakodowane binarnie.
                 Zatem po standaryzacji danych, będziemy mieli zachowane zależności i odległości
                 tych danych. Czas na to, żeby uznać zbiór za przygotowany do naszych eksperymentów.
             </p>
@@ -292,21 +307,21 @@
                 wyjściowej,
                 bez żadnych cykli czy sprzężeń zwrotnych.
             </p>
-        
+
             <div class="plot plot-tiny-width"><img src="img/ff_penguins/siec_feed_forward.webp"></img></div>
             <div class="code-snippet">
                 <pre class="line-numbers">
-                    <code class="language-python">
-                        # Sieć Feed Forward
-                        model = Sequential()
-    
-                        # Dodanie warstw ukrytych
-                        model.add(Dense(10, input_dim=X_train_scaled.shape[1], activation='relu'))
-    
-                        # Dodanie warstwy wyjściowej - zakładamy trzy klasy (species_Adelie, species_Chinstrap, species_Gentoo)
-                        model.add(Dense(3, activation='softmax'))
-                    </code>
-                </pre>
+                            <code class="language-python">
+                                # Sieć Feed Forward
+                                model = Sequential()
+            
+                                # Dodanie warstw ukrytych
+                                model.add(Dense(10, input_dim=X_train_scaled.shape[1], activation='relu'))
+            
+                                # Dodanie warstwy wyjściowej - zakładamy trzy klasy (species_Adelie, species_Chinstrap, species_Gentoo)
+                                model.add(Dense(3, activation='softmax'))
+                            </code>
+                        </pre>
             </div>
             <p>Struktura sieci:
             <p><code>Warstwa wejściowa (Input Layer):</code></p>
@@ -335,26 +350,26 @@
             <p>Wizualizacja modelu z pomocą biblioteki keras</p>
             <div class="code-snippet">
                 <pre class="line-numbers">
-                    <code class="language-python">
-                        model.summary()
-                        keras.utils.plot_model(model, to_file='test.png', show_shapes=True)
-                    </code>
-                </pre>
+                            <code class="language-python">
+                                model.summary()
+                                keras.utils.plot_model(model, to_file='test.png', show_shapes=True)
+                            </code>
+                        </pre>
                 <pre class="command-line">
-    Model: "sequential"
-    _________________________________________________________________
-    Layer (type) Output Shape Param #
-    =================================================================
-    dense (Dense) (None, 10) 70
-    
-    dense_1 (Dense) (None, 3) 33
-    
-    =================================================================
-    Total params: 103 (412.00 Byte)
-    Trainable params: 103 (412.00 Byte)
-    Non-trainable params: 0 (0.00 Byte)
-                </pre>
-            </div> 
+            Model: "sequential"
+            _________________________________________________________________
+            Layer (type) Output Shape Param #
+            =================================================================
+            dense (Dense) (None, 10) 70
+            
+            dense_1 (Dense) (None, 3) 33
+            
+            =================================================================
+            Total params: 103 (412.00 Byte)
+            Trainable params: 103 (412.00 Byte)
+            Non-trainable params: 0 (0.00 Byte)
+                        </pre>
+            </div>
             <div class="plot plot-small-height"><img src="img/ff_penguins/keras_visualization.png"></img></div>
             <h2>Uczenie sieci</h2>
             <p>Zanim przystąpimy do procesu uczenia się sieci, chcemy najpierw model "skompilować" tzn. skonfigurować go w
@@ -366,101 +381,13 @@
                 (lub wartościami docelowymi). W tym przypadku używamy 'categorical_crossentropy'.
                 Funkcja ta jest często stosowana w tego typu problemach.
             </p>
-            <p><code>kilka słów o categorical crossentropy</code></p>
-            <p>
-                Categorical Cross-Entropy (czasami nazywana po prostu Cross-Entropy lub Log-Loss) to funkcja kosztu,
-                która jest szeroko stosowana w problemach klasyfikacji wieloklasowej w uczeniu maszynowym i głębokim uczeniu.
-                Jest to miara oceny różnicy między przewidywaniami modelu a rzeczywistymi etykietami (lub wartościami
-                docelowymi)
-                w przypadku, gdy zadanie polega na przyporządkowaniu obserwacji do jednej z wielu klas.
-            </p>
-            <p>1. Zakres i interpretacja: Funkcja kosztu Categorical Cross-Entropy jest używana w problemach klasyfikacji,
-                gdzie dane należy przyporządkować do jednej z wielu klas (np. rozpoznawanie obrazów różnych gatunków zwierząt).
-                Zakres wyników tej funkcji to liczby nieujemne, a jej wartość minimalna wynosi 0. Im niższa wartość funkcji
-                kosztu,
-                tym lepiej model dokonuje klasyfikacji.
-            </p>
-            <p>2. Rozkład prawdopodobieństwa: Przedstawmy sobie, że mamy C klas, a model generuje rozkład prawdopodobieństwa
-                przynależności
-                obserwacji do tych klas. Oznaczmy ten rozkład jako p(y|x), gdzie y to wektor prawdopodobieństw przynależności do
-                każdej z klas.
-                Model trenowany jest tak, aby ten rozkład prawdopodobieństwa był jak najbliższy rzeczywistemu rozkładowi etykiet
-                (ground truth),
-                który możemy oznaczyć jako q(y).</p>
-            <p>3. Obliczenie kosztu: Koszt Categorical Cross-Entropy mierzy różnicę między rozkładem prawdopodobieństwa
-                przewidywanym przez model (p(y|x))
-                a rzeczywistym rozkładem (q(y)). Wzór na obliczenie kosztu dla pojedynczej próbki wygląda następująco:
-        
-                Loss = -Σ(q(y) * log(p(y|x)))
-            </p>
-            <p>W praktyce oblicza się tę sumę dla wszystkich klas (od 1 do C) i średnią po wszystkich próbkach treningowych.
-                Ten wzór jest zapisem krzyżowej entropii (cross-entropy) między dwoma rozkładami prawdopodobieństwa.
-                Warto zaznaczyć, że wartości logarytmów są zawsze ujemne, więc wartość funkcji kosztu jest nieujemna.</p>
-            <p>
-                4. Cel optymalizacji: Celem procesu treningu jest minimalizacja wartości Categorical Cross-Entropy.
-                Oznacza to, że model jest uczony w taki sposób, aby jego przewidywania (rozkład p(y|x))
-                były jak najbliższe rzeczywistym etykietom (q(y)).
-            </p>
+
             <p><code>optimizer</code></p>
             <p>Określa algorytm optymalizacji, który będzie używany do aktualizacji wag modelu podczas treningu.
                 W przykładzie 'adam' wskazuje na algorytm optymalizacji Adam.
                 Adam jest popularnym algorytmem optymalizacji stosowanym w uczeniu maszynowym,
                 który adaptacyjnie dostosowuje tempo uczenia w trakcie treningu. </p>
-            <p><code>kilka słów o algorytmie Adam</code></p>
-            <p>
-                Adam (Adaptive Moment Estimation) to zaawansowany algorytm optymalizacji gradientowej stosowany w uczeniu
-                maszynowym i głębokim uczeniu.
-                Jest popularny ze względu na swoją skuteczność w praktyce i zdolność do dostosowywania tempo uczenia w trakcie
-                treningu.
-            </p>
-            <p>
-                Adam łączy w sobie dwie innowacje w dziedzinie optymalizacji: średnią ruchomą pierwszego momentu (ang. first
-                moment)
-                i średnią ruchomą drugiego momentu (ang. second moment). Oto podstawowe kroki, które podejmuje algorytm Adam w
-                trakcie treningu:
-            </p>
-            <p>1. Inicjalizacja zmiennych:
-        
-                Algorytm inicjuje dwie zmienne: średnią ruchomą pierwszego momentu (zwana też eksponentjalnie ważoną średnią
-                ruchomą gradientu) i średnią ruchomą drugiego momentu.
-                Te zmienne inicjalizowane są na początku treningu jako wektory zerowe.
-            </p>
-            <p>
-                2. Obliczenie gradientu:
-        
-                W każdej iteracji treningu obliczane są gradienty funkcji kosztu względem parametrów modelu.
-            </p>
-        
-            <p>
-                3. Aktualizacja pierwszego momentu (momentum):
-        
-                Pierwsza zmienna (moment) to średnia ruchoma gradientu (pierwszego momentu) z poprzednich iteracji.
-                Jest to wygładzona wersja gradientu, która pomaga modelowi uniknąć utknięcia w lokalnym minimum.
-            </p>
-        
-            <p>
-                4. Aktualizacja drugiego momentu (second moment):
-        
-                Druga zmienna (moment) to średnia ruchoma kwadratu gradientu (drugiego momentu) z poprzednich iteracji.
-                Jest to wskaźnik wariancji gradientu, co pozwala na adaptacyjne dostosowywanie tempa uczenia.
-            </p>
-        
-            <p>
-                5. Korekta obu momentów:
-        
-                Ponieważ oba momenty są inicjalizowane jako wektory zerowe, mogą być obarczone obciążeniem w kierunkach, w
-                których gradienty są rzadkie.
-                W celu korekty obciążenia algorytm Adam wykorzystuje skalowanie korekcyjne (bias correction), aby kompensować tę
-                inicjalizację.
-            </p>
-            <p>
-                6. Aktualizacja wag modelu:
-        
-                Parametry modelu (wagi) są aktualizowane na podstawie obliczonych momentów i gradientów.
-                Dzięki uwzględnieniu obu momentów, algorytm Adam dostosowuje tempo uczenia w zależności od złożoności problemu i
-                gradientów.
-            </p>
-            </p>
+
             <p><code>metrics</code></p>
             <p>Określa metryki, które zostaną obliczane podczas treningu i oceny modelu. W przykładzie używamy ['accuracy'],
                 co oznacza, że podczas treningu i oceny modelu będzie obliczana dokładność (ang. accuracy), czyli stosunek
@@ -468,24 +395,24 @@
                 sklasyfikowanych próbek do wszystkich próbek</p>
             <div class="code-snippet">
                 <pre class="line-numbers">
-                    <code class="language-python">
-                        # Kompilacja modelu
-                        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-                    </code>
-                </pre>
+                            <code class="language-python">
+                                # Kompilacja modelu
+                                model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+                            </code>
+                        </pre>
             </div>
-                <p>Teraz model jest gotowy do trenowania z użyciem danych treningowych i określonych kryteriów oceny.
-                    Podczas procesu uczenia funkcja kosztu jest minimalizowana, a wag modelu są aktualizowane zgodnie z wybranym
-                    algorytmem optymalizacji.
-                    Metryki są obliczane, aby monitorować postęp treningu i ocenić wydajność modelu na danych walidacyjnych lub
-                    testowych.</p>
-            <div class="code-snippet">    
+            <p>Teraz model jest gotowy do trenowania z użyciem danych treningowych i określonych kryteriów oceny.
+                Podczas procesu uczenia funkcja kosztu jest minimalizowana, a wagi modelu są aktualizowane zgodnie z wybranym
+                algorytmem optymalizacji.
+                Metryki są obliczane, aby monitorować postęp treningu i ocenić wydajność modelu na danych walidacyjnych lub
+                testowych.</p>
+            <div class="code-snippet">
                 <pre class="line-numbers">
-                <code class="language-python">
-                    # Trenowanie modelu
-                    history = model.fit(X_train, y_train, epochs=10, batch_size=10, validation_data=(X_valid, y_valid))
-                </code>
-            </pre>
+                        <code class="language-python">
+                            # Trenowanie modelu
+                            history = model.fit(X_train, y_train, epochs=10, batch_size=10, validation_data=(X_valid, y_valid))
+                        </code>
+                    </pre>
             </div>
             <p><code>Parametry</code></p>
             <p>
@@ -494,10 +421,9 @@
                 W tym przypadku ustawienie epochs=10 oznacza, że model będzie trenowany przez 10 epok.
             </p>
             <p>
-                2. batch_size: Parametr batch_size określa rozmiar partii (batch size) danych używanych w jednej iteracji
+                2. batch_size: Parametr batch_size określa rozmiar partii danych używanych w jednej iteracji
                 treningu.
                 Oznacza to, że podczas każdej epoki dane treningowe zostaną podzielone na partie o rozmiarze 10 próbek.
-                Dla każdej partii model obliczy gradienty i zaktualizuje wagi
             </p>
             <p><code>Osiągniete rezultaty</code></p>
             <div class="plot plot-small-width"><img src="img/ff_penguins/rezultaty_epoki_text.png"></img></div>
@@ -508,8 +434,8 @@
             <p>W pierwotnym modelu zostało użyte tylko 10 epok, co jest stosunkowo małą liczbą,
                 a dobranie większej liczby może konkretnie zwiększyć nasze rezultaty. Zatem sprawdźmy to</p>
             <div class="plot"><img src="img/ff_penguins/100_epok.png"></img></div>
-            <p>Widzimy, że osiągneliśmy 98% dokładności na zbiorze testowym, używając 100 epok.
-                Po przebiegu wykresu widzimy natomiast, że liczba ~45 epoo daje zadowalające rezultaty
+            <p>Widzimy, że osiągneliśmy 98% dokładności na zbiorze validacyjnym, używając 100 epok.
+                Po przebiegu wykresu widzimy natomiast, że liczba ~45 epok daje zadowalające rezultaty
             </p>
             <p>Spróbujmy teraz poeksperymentować z parametrem "batch-size" czyli
                 rozmiaru parti używanej w jednej iteracji treningu. W pierwotnym modelu dobraliśmy jego wartość jako 10.
@@ -529,23 +455,11 @@
             <p>Learning rate: 0.01</p>
             <div class="plot"><img src="img/ff_penguins/adam_learning_rate_01.png"></img></div>
             <p>Rezultat jest taki sam jak dla powyższego przykładu,
-                            mamy tutaj przykład "overfittingu"</p>
+                mamy tutaj przykład "overfittingu"</p>
             <p>Konkluzja: w naszym ostatecznym modelu, przyjmujemy parametry
                 batch size = 10, epoch = 45 oraz learning rate = 0.001 (domyślna wartość)</p>
             <h2>Ocena wyników na dopracowanym modelu i zbiorze testowym</h2>
-            <div class="code-snippet">
-                <pre class="line-numbers">
-                <code class="language-python">
-                    # Rezultaty na zbiorze testowym
-                    test_loss, test_accuracy = model.evaluate(X_test_scaled, y_test)
-                    print(f"Test loss: {test_loss:.4f}, Test accuracy: {test_accuracy:.4f}")
-                </code>
-                </pre>
-                <pre class="command-line">
-2/2 [==============================] - 0s 8ms/step - loss: 0.0098 - accuracy: 1.0000
-Test loss: 0.0098, Test accuracy: 1.0000
-                </pre>
-            </div>
+            <div class="plot"><img src="img/ff_penguins/results_test.png"></img></div>
             <div class="plot"><img src="img/ff_penguins/roc_curve_test_set.png"></img></div>
             <div class="plot"><img src="img/ff_penguins/confussion_matrix_test_set.png"></img></div>
             <p>1. Dokładność mamy na poziomie 100%</p>
