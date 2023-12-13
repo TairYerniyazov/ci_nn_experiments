@@ -596,7 +596,7 @@
                 </pre>
             </div>
             <h2>Network structure</h2>
-            <p>Sieć będzie mała, ponieważ po pierwsze zbiór danych jest mały, a po drugie rozwiązywanym problem jest klasyfikacja binarna. Stosujemy prosty (bo do wyboru mamy jeszcze inne, bardziej skomplikowane i samoobsługowe) Stochastic Gradient Descent, którego działanie było omawiane na przedmiocie Metody Numeryczne. Jeśli chodzi o hiperparametry takie jak learning_rate i momentum, to ich wartości początkowe wybrałem jako polecane przez internet.</p>
+            <p>Sieć będzie mała, ponieważ po pierwsze zbiór danych jest mały, a po drugie rozwiązywanym problem jest klasyfikacja binarna. Stosujemy prosty (bo do wyboru mamy jeszcze inne, bardziej skomplikowane i samoobsługowe) Stochastic Gradient Descent, którego działanie było omawiane na przedmiocie Metody Numeryczne. Wartości hiperparametrów takich jak learning_rate i momentum, wynikają tym etapie (od jakichś trzeba zacząć) z empirycznych obserwacji, że dla wielu modeli stosujących SGD te były dobre.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     units1 = 20
@@ -613,7 +613,21 @@
                 </code></pre>
             </div>
             <h2>Network training</h2>
-            
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    units1 = 20
+                    units2 = 10
+                    units3 = 1
+                    model = Sequential([
+                        Dense(units1, activation='relu', input_shape=(X_train.shape[1],)),
+                        Dense(units2, activation='relu'),
+                        # Dropout(0.2),
+                        Dense(units3, activation='sigmoid')
+                    ])
+                    model.compile(optimizer=tf.keras.optimizers.SGD(
+                        learning_rate=0.01, momentum=0.9), loss='binary_crossentropy', metrics=['accuracy'])
+                </code></pre>
+            </div>
             <h2>Results</h2>
             <h2>Results analysis</h2>
             <h2>Parameter tuning</h2>
