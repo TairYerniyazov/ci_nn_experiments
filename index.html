@@ -579,7 +579,7 @@
 
         <!-- STRONA HUBERTA P. -->
         <div class="wrapper page">
-            <h1>FFNN - Heart Disease</h1>
+            <h2>FFNN - Heart Disease</h2>
             <p>Nagłówki zostaną po angielsku dla spójności z <a href="https://drive.google.com/file/d/1qiDcnclMQwPquOmphOMx-5t5TrzHximV/view?usp=sharing">notatnikiem</a>, który jest cały po angielsku (na którego to podstawie jest ten artykuł).</p>
             <h2>Table of contents</h2>
             <ol>
@@ -695,7 +695,7 @@
                 </code></pre>
             </div>
             <h2>Network training</h2>
-            <p>Funkcja train_test_split wybiera losowe lekko ponad 15% zbioru treningowego (stanowiące 15% całego zbioru pierwotnego). Domyślnia wartość parametru batch_size funkcji model.fit wynosi 32, zaś domyślnie epochs = 1, dlatego przyjąłem na dobry początek 100.</p>
+            <p>Funkcja train_test_split wybiera losowe lekko ponad 15% zbioru treningowego (stanowiące 15% całego zbioru pierwotnego). Domyślna wartość parametru batch_size funkcji model.fit wynosi 32, zaś domyślnie epochs = 1, dlatego przyjąłem na dobry początek 100.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     X, Xv, y, yv = train_test_split(X_train, y_train, test_size=(.15/.85))
@@ -739,9 +739,10 @@
                 </code></pre>
             </div>
             <div class="plot"><img src="img/ff_hd/first_network.png"></img></div>
-            <p>Widocznie mieliśmy szczęście z domyślnymi hiperparametrami, ponieważ już teraz sieć rozpoznaje około 85% przypadków. Poniżej jest zdjęcie ze strony zbioru, dzięki czemu teraz i na końcu będziemy mogli porównać nasz model z tym, co jest uważane za przedział dokładności dla klasyfikacyjnej neuronowej.</p>
+            <p>Widocznie mieliśmy szczęście z domyślnymi hiperparametrami, ponieważ już teraz sieć rozpoznaje około 85% przypadków. Poniżej jest zdjęcie ze strony zbioru, dzięki czemu teraz i na końcu będziemy mogli porównać nasz model z tym, co jest uważane za przedział dokładności dla klasyfikacyjnej sieci neuronowej.</p>
             <div class="plot"><img src="img/ff_hd/baseline_model_performance.png"></img></div>
             <h2>Results analysis</h2>
+            <p>Z pierwszego treningu wynika, że sieć się nie douczyła, ponieważ Training Loss > Validation Loss oraz Training Accuracy < Validation Accuracy. Jednakże od około połowy epochs widzimy więcej fluktuacji, niż trendu zmian w związku z czym może trzeba będzie poprawić np. batch_size lub learning_rate.</p>
             <h2>Parameter tuning</h2>
 
             <!-- Template:
