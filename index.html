@@ -472,25 +472,67 @@
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
             <h3>SOM - Palmer Penguin</h3>
-            <div class="plot plot-tiny-width"><img src="img/penguins_logo.png"></img></div>
-            <h2>Opis zbioru danych & Przygotowanie danych</h2>
-            <p>Zawarty na stronie Piotra Dziedzica
+			<div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
+			<h2>Opis zbioru danych & Przygotowanie danych</h2>
+			<p>Zawarty na stronie Piotra Dziedzica
             <h2>Struktura sieci SOM</h2>
-            Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
-            <p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z
-                generalną architekturą sieci:
-            <p><b>Architektura sieci:</b>
-            <p>
+			Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
+			<p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z generalną architekturą sieci:
+			<p><b>Architektura sieci:</b><p>
             <ul>
-                <li><u>Siatka</u> - 2D, 9x9;</li>
-                <li><u>Liczba neuronów</u> - 81 (zasada heurystyczna dla treningowego zbioru danych
-                    o rozmiarze 272 rekordy);</li>
-                <li><u>Wymiar wektorów wag</u> - 18 (co odpowiada liczbie atrybutów);</li>
+                <li><u>Siatka</u> - 2D, 10x10; - dająca liczbe 100</li>
+                <li><u>Liczba neuronów</u> - 100 (zasada heurystyczna dla treningowego zbioru danych
+                    o rozmiarze 343 dałaby ~9x10, ale zwiększyliśmy do 10x10 dla ładniejszych wykresów);</li>
+                <li><u>Wymiar wektorów wag</u> - 3-6 Zależy od eksperymentu;</li>
                 <li><u>Odległość</u> - metryka Euklidesowa</li>
-                <li><u>Liczenie sąsiedztwa</u> - metryka Manhattan;</li>
-                <li><u>Redukcja współczynników</u> - zależy od maksymalnych wartości oraz całkowitej
-                    liczby iteracji.</li>
+                <li><u>Liczenie sąsiedztwa</u> - metryka Gaussian;</li>
+                <li><u>Redukcja współczynników</u> - wykonywana przez minisom.</li>
             </ul>
+			
+			Startowe wartości wszystkich neuronów są losowane przez minisom.
+			
+			<p><b>Uczenie sieci & Wyniki:</b><p>
+			
+			<p>Do utworzenia map dopasowania, SOM jest trenowany 100000 razy.
+			<p>Do utworzenia wykresów dokładności korzystamy z osobnych SOM trenowanych na 5 różnych datasetach utworzonych za pomocą walidacji krzyżowej.
+
+			<p>Rozważmy najpierw eksperyment dla wszystkich parametrów.
+			<p>Tak jak wcześniej omówiliśmy, odrzucamy kategorie "year" i "island". Omijamy także "species":
+			<div class="plot plot-small-width"><img src="img/som_penguins/BaseMap.png"></img></div>
+			<p>Widać tutaj klasteryzację, zwłaszcza dla pingwinów reprezentowanych przez niebieskie romby.
+			<p>Widać także klaster czerwony i zielony, jednakże te lubią się mieszać.
+			<div class="plot plot-small-width"><img src="img/som_penguins/BaseValidation.png"></img></div>
+			<p>W obu przypadkach, dokładność tego modelu jest w granicach 63-68%. Jako że dane są szeregowane losowo, te wartości potrafią się zmieniać.
+			<p>
+			<p>Teraz przetestujmy SOM bez atrybutu "płci":
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexMap.png"></img></div>
+			<p>Wygląda na to że nasza mapa się obróciła o 180 stopni. Wciąż widać klastry.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexValidation.png"></img></div>
+			<p>Utrata danych o płci zmniejszyła true positive rate o około 10 punktów procentowych.
+			<p>
+			<p>Teraz spróbujmy usunąć oba atrybuty o dziobie, zostawiając tylko długość płetwy i masę ciała.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbillMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbillValidation.png"></img></div>
+			<p>Jak widać, te dwa atrybuty wystarczą aby wciąż widzieć klastry, chociaż są one coraz bardziej rozrzucone. Dodatkowo, nasz SOM jest mniej dodatkowe o kolejne ~10 punktów procentowych.
+			<p> 
+			<p> Rozważmy teraz coś innego, zamiast usuwać infomacje o dziobie, usuńmy atrybut odpowiadający za masę ciała.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassMap.png"></img></div>
+			<p> Jak widać, teraz wszystkie 3 klastry są bardzo rozdzielone i bardzo widoczne. Nie jest to dziwne, bo pingwiny gatunku Chinstrap i Adelie mają bardzo podobne masy ciał.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassValidation.png"></img></div>
+			<p> Czemu tutaj jest tak mała dokładność chociaż klasty są bardziej widoczne? Bo mniej są trenowane?
+			<p>
+			<p> Rozważmy jeszcze dwa eksperymenty. Usuńmy dodatkowo oprócz masy ciała, płci jeszcze długość płetwy, która też jest bardzo podobna dla gatunków Chinstap i Adelie:
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassflipperMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassflipperValidation.png"></img></div>
+			<p> Wciąż wyraźnie widać 3 klastry, ale dokładność się nam zmniejszyła do poziomu 36%, to prawie jak losowe zgadywanie!
+			<p>
+			<p> Jeszcze rozważmy jeden przykład: zamiast usuwać informację o płetwie, rozważmy usunięcie informacji o głębokości dzioba:
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassbilldepthMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassbilldepthValidation.png"></img></div>
+			<p> Usuwając jeden z wyróżniających atrybutów, znowu klastry się wymieszały. Tym razem zielony i niebieski się mieszają a nasza dokładność jest jeszcze gorsza niż wcześniej.
+			<p>
+			<p>
+			<p><b>Dostrajanie Parametrów:</b><p>
         </div>
 
 
