@@ -66,6 +66,15 @@
                 <li><b>Podsumowanie:</b> na zakończenie należy podsumować otrzymane wyniki dla 4 sieci. Zestawić je parami: raz dla danych, raz dla
                 rodzaju sieci i wyciągnąć wnioski z otrzymanych wyników.</li>
             </ol>
+            <br>
+            <h2>Notatniki Jupyter</h2>
+            <p>Google Colab</p>
+            <ol>
+                <li><a href="#">FFNN Palmer Penguins</a></li>
+                <li><a href="#">SOM Palmer Penguins</a></li>
+                <li><a href="#">FFNN Heart Disease</a></li>
+                <li><a href="https://colab.research.google.com/drive/1aFp_SQcUAk8FIX2B24jQNYbMutnl50P_?usp=sharing">SOM Heart Disease</a></li>
+            </ol>
         </div>
 
         <!-- STRONA PIOTRA D. -->
@@ -492,10 +501,10 @@
                 Dla każdej partii model obliczy gradienty i zaktualizuje wagi
             </p>
             <p><code>Osiągniete rezultaty</code></p>
-            <div class="plot"><img src="img/ff_penguins/rezultaty_epoki_text.png"></img></div>
+            <div class="plot plot-small-width"><img src="img/ff_penguins/rezultaty_epoki_text.png"></img></div>
             <div class="plot"><img src="img/ff_penguins/rezultaty_epoki_wykresy.png"></img></div>
-            <div class="plot"><img src="img/ff_penguins/confussion_matrix.png"></img></div>
-            <div class="plot"><img src="img/ff_penguins/roc_curve.png"></img></div>
+            <div class="plot plot-small-height"><img src="img/ff_penguins/confussion_matrix.png"></img></div>
+            <div class="plot plot-small-height"><img src="img/ff_penguins/roc_curve.png"></img></div>
             <h2>Dostrajanie parametrów</h2>
             <p>W pierwotnym modelu zostało użyte tylko 10 epok, co jest stosunkowo małą liczbą,
                 a dobranie większej liczby może konkretnie zwiększyć nasze rezultaty. Zatem sprawdźmy to</p>
@@ -511,18 +520,22 @@
             <div class="plot"><img src="img/ff_penguins/batch_size_32.png"></img></div>
             <div class="plot"><img src="img/ff_penguins/batch_size_64.png"></img></div>
             <p>Bardzo łatwo zauważyć na wykresach, że im mniejszy batch size tym szybsza jest zbieżność</p>
-            <p>Następnie przeprowadźmy eksperymenty z innymi algorytmami optymalizacji niż Adam</p>
-            <p><code>Optimizer: SGD</code></p>
-            <div class="plot"><img src="img/ff_penguins/sgd_optimizer.png"></img></div>
-            <p><code>Rezultat: ()</code></p>
-            <p><code>Optimizer: RMSProp</code></p>
-            <div class="plot"><img src="img/ff_penguins/rmsprop_optimizer.png"></img></div>
-            <p><code>Rezultat: ()</code></p>
-            <p><code>Optimizer: Adagrad</code></p>
-            <div class="plot"><img src="img/ff_penguins/adagrad.png"></img></div>
-            <p><code>Rezultat: ()</code></p>
-            </div>
+            <p>Spróbujmy teraz zbadać jeszcze wpływ parametru learning-rate na nasze wyniki.
+                W modelu pierwotnym nie podawaliśmy go explicite, ponieważ jest on ustawiany domyślnie na 0.001
+                przez algorytm Adam
+            </p>
+            <p>Learning rate: 0.005</p>
+            <div class="plot"><img src="img/ff_penguins/adam_learning_rate_005.png"></img></div>
+            <p>Rezultat: Łatwo zauważamy że mamy tutaj przykład "overfittingu"</p>
+            <p>Learning rate: 0.01</p>
+            <div class="plot"><img src="img/ff_penguins/adam_learning_rate_01.png"></img></div>
+            <p>Rezultat jest taki sam jak dla powyższego przykładu,
+                            mamy tutaj przykład "overfittingu"</p>
+            <p>Konkluzja: w naszym ostatecznym modelu, przyjmujemy parametry
+                batch size = 10, epoch = 45 oraz learning rate = 0.001 (domyślna wartość)</p>
+            <h2>Ocena wyników na dopracowanym modelu i zbiorze testowym</h2>
         </div>
+        
 
 
         <!-- STRONA HUBERTA M. -->
@@ -652,7 +665,7 @@
             <div class="plot"><img src="img/som_hd/correlation_1.png"></img></div>
             <h2>Przygotowanie danych</h2>
             <p>W tym rozdziale będziemy pokazywali kluczowe kawałki kodu. Całość można znaleźć tu:
-                <a href="#">notatnik Jupyter (Google Colab)</a>
+                <a href="https://colab.research.google.com/drive/1aFp_SQcUAk8FIX2B24jQNYbMutnl50P_?usp=sharing">notatnik Jupyter (Google Colab)</a>
             </p>
             <p>Przede wszystkim powinniśmy jakoś postąpić z brakującymi wartościami. Ze zwględu na to,
                 że każdy rekord zawiera 13 cech, to możemy te dwie znane nam kolumny douzupełnić wartością
