@@ -511,7 +511,7 @@
 
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
-            <h3>SOM - Palmer Penguin</h3>
+            <h2>SOM - Palmer Penguin</h3>
 			<div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
 			<h2>Opis zbioru danych & Przygotowanie danych</h2>
 			<p>Zawarty na stronie Piotra Dziedzica
@@ -573,6 +573,14 @@
 			<p>
 			<p>
 			<p><b>Dostrajanie Parametrów:</b><p>
+			<p> Za pomocą testów udało nam się wywnioskować że zmiana learning rate z 50% do 90% skutkuje zmniejszeniem dokładności w każdym z eksperymentów. Jest to bardzo zauważalne w eksperymencie bez płci i masy ciała, gdzie % trafionych zgadnięć schodzi z 53% do 36%. Jest jednak jeden wyjątek do tego, albowiem model bez masy ciała i długości płetwy zwiększył swoją dokładność z 36% do 67%.
+			<div class="plot plot-small-width"><img src="img/som_penguins/BeforeLearningRate09.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/AfterLearningRate09.png"></img></div>
+			<p>
+			<p> Postanowiliśmy także przetestować zmniejszenie learning rate z 50% do 5%. Tutaj wyniki są o wiele bardziej pozytywne. Każdy z eksperymentów oprócz pierwszego miał zwiększony wskaźnik trafności. Najwiekszą różnicę można zauważyć było w eksperymencie bez atrybutu płci i masy ciała, gdzie trafność zwiększyła się do 73%.
+			<div class="plot plot-small-width"><img src="img/som_penguins/AfterLearningRate005.png"></img></div>
+			<p>
+			<p> Spróbowaliśmy zwiększyć rozmiar mapy do 20x20, ale to poskutkowało zmniejszeniem trafności do 28-36% w każdym z przypadków.  
         </div>
 
 
@@ -744,7 +752,7 @@
             <h2>Results analysis</h2>
             <p>Z pierwszego treningu wynika, że sieć się nie douczyła, ponieważ Training Loss > Validation Loss oraz Training Accuracy < Validation Accuracy. Jednakże od około połowy epochs widzimy więcej fluktuacji, niż trendu zmian w związku z czym może trzeba będzie poprawić np. batch_size lub learning_rate.</p>
             <h2>Parameter tuning</h2>
-            <p></p>
+            <p>Przygotowaliśmy funkcję do testowania zmian hiperparametrów. Jako argumenty przyjmuje rozkład wykresów, zbiór treningowy, parametr, który będziemy zmieniać oraz zakres zmian. Opcjonalnymi argumentami są mnożnik zmian (jak skalować od do oraz krok) oraz czy model ma zawierać dropout. Gdy będziemy chcieli zmienić hiperparametr na stałe, dokonamy tego wewnątrz tej funkcji. Zaczynamy z batch_size = 32, epochs = 100, learning_rate = 0.01, momentum = 0.9.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     def default_model():
@@ -767,9 +775,9 @@
                     def plot_models(subplot, X_train, y_train, change, max, multiplier=1, min=0, model_type="Without dropout", title=""):
                         step = int((max-min)/20)     # Here is the magic place where we set how long program will work
                         if(step<1): step = 1
-                        batch_size = 10
+                        batch_size = 32
                         epochs = 100
-                        learning_rate = 0.001
+                        learning_rate = 0.01
                         momentum = 0.9
                         if(model_type == "With dropout"): model = dropout_model()
                         else: model = default_model()
@@ -789,12 +797,6 @@
                             test_loss, test_accuracy = model.evaluate(Xv, yv)
                             validation_losses.append(test_loss)
                             validation_accuracies.append(test_accuracy)
-                        # plt.subplot(subplot[0], subplot[1], subplot[2])
-                        # plt.plot([multiplier*i for i in range(min, max+1, step)], validation_losses, label='Validation loss')
-                        # plt.plot([multiplier*i for i in range(min, max+1, step)], validation_accuracies, label='Validation accuracy')
-                        # plt.title(str(model_type)+" "+str(title))
-                        # plt.xlabel(" ".join([str(item) for item in change]))
-                        # plt.legend()
 
                         ax1 = plt.subplot(subplot[0], subplot[1], subplot[2])
                         ax1.plot([multiplier*i for i in range(min, max+1, step)], validation_accuracies, color="#198038")
@@ -804,6 +806,55 @@
                         ax2.set_ylabel('Validation loss', color="#1192e8")
                         plt.title(str(model_type)+" "+str(title))
                         plt.xlabel(" ".join([str(item) for item in change]))
+                </code></pre>
+            </div>
+            <h3>Number of epochs</h3>
+            <p>Powyżej 100 epoc nie widać poprawy, więc epochs zastawiamy 100.</p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    display(Javascript('''google.colab.output.setIframeHeight(0, true, {maxHeight: 100})'''))
+                    plt.figure(figsize=(10, 4))
+                    plot_models([1,2,1], X_train, y_train, "epoch", 400)
+                    plot_models([1,2,2], X_train, y_train, "epoch", 400, model_type="With dropout")
+                    plt.tight_layout()
+                    plt.show()
+                </code></pre>
+            </div>
+            <div class="plot"><img src="img/ff_hd/epochs.png"></img></div>
+            <h3>Batch size</h3>
+            <p></p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    display(Javascript('''google.colab.output.setIframeHeight(0, true, {maxHeight: 100})'''))
+                    plt.figure(figsize=(10, 4))
+                    plot_models([1,2,1], X_train, y_train, "batch_size", 100)
+                    plot_models([1,2,2], X_train, y_train, "batch_size", 100, model_type="With dropout")
+                    plt.tight_layout()
+                    plt.show()
+                </code></pre>
+            </div>
+            <div class="plot"><img src="img/ff_hd/first_network.png"></img></div>
+            <h3>Learning rate</h3>
+            <p></p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    
+                </code></pre>
+            </div>
+            <div class="plot"><img src="img/ff_hd/first_network.png"></img></div>
+            <h3>Momentum</h3>
+            <p></p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    
+                </code></pre>
+            </div>
+            <div class="plot"><img src="img/ff_hd/first_network.png"></img></div>
+            <h2>Example of a good model</h2>
+            p></p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    
                 </code></pre>
             </div>
 
