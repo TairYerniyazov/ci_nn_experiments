@@ -786,7 +786,7 @@
                         batch_size = 32
                         epochs = 100
                         learning_rate = 0.01
-                        momentum = 0.9
+                        momentum = 0.65
                         if(model_type == "With dropout"): model = dropout_model()
                         else: model = default_model()
                         compile_model(model, learning_rate, momentum)
@@ -856,7 +856,7 @@
             </div>
             <div class="plot"><img src="img/ff_hd/learning_rate.png"></img></div>
             <h3>Momentum</h3>
-            <p>Fluktuacje są bardzo duże, zaś accuracy jest bardzo niskie, średnio rzędu 55%, dlatego zmieniamy learning_rate spowrotem z 0.05 na 0.01 i uruchamiamy test momentum jeszcze raz.</p>
+            <p>Momentum zmieniamy z 0.9 na 0.65.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     display(Javascript('''google.colab.output.setIframeHeight(0, true, {maxHeight: 100})'''))
@@ -876,15 +876,57 @@
                 <li>Epochs: 100</li>
                 <li>Batch size: 32</li>
                 <li>Learning rate: 0.05</li>
-                <li>Momentum: </li>
+                <li>Momentum: 0.65</li>
             </ul>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
-                    
+                    model = dropout_model()
+                    compile_model(model, learning_rate=0.05, momentum=0.65)
+                    X, Xv, y, yv = train_test_split(X_train, y_train, test_size=(.15/.85))
+                    history = model.fit(X, y, batch_size=32, epochs=300, validation_data=(Xv, yv), verbose=0)
+
+                    test_loss, test_accuracy = model.evaluate(X_test, y_test)
+                    print(f"Final accuracy on test data: {test_accuracy*100:.2f}%")
+
+                    plt.figure(figsize=(15, 5))
+
+                    plt.subplot(1, 3, 1)
+                    plt.plot(history.history['loss'], label='Training Loss')
+                    plt.plot(history.history['val_loss'], label='Validation Loss')
+                    plt.title('Loss on Training and Validation Data')
+                    plt.xlabel('Epochs')
+                    plt.ylabel('Loss')
+                    plt.legend()
+
+                    plt.subplot(1, 3, 2)
+                    plt.plot(history.history['accuracy'], label='Training Accuracy')
+                    plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+                    plt.title('Accuracy on Training and Validation Data')
+                    plt.xlabel('Epochs')
+                    plt.ylabel('Accuracy')
+                    plt.legend()
+
+                    # false positive rate (fpr), true positive rate (tpr)
+                    fpr, tpr, thresholds = roc_curve(y_test, model.predict(X_test))
+                    roc_auc = auc(fpr, tpr) # Area Under Curve (AUC)
+                    plt.subplot(1, 3, 3)
+                    plt.plot(fpr, tpr, color='blue', lw=2, label='ROC curve (AUC = %0.2f)' % roc_auc)
+                    plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
+                    plt.xlabel('False Positive Rate')
+                    plt.ylabel('True Positive Rate')
+                    plt.title('Receiver Operating Characteristic (ROC) Curve')
+                    plt.legend(loc='lower right')
+
+                    plt.tight_layout()
+                    plt.show()
                 </code></pre>
+                </pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    Final accuracy on test data: 89.13%
+                </pre>
             </div>
             <div class="plot"><img src="img/ff_hd/corr_matrix.png"></img></div>
-            <p></p>
+            <p>Ostateczne accuracy na zbiorze testowym wynosi 89.13%, co porównując do wykresu.</p>
 
             <!-- Template:
             <div class="code-snippet">
