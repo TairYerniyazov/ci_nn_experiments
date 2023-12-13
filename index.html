@@ -752,7 +752,7 @@
             <h2>Results analysis</h2>
             <p>Z pierwszego treningu wynika, że sieć się nie douczyła, ponieważ Training Loss > Validation Loss oraz Training Accuracy < Validation Accuracy. Jednakże od około połowy epochs widzimy więcej fluktuacji, niż trendu zmian w związku z czym może trzeba będzie poprawić np. batch_size lub learning_rate.</p>
             <h2>Parameter tuning</h2>
-            <p>Przygotowaliśmy funkcję do testowania zmian hiperparametrów. Jako argumenty przyjmuje rozkład wykresów, zbiór treningowy, parametr, który będziemy zmieniać oraz zakres zmian. Opcjonalnymi argumentami są mnożnik zmian (jak skalować od do oraz krok) oraz czy model ma zawierać dropout. Gdy będziemy chcieli zmienić hiperparametr na stałe, dokonamy tego wewnątrz tej funkcji. Zaczynamy z batch_size = 32, epochs = 100, learning_rate = 0.01, momentum = 0.9.</p>
+            <p>Przygotowaliśmy funkcję do testowania zmian hiperparametrów. Jako argumenty przyjmuje rozkład wykresów, zbiór treningowy, parametr, który będziemy zmieniać oraz zakres zmian. Opcjonalnymi argumentami są mnożnik zmian (jak skalować od do oraz krok) oraz czy model ma zawierać dropout. Gdy będziemy chcieli zmienić hiperparametr na stałe, dokonamy tego wewnątrz tej funkcji. Zaczynamy z batch_size = 32, epochs = 100, learning_rate = 0.01, momentum = 0.9. Bardzo przydatne są linijki print'ujące progres testu, bo czasem można stracić cierpliwość, gdy program już długo działa i nie wiadomo jak długo trzeba będzie jeszcze czekać.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     def default_model():
@@ -787,7 +787,7 @@
                         for i in range(min, max+1, step):
                             if "batch_size" in change: batch_size = multiplier*i
                             if "epoch" in change: epochs = multiplier*i
-                            if "learning_rate" in change: compile_model(model, multiplier*i, momentum)
+                            if "learning_rate" in change: compile_model(model, multiplier*i, learning_rate)
                             if "momentum" in change: compile_model(model, i, multiplier*momentum)
                             X, Xv, y, yv = train_test_split(X_train, y_train, test_size=(.15/.85))
                             fit_model(model, X, y, batch_size=batch_size, epochs=epochs)
