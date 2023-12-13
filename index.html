@@ -835,21 +835,33 @@
             </div>
             <div class="plot"><img src="img/ff_hd/batch_size.png"></img></div>
             <h3>Learning rate</h3>
-            <p></p>
+            <p>Fluktuacje sugerują dystans do tego jaka wartość jest ściśle najlepsza, jednak decydujemy się na zwiększenie learning_rate z 0.01 na 0.05.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
-                    
+                    display(Javascript('''google.colab.output.setIframeHeight(0, true, {maxHeight: 100})'''))
+                    plt.figure(figsize=(10, 4))
+                    plot_models([1,2,1], X_train, y_train, "learning_rate", 100, multiplier=0.001)
+                    plot_models([1,2,2], X_train, y_train, "learning_rate", 100, multiplier=0.001, model_type="With dropout")
+                    plt.tight_layout()
+                    plt.show()
                 </code></pre>
             </div>
-            <div class="plot"><img src="img/ff_hd/first_network.png"></img></div>
+            <div class="plot"><img src="img/ff_hd/learning_rate.png"></img></div>
             <h3>Momentum</h3>
-            <p></p>
+            <p>Fluktuacje są bardzo duże, zaś accuracy jest bardzo niskie, średnio rzędu 55%, dlatego zmieniamy learning_rate spowrotem z 0.05 na 0.01 i uruchamiamy test momentum jeszcze raz.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
-                    
+                    display(Javascript('''google.colab.output.setIframeHeight(0, true, {maxHeight: 100})'''))
+                    plt.figure(figsize=(10, 4))
+                    plot_models([1,2,1], X_train, y_train, "momentum", 100, multiplier=0.01)
+                    plot_models([1,2,2], X_train, y_train, "momentum", 100, multiplier=0.01, model_type="With dropout")
+                    plt.tight_layout()
+                    plt.show()
                 </code></pre>
             </div>
-            <div class="plot"><img src="img/ff_hd/first_network.png"></img></div>
+            <div class="plot"><img src="img/ff_hd/momentum_1.png"></img></div>
+            <p>Fluktuacje są bardzo duże, zaś accuracy jest bardzo niskie, średnio rzędu 55%, dlatego zmieniamy learning_rate spowrotem z 0.05 na 0.01 i uruchamiamy test momentum jeszcze raz.</p>
+            <div class="plot"><img src="img/ff_hd/momentum_2.png"></img></div>
             <h2>Example of a good model</h2>
             p></p>
             <div class="code-snippet">
