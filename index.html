@@ -556,13 +556,29 @@ Test loss: 0.0098, Test accuracy: 1.0000
         </div>
         
 
-
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
-            <div class="plot plot-tiny-width"><img src="img/penguins_logo.png"></img></div>
             <h3>SOM - Palmer Penguin</h3>
+            <div class="plot plot-tiny-width"><img src="img/penguins_logo.png"></img></div>
+            <h2>Opis zbioru danych & Przygotowanie danych</h2>
+            <p>Zawarty na stronie Piotra Dziedzica
+            <h2>Struktura sieci SOM</h2>
+            Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
+            <p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z
+                generalną architekturą sieci:
+            <p><b>Architektura sieci:</b>
+            <p>
+            <ul>
+                <li><u>Siatka</u> - 2D, 9x9;</li>
+                <li><u>Liczba neuronów</u> - 81 (zasada heurystyczna dla treningowego zbioru danych
+                    o rozmiarze 272 rekordy);</li>
+                <li><u>Wymiar wektorów wag</u> - 18 (co odpowiada liczbie atrybutów);</li>
+                <li><u>Odległość</u> - metryka Euklidesowa</li>
+                <li><u>Liczenie sąsiedztwa</u> - metryka Manhattan;</li>
+                <li><u>Redukcja współczynników</u> - zależy od maksymalnych wartości oraz całkowitej
+                    liczby iteracji.</li>
+            </ul>
         </div>
-
 
         <!-- STRONA HUBERTA P. -->
         <div class="wrapper page">
