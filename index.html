@@ -830,7 +830,7 @@
             </div>
             <div class="plot"><img src="img/ff_hd/epochs.png"></img></div>
             <h3>Batch size</h3>
-            <p>W przypadku batch_size również na razie nie widać, żeby zmiana z domyślnej wartości 32 miała sens.</p>
+            <p>W przypadku batch_size na razie nie widać, żeby zmiana z domyślnej wartości 32 miała sens, dlatego tak zostanie.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     display(Javascript('''google.colab.output.setIframeHeight(0, true, {maxHeight: 100})'''))
@@ -871,12 +871,20 @@
             <p>Fluktuacje są bardzo duże, zaś accuracy jest bardzo niskie, średnio rzędu 55%, dlatego zmieniamy learning_rate spowrotem z 0.05 na 0.01 i uruchamiamy test momentum jeszcze raz.</p>
             <div class="plot"><img src="img/ff_hd/momentum_2.png"></img></div>
             <h2>Example of a good model</h2>
-            p></p>
+            <p>Na powyższych wykresach dropout generalnie osiągał lepsze rezultaty, niż wersja bez niego, dlatego ostateczna wersja będzie wersją z dropout'em. Ostateczne hiperparametry sieci to:</p>
+            <ul>
+                <li>Epochs: 100</li>
+                <li>Batch size: 32</li>
+                <li>Learning rate: </li>
+                <li>Momentum: </li>
+            </ul>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     
                 </code></pre>
             </div>
+            <div class="plot"><img src="img/ff_hd/corr_matrix.png"></img></div>
+            <p></p>
 
             <!-- Template:
             <div class="code-snippet">
