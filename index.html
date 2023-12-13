@@ -511,20 +511,19 @@
 
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
-            <h2>SOM - Palmer Penguin</h3>
-			<div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
+			<div class="plot plot-tiny-width"><img src="img/penguins_logo.png"></img></div>
 			<h2>Opis zbioru danych & Przygotowanie danych</h2>
-			<p>Zawarty na stronie Piotra Dziedzica
+			<p>Zawarty na stronie Piotra Dziedzica.
             <h2>Struktura sieci SOM</h2>
 			Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
-			<p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z generalną architekturą sieci:
+			<p>Rozważymy wiele różnych kombinacji liczby atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z generalną architekturą sieci:
 			<p><b>Architektura sieci:</b><p>
             <ul>
-                <li><u>Siatka</u> - 2D, 10x10; - dająca liczbe 100</li>
+                <li><u>Siatka</u> - 2D, 10x10; - dająca liczbę 100;</li>
                 <li><u>Liczba neuronów</u> - 100 (zasada heurystyczna dla treningowego zbioru danych
-                    o rozmiarze 343 dałaby ~9x10, ale zwiększyliśmy do 10x10 dla ładniejszych wykresów);</li>
-                <li><u>Wymiar wektorów wag</u> - 3-6 Zależy od eksperymentu;</li>
-                <li><u>Odległość</u> - metryka Euklidesowa</li>
+                    o rozmiarze 343 dałaby ≈ 9x10, ale zwiększyliśmy do 10x10 dla ładniejszych wykresów);</li>
+                <li><u>Wymiar wektorów wag</u> - 3-6, zależy od eksperymentu;</li>
+                <li><u>Odległość</u> - metryka Euklidesowa;</li>
                 <li><u>Liczenie sąsiedztwa</u> - metryka Gaussian;</li>
                 <li><u>Redukcja współczynników</u> - wykonywana przez minisom.</li>
             </ul>
@@ -533,7 +532,7 @@
 			
 			<p><b>Uczenie sieci & Wyniki:</b><p>
 			
-			<p>Do utworzenia map dopasowania, SOM jest trenowany 100000 razy.
+			<p>Do utworzenia map dopasowania, SOM jest trenowany 100 000 razy.
 			<p>Do utworzenia wykresów dokładności korzystamy z osobnych SOM trenowanych na 5 różnych datasetach utworzonych za pomocą walidacji krzyżowej.
 
 			<p>Rozważmy najpierw eksperyment dla wszystkich parametrów.
@@ -553,15 +552,18 @@
 			<p>Teraz spróbujmy usunąć oba atrybuty o dziobie, zostawiając tylko długość płetwy i masę ciała.
 			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbillMap.png"></img></div>
 			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbillValidation.png"></img></div>
-			<p>Jak widać, te dwa atrybuty wystarczą aby wciąż widzieć klastry, chociaż są one coraz bardziej rozrzucone. Dodatkowo, nasz SOM jest mniej dodatkowe o kolejne ~10 punktów procentowych.
+			<p>Jak widać, te dwa atrybuty wystarczą aby wciąż widzieć klastry, chociaż są one coraz bardziej rozrzucone. 
+                Dodatkowo, nasz SOM jest mniej dodatkowe o kolejne ≈ 10 punktów procentowych.
 			<p> 
 			<p> Rozważmy teraz coś innego, zamiast usuwać infomacje o dziobie, usuńmy atrybut odpowiadający za masę ciała.
 			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassMap.png"></img></div>
-			<p> Jak widać, teraz wszystkie 3 klastry są bardzo rozdzielone i bardzo widoczne. Nie jest to dziwne, bo pingwiny gatunku Chinstrap i Adelie mają bardzo podobne masy ciał.
+			<p> Jak widać, teraz wszystkie 3 klastry są bardzo rozdzielone i bardzo widoczne. Nie jest to dziwne, 
+                bo pingwiny gatunku Chinstrap i Adelie mają bardzo podobne masy ciał.
 			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassValidation.png"></img></div>
 			<p> Czemu tutaj jest tak mała dokładność chociaż klasty są bardziej widoczne? Bo mniej są trenowane?
 			<p>
-			<p> Rozważmy jeszcze dwa eksperymenty. Usuńmy dodatkowo oprócz masy ciała, płci jeszcze długość płetwy, która też jest bardzo podobna dla gatunków Chinstap i Adelie:
+			<p> Rozważmy jeszcze dwa eksperymenty. Usuńmy dodatkowo oprócz masy ciała, płci jeszcze długość płetwy, 
+                która też jest bardzo podobna dla gatunków Chinstap i Adelie:
 			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassflipperMap.png"></img></div>
 			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassflipperValidation.png"></img></div>
 			<p> Wciąż wyraźnie widać 3 klastry, ale dokładność się nam zmniejszyła do poziomu 36%, to prawie jak losowe zgadywanie!
@@ -569,15 +571,21 @@
 			<p> Jeszcze rozważmy jeden przykład: zamiast usuwać informację o płetwie, rozważmy usunięcie informacji o głębokości dzioba:
 			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassbilldepthMap.png"></img></div>
 			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassbilldepthValidation.png"></img></div>
-			<p> Usuwając jeden z wyróżniających atrybutów, znowu klastry się wymieszały. Tym razem zielony i niebieski się mieszają a nasza dokładność jest jeszcze gorsza niż wcześniej.
+			<p> Usuwając jeden z wyróżniających atrybutów, znowu klastry się wymieszały. Tym razem zielony i niebieski się mieszają 
+                a nasza dokładność jest jeszcze gorsza niż wcześniej.
 			<p>
 			<p>
 			<p><b>Dostrajanie Parametrów:</b><p>
-			<p> Za pomocą testów udało nam się wywnioskować że zmiana learning rate z 50% do 90% skutkuje zmniejszeniem dokładności w każdym z eksperymentów. Jest to bardzo zauważalne w eksperymencie bez płci i masy ciała, gdzie % trafionych zgadnięć schodzi z 53% do 36%. Jest jednak jeden wyjątek do tego, albowiem model bez masy ciała i długości płetwy zwiększył swoją dokładność z 36% do 67%.
+			<p> Za pomocą testów udało nam się wywnioskować że zmiana learning rate z 50% do 90% skutkuje zmniejszeniem dokładności 
+                w każdym z eksperymentów. Jest to bardzo zauważalne w eksperymencie bez płci i masy ciała, gdzie % trafionych zgadnięć 
+                schodzi z 53% do 36%. Jest jednak jeden wyjątek do tego, albowiem model bez masy ciała i długości płetwy zwiększył 
+                swoją dokładność z 36% do 67%.
 			<div class="plot plot-small-width"><img src="img/som_penguins/BeforeLearningRate09.png"></img></div>
 			<div class="plot plot-small-width"><img src="img/som_penguins/AfterLearningRate09.png"></img></div>
 			<p>
-			<p> Postanowiliśmy także przetestować zmniejszenie learning rate z 50% do 5%. Tutaj wyniki są o wiele bardziej pozytywne. Każdy z eksperymentów oprócz pierwszego miał zwiększony wskaźnik trafności. Najwiekszą różnicę można zauważyć było w eksperymencie bez atrybutu płci i masy ciała, gdzie trafność zwiększyła się do 73%.
+			<p> Postanowiliśmy także przetestować zmniejszenie learning rate z 50% do 5%. Tutaj wyniki są o wiele bardziej pozytywne. 
+                Każdy z eksperymentów oprócz pierwszego miał zwiększony wskaźnik trafności. Najwiekszą różnicę można zauważyć było 
+                w eksperymencie bez atrybutu płci i masy ciała, gdzie trafność zwiększyła się do 73%.
 			<div class="plot plot-small-width"><img src="img/som_penguins/AfterLearningRate005.png"></img></div>
 			<p>
 			<p> Spróbowaliśmy zwiększyć rozmiar mapy do 20x20, ale to poskutkowało zmniejszeniem trafności do 28-36% w każdym z przypadków.  
