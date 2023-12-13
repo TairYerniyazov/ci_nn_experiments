@@ -70,10 +70,50 @@
             <p>Google Colab</p>
             <ol>
                 <li><a href="https://colab.research.google.com/drive/1baNi0ls9fdn9ztc2AR0PuS4e6hMK1em0?usp=sharing">FFNN Palmer Penguins</a></li>
-                <li><a href="#">SOM Palmer Penguins</a></li>
+                <li><a href="https://drive.google.com/file/d/1a0LBpjsay0yh0vT-q_0nN08VPGyCgo8C/view?usp=sharing">SOM Palmer Penguins</a></li>
                 <li><a href="#">FFNN Heart Disease</a></li>
                 <li><a href="https://colab.research.google.com/drive/1aFp_SQcUAk8FIX2B24jQNYbMutnl50P_?usp=sharing">SOM Heart Disease</a></li>
             </ol>
+            <h2>Wyniki</h2>
+            <p>Próbując rozwiązać problem klasyfikacji binarnej oraz wieloklasowej udało nam się zbudować różne sieci neuronowe - Self-organising map (SOM)
+                oraz (Shallow) Feedforward Neural Network (FFNN). Spróbujmy teraz porównać ich skuteczność oraz wyjaśnić, na czym polegała różnica:<p>
+                    <un> 
+                        <li>Obydwa zbiory danych zostały przedstawione i zbadane w trakcie eksperymentów. Wstępne przetworzenie danych
+                            oraz inżynieria cech pozwoliły na uzyskanie ciekawych wyników.</li><br>
+                        <li><b>Sieć SOM & zbiór Health Disease:</b> zaprojektowaliśmy i zaimplementowaliśmy całą architekturę od zera, nie korzystając z
+                            żadnych bibliotek. Udało się wyodrębnić dane i utworzyć dwa klastry. Dzięki temu, że zbadaliśmy wygląd macierzy
+                            odległości, mogliśmy zaobserwować tworzenie "ścian" separujących próbki i wykrywających pewne prawdopodobieństwo.
+                            Na szczęście właściwe klastry, które zostały wykryty, zostały później skutecznie rozpoznane jako osoby zdrowe i chore.
+                            Później zastosowaliśmy wyuczone neurony do klasyfikacji binarnej i uzyskaliśmy po 6k iteracji dokładność na poziomie <b>81%</b>.
+                        </li><br>
+                        <li><b>Sieć SOM & zbiór Palmer Penguin:</b> zaprojektowaliśmy sieć, a następnie zaimplementowaliśmy, korzystajć z biblioteki minisom.
+                            Wizualizacja macierzy odległości złączonej z macierzą odzwierciedlającą zaznaczone przez nas próbki pozwoliły na zaobserwowanie
+                            trzech powstałych grup. Każda z tych grup reprezentowała konkretny gatunek pingwina. Właśnie tego się spodziewaliśmy.
+                            Stosując 5-składową walidację krzyżową oraz siatkę o rozmiarze 10x10 nie mieliśmy zbyt dużo czasu, na znalezienie
+                            optymalnych hyperparametrów. Niemniej jednak, uzyskaliśmy dokładność na poziomie <b>63%</b>. 
+                        </li><br>
+                        <li><b>Sieć FFNN & zbiór Health Disease:</b> sieć dobrze sprawdziła się w przypadku klasyfikacji biarnej. Próbowaliśmy
+                        na różne sposoby uzyskać jak najszybszą zbieżność i równocześnie uniknąć nadmiernego dopasowania. Stosowanie takich
+                        metod jak wprowadzenie warstwy odrzucania (Dropout Layer) pomagało utrzymywać dokładność i precyzję klasyfikacji zarówno
+                        na zbiorze testowym, jak i walidacyjnym. Dzięki temu ostateczny model osiągnął ponad 90% dokłądności, mimo że wyuczony
+                        został na bardzo małej liczbie danych i małej liczbie parametrów.</li><br>
+                        <li><b>Sieć FFNN & zbiór Palmer Penguin:</b> sieć, która posiada zaledwie 10 neuronów w jednej warstwie ukrytej, potrafiła
+                            osiągnąć <b>100%</b> dokładność, próbując rozwiązać problem klasyfikacji wieloklasowej. Taka sieć nie jest złożona i nie 
+                            posiada za dużo parametrów, więc jak najbardziej nadała się do małego zbioru danych, wykazując się zdolnością do
+                            generalizacji. Wszystkie hyperparametry w tym eksperymencie zostały uważnie dobrane. Stosowanie optymalizatora Adam
+                            opierającego się o liczenie pędu wektorów gradientu pozwoliło na szybkie znalezienie minimum funkcji straty określoną
+                            przez entropię krzyżową. Krzywe ROC są idealne, co może wynikać z tego, że podczas ewaluacji sieci na zbiorze testowym
+                            model miał pewność, że rozpoznaje właściwy gatunek pingwina. Innymi słowy, mieliśmy dobrą precyzję.</li><br>
+                        <li><b>Sieć FFNN vs sieć SOM:</b> w trakcie eksperymentów zobaczyliśmy, że nie zawsze jest sens stosować mapy samoorganizujące się
+                            do klasyfikacji bądź innych metod opartych na <b>uczeniu nadzorowanym</b>. Radzą sobie dobrze w przypadku surowej eksploracji
+                            danych - czyli w uczeniu <b>nienadzorowanym</b>(np. widzieliśmy, jak ze zbioru Heart Disease powstają klastry, a nie wiemy, czy na pewno chodzi sieci o 
+                            obecność choroby). Sieci FFNN są bardziej uniwersalne, ale z kolei w ramach naszych eksperymentów nie wychodziły poza
+                            obszar uczenia nadzorowanego. Sieci gęsto połączone poradziły sobie dobrze (mając przy tym bardzo małe wymagania
+                            obliczeniowe oraz ograniczony zestaw parametrów) w obydwu przypadkach. Oczywiście głównym zadaniem dla nas było też
+                            kontrolowanie całego procesu uczenia się, gdyż sieć mogła w dowolnej chwili zapamiętać na sztywno dane wejściowe,
+                            przez co otrzymalibyśmy brak zdolności do uogólnienia, wykrywania wzorców, ekstrakcji przydatnych cech. 
+                        </li>
+                    </un><br>    
         </div>
 
         <!-- STRONA PIOTRA D. -->
@@ -472,25 +512,67 @@
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
             <h3>SOM - Palmer Penguin</h3>
-            <div class="plot plot-tiny-width"><img src="img/penguins_logo.png"></img></div>
-            <h2>Opis zbioru danych & Przygotowanie danych</h2>
-            <p>Zawarty na stronie Piotra Dziedzica
+			<div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
+			<h2>Opis zbioru danych & Przygotowanie danych</h2>
+			<p>Zawarty na stronie Piotra Dziedzica
             <h2>Struktura sieci SOM</h2>
-            Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
-            <p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z
-                generalną architekturą sieci:
-            <p><b>Architektura sieci:</b>
-            <p>
+			Zastosowaliśmy bibliotekę <a href="https://github.com/JustGlowing/minisom">Minisom.</a>
+			<p>Rozważymy wiele różnych kombinacji ilości atrybutów. Lecz zanim do tego przejdziemy, warto zapoznać się z generalną architekturą sieci:
+			<p><b>Architektura sieci:</b><p>
             <ul>
-                <li><u>Siatka</u> - 2D, 9x9;</li>
-                <li><u>Liczba neuronów</u> - 81 (zasada heurystyczna dla treningowego zbioru danych
-                    o rozmiarze 272 rekordy);</li>
-                <li><u>Wymiar wektorów wag</u> - 18 (co odpowiada liczbie atrybutów);</li>
+                <li><u>Siatka</u> - 2D, 10x10; - dająca liczbe 100</li>
+                <li><u>Liczba neuronów</u> - 100 (zasada heurystyczna dla treningowego zbioru danych
+                    o rozmiarze 343 dałaby ~9x10, ale zwiększyliśmy do 10x10 dla ładniejszych wykresów);</li>
+                <li><u>Wymiar wektorów wag</u> - 3-6 Zależy od eksperymentu;</li>
                 <li><u>Odległość</u> - metryka Euklidesowa</li>
-                <li><u>Liczenie sąsiedztwa</u> - metryka Manhattan;</li>
-                <li><u>Redukcja współczynników</u> - zależy od maksymalnych wartości oraz całkowitej
-                    liczby iteracji.</li>
+                <li><u>Liczenie sąsiedztwa</u> - metryka Gaussian;</li>
+                <li><u>Redukcja współczynników</u> - wykonywana przez minisom.</li>
             </ul>
+			
+			Startowe wartości wszystkich neuronów są losowane przez minisom.
+			
+			<p><b>Uczenie sieci & Wyniki:</b><p>
+			
+			<p>Do utworzenia map dopasowania, SOM jest trenowany 100000 razy.
+			<p>Do utworzenia wykresów dokładności korzystamy z osobnych SOM trenowanych na 5 różnych datasetach utworzonych za pomocą walidacji krzyżowej.
+
+			<p>Rozważmy najpierw eksperyment dla wszystkich parametrów.
+			<p>Tak jak wcześniej omówiliśmy, odrzucamy kategorie "year" i "island". Omijamy także "species":
+			<div class="plot plot-small-width"><img src="img/som_penguins/BaseMap.png"></img></div>
+			<p>Widać tutaj klasteryzację, zwłaszcza dla pingwinów reprezentowanych przez niebieskie romby.
+			<p>Widać także klaster czerwony i zielony, jednakże te lubią się mieszać.
+			<div class="plot plot-small-width"><img src="img/som_penguins/BaseValidation.png"></img></div>
+			<p>W obu przypadkach, dokładność tego modelu jest w granicach 63-68%. Jako że dane są szeregowane losowo, te wartości potrafią się zmieniać.
+			<p>
+			<p>Teraz przetestujmy SOM bez atrybutu "płci":
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexMap.png"></img></div>
+			<p>Wygląda na to że nasza mapa się obróciła o 180 stopni. Wciąż widać klastry.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexValidation.png"></img></div>
+			<p>Utrata danych o płci zmniejszyła true positive rate o około 10 punktów procentowych.
+			<p>
+			<p>Teraz spróbujmy usunąć oba atrybuty o dziobie, zostawiając tylko długość płetwy i masę ciała.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbillMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbillValidation.png"></img></div>
+			<p>Jak widać, te dwa atrybuty wystarczą aby wciąż widzieć klastry, chociaż są one coraz bardziej rozrzucone. Dodatkowo, nasz SOM jest mniej dodatkowe o kolejne ~10 punktów procentowych.
+			<p> 
+			<p> Rozważmy teraz coś innego, zamiast usuwać infomacje o dziobie, usuńmy atrybut odpowiadający za masę ciała.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassMap.png"></img></div>
+			<p> Jak widać, teraz wszystkie 3 klastry są bardzo rozdzielone i bardzo widoczne. Nie jest to dziwne, bo pingwiny gatunku Chinstrap i Adelie mają bardzo podobne masy ciał.
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassValidation.png"></img></div>
+			<p> Czemu tutaj jest tak mała dokładność chociaż klasty są bardziej widoczne? Bo mniej są trenowane?
+			<p>
+			<p> Rozważmy jeszcze dwa eksperymenty. Usuńmy dodatkowo oprócz masy ciała, płci jeszcze długość płetwy, która też jest bardzo podobna dla gatunków Chinstap i Adelie:
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassflipperMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassflipperValidation.png"></img></div>
+			<p> Wciąż wyraźnie widać 3 klastry, ale dokładność się nam zmniejszyła do poziomu 36%, to prawie jak losowe zgadywanie!
+			<p>
+			<p> Jeszcze rozważmy jeden przykład: zamiast usuwać informację o płetwie, rozważmy usunięcie informacji o głębokości dzioba:
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassbilldepthMap.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/NosexbodymassbilldepthValidation.png"></img></div>
+			<p> Usuwając jeden z wyróżniających atrybutów, znowu klastry się wymieszały. Tym razem zielony i niebieski się mieszają a nasza dokładność jest jeszcze gorsza niż wcześniej.
+			<p>
+			<p>
+			<p><b>Dostrajanie Parametrów:</b><p>
         </div>
 
 
