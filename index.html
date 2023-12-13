@@ -534,6 +534,25 @@
             <p>Konkluzja: w naszym ostatecznym modelu, przyjmujemy parametry
                 batch size = 10, epoch = 45 oraz learning rate = 0.001 (domyślna wartość)</p>
             <h2>Ocena wyników na dopracowanym modelu i zbiorze testowym</h2>
+            <div class="code-snippet">
+                <pre class="line-numbers">
+                <code class="language-python">
+                    # Rezultaty na zbiorze testowym
+                    test_loss, test_accuracy = model.evaluate(X_test_scaled, y_test)
+                    print(f"Test loss: {test_loss:.4f}, Test accuracy: {test_accuracy:.4f}")
+                </code>
+                </pre>
+                <pre class="command-line">
+2/2 [==============================] - 0s 8ms/step - loss: 0.0098 - accuracy: 1.0000
+Test loss: 0.0098, Test accuracy: 1.0000
+                </pre>
+            </div>
+            <div class="plot"><img src="img/ff_penguins/roc_curve_test_set.png"></img></div>
+            <div class="plot"><img src="img/ff_penguins/confussion_matrix_test_set.png"></img></div>
+            <p>1. Dokładność mamy na poziomie 100%</p>
+            <p>2. Precyzję również mamy na poziomie 100% (widać to łatwo z "Confussion Matrix")</p>
+            <p>3. Jeśli chodzi o złożoność naszego wyniku, to ma on tylko 103 parametry,
+                a mimo to udało nam się osiągnąć 100% dokładność</p>
         </div>
         
 
