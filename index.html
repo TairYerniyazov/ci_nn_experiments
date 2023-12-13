@@ -580,12 +580,62 @@ Test loss: 0.0098, Test accuracy: 1.0000
             </ul>
         </div>
 
+
+
         <!-- STRONA HUBERTA P. -->
         <div class="wrapper page">
             <h3>FFNN - Heart Disease</h3>
-            <p>Opis zbioru danych został wykonany na podstronie Taira Yerniyazova</p>
-            
-        </div>
+            <p>Opis zbioru danych został wykonany na podstronie Taira Yerniyazova w związku z czym tu przedstawię to skrótowo</p>
+            Najpierw potrzebne biblioteki oraz zbiór danych.
+            Wykorzystam ucimlrepo do łatwego importowania zestawów danych z UC Irvine Machine Learning Repository.
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    !pip install ucimlrepo
+                    from ucimlrepo import fetch_ucirepo
+                    import pandas as pd
+                    import seaborn as sns
+                    from sklearn.model_selection import train_test_split
+                    from sklearn.preprocessing import normalize
+                    from matplotlib import pyplot as plt
+                    import tensorflow as tf
+                    from tensorflow.keras.models import Sequential
+                    from tensorflow.keras.layers import Dense, Dropout
+                    from sklearn.metrics import roc_curve, auc
+                    from IPython.display import Javascript
+                    plt.interactive(False)
+                    plt.style.use('dark_background')
+
+                    heart_diseases = fetch_ucirepo(id=45)
+                    X = heart_diseases.data.features # big letter for matrix
+                    y = heart_diseases.data.targets # small letter for vector
+                    X.isna().sum()
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    age         0
+                    sex         0
+                    cp          0
+                    trestbps    0
+                    chol        0
+                    fbs         0
+                    restecg     0
+                    thalach     0
+                    exang       0
+                    oldpeak     0
+                    slope       0
+                    ca          4
+                    thal        2
+                    dtype: int64
+                </pre>
+                <pre class="line-numbers"><code class="language-python">
+                    plt.figure(figsize=(10, 8))
+                    sns.heatmap(heart_diseases.data.original.corr(), annot=True, cmap='coolwarm', fmt=".2f")
+                    plt.title("Correlation matrix")
+                    plt.show()
+                </code></pre>
+                <div class="plot"><img src="img/ff_hd/corr_matrix.png"></img></div>
+            </div>
+
+
 
         <!-- STRONA TAIRA Y. -->
         <div class="wrapper page">
