@@ -155,6 +155,10 @@ footer p {
     max-width: 800px;
 }
 
+.plot-tiny-width {
+    max-width: 500px;
+}
+
 #main_logo {
     width: 60px;
     display: flex;
