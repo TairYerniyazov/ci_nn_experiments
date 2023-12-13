@@ -796,7 +796,7 @@
                             if "batch_size" in change: batch_size = multiplier*i
                             if "epoch" in change: epochs = multiplier*i
                             if "learning_rate" in change: compile_model(model, multiplier*i, momentum)
-                            if "momentum" in change: compile_model(model, learning_rate, multiplier*momentum)
+                            if "momentum" in change: compile_model(model, learning_rate, multiplier*i)
                             X, Xv, y, yv = train_test_split(X_train, y_train, test_size=(.15/.85))
                             fit_model(model, X, y, batch_size=batch_size, epochs=epochs)
                             print("Done "+str(((subplot[2]-2)/(subplot[0]*subplot[1])+(i/max+1)/(subplot[0]*subplot[1]))*100)
@@ -871,11 +871,11 @@
             <p>Fluktuacje są bardzo duże, zaś accuracy jest bardzo niskie, średnio rzędu 55%, dlatego zmieniamy learning_rate spowrotem z 0.05 na 0.01 i uruchamiamy test momentum jeszcze raz.</p>
             <div class="plot"><img src="img/ff_hd/momentum_2.png"></img></div>
             <h2>Example of a good model</h2>
-            <p>Na powyższych wykresach dropout generalnie osiągał lepsze rezultaty, niż wersja bez niego, dlatego ostateczna wersja będzie wersją z dropout'em. Ostateczne hiperparametry sieci to:</p>
+            <p>Na powyższych wykresach dropout generalnie osiągał lekko lepsze rezultaty, niż wersja bez niego, dlatego ostateczna wersja będzie wersją z dropout'em. Ostateczne hiperparametry sieci to:</p>
             <ul>
                 <li>Epochs: 100</li>
                 <li>Batch size: 32</li>
-                <li>Learning rate: </li>
+                <li>Learning rate: 0.05</li>
                 <li>Momentum: </li>
             </ul>
             <div class="code-snippet">
