@@ -574,7 +574,7 @@
                     dummy_X = pd.get_dummies(X, columns=heart_diseases.variables[heart_diseases.variables['type'] == 'Categorical']['name'].values)
                 </code></pre>
             </div>
-            <p>Na końcu normalizujemy dane, aby wszystkie były dla sieci tak samo ważne.</p>
+            <p>Na końcu normalizujemy dane, aby wszystkie były dla sieci tak samo ważne. Wywołanie funkcji normalize dla zbioru y, w którym pierwotnie są liczby ze zbioru {0, 1, 2, 3, 4}, spowoduje, że 0 zostaną 0, a pozostałę liczby staną się 1. Wynika to ze specyfikacji zbioru danych. Autorzy nie rozróżniają liczb większych od 1.</p>
             <div class="code-snippet">
                 <pre class="line-numbers"><code class="language-python">
                     np_X = normalize(dummy_X.values, axis=0)
@@ -582,6 +582,19 @@
                 </code></pre>
             </div>
             <h2>Division into training and test sets</h2>
+            <p>Cały zbiór dzielę na razie tylko na zbiór treningowy i testowy. Testowe 15% zbioru zostanie użyte dopiero na samym końcu po dobraniu hiperparametrów, żeby ocenić jak sieć sobie poradzi na danych, których nie widziała ani ona, ani programista dostosowywujący hiperparametry. Do dostosowywania hiperparametrów będziemy używali czegoś zbliżonego do cross-validation, tzn. za każdym razem do ewaluacji widocznej na późniejszych wykresach będzie używane 15% ze zbioru treningowego, zaś zbiorem, na którym sieć się rzeczywiście będzie trenować będzie 70% pierwotnego zbioru. Jednak wybierany zbiór 15% do walidacji będzie losowany dla każdego treningu, dzięki czemu sieć będzie się mogła uśredniając trenować dla 85% pierwotnego zbioru.</p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    X_train, X_test, y_train, y_test = train_test_split(np_X, np_y, test_size=.15, random_state=1)
+                    # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=(.15/.85))
+                    print(X_train.shape, X_test.shape) # , X_val.shape
+                    print(y_train.shape, y_test.shape) # , y_val.shape
+                </code></pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+                    (257, 25) (46, 25)
+                    (257, 1) (46, 1)
+                </pre>
+            </div>
             <h2>Network structure</h2>
             <h2>Network training</h2>
             <h2>Results</h2>
