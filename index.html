@@ -744,6 +744,68 @@
             <h2>Results analysis</h2>
             <p>Z pierwszego treningu wynika, że sieć się nie douczyła, ponieważ Training Loss > Validation Loss oraz Training Accuracy < Validation Accuracy. Jednakże od około połowy epochs widzimy więcej fluktuacji, niż trendu zmian w związku z czym może trzeba będzie poprawić np. batch_size lub learning_rate.</p>
             <h2>Parameter tuning</h2>
+            <p></p>
+            <div class="code-snippet">
+                <pre class="line-numbers"><code class="language-python">
+                    def default_model():
+                        return Sequential([
+                            Dense(units1, activation='relu', input_shape=(X_train.shape[1],)),
+                            Dense(units2, activation='relu'),
+                            Dense(units3, activation='sigmoid')
+                        ])
+                    def dropout_model(dropout=0.2):
+                        return Sequential([
+                            Dense(units1, activation='relu', input_shape=(X_train.shape[1],)),
+                            Dense(units2, activation='relu'),
+                            Dropout(dropout),
+                            Dense(units3, activation='sigmoid')
+                        ])
+                    def compile_model(model, learning_rate, momentum):
+                        model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate, momentum), loss='binary_crossentropy', metrics=['accuracy'])
+                    def fit_model(model, X_train, y_train, batch_size, epochs):
+                        model.fit(X_train, y_train, batch_size, epochs, verbose=0) #validation_data=(X_val, y_val)
+                    def plot_models(subplot, X_train, y_train, change, max, multiplier=1, min=0, model_type="Without dropout", title=""):
+                        step = int((max-min)/20)     # Here is the magic place where we set how long program will work
+                        if(step<1): step = 1
+                        batch_size = 10
+                        epochs = 100
+                        learning_rate = 0.001
+                        momentum = 0.9
+                        if(model_type == "With dropout"): model = dropout_model()
+                        else: model = default_model()
+                        compile_model(model, learning_rate, momentum)
+                        validation_losses = []
+                        validation_accuracies = []
+                        for i in range(min, max+1, step):
+                            if "batch_size" in change: batch_size = multiplier*i
+                            if "epoch" in change: epochs = multiplier*i
+                            if "learning_rate" in change: compile_model(model, multiplier*i, momentum)
+                            if "momentum" in change: compile_model(model, i, multiplier*momentum)
+                            X, Xv, y, yv = train_test_split(X_train, y_train, test_size=(.15/.85))
+                            fit_model(model, X, y, batch_size=batch_size, epochs=epochs)
+                            print("Done "+str(((subplot[2]-2)/(subplot[0]*subplot[1])+(i/max+1)/(subplot[0]*subplot[1]))*100)
+                            +"% ("+str(i)+"/"+str(max+1)+" from "+str(subplot)+")")
+                            # X_test, y_test instead of Xv, yv only when nothing will be changed later
+                            test_loss, test_accuracy = model.evaluate(Xv, yv)
+                            validation_losses.append(test_loss)
+                            validation_accuracies.append(test_accuracy)
+                        # plt.subplot(subplot[0], subplot[1], subplot[2])
+                        # plt.plot([multiplier*i for i in range(min, max+1, step)], validation_losses, label='Validation loss')
+                        # plt.plot([multiplier*i for i in range(min, max+1, step)], validation_accuracies, label='Validation accuracy')
+                        # plt.title(str(model_type)+" "+str(title))
+                        # plt.xlabel(" ".join([str(item) for item in change]))
+                        # plt.legend()
+
+                        ax1 = plt.subplot(subplot[0], subplot[1], subplot[2])
+                        ax1.plot([multiplier*i for i in range(min, max+1, step)], validation_accuracies, color="#198038")
+                        ax1.set_ylabel('Validation accuracy', color="#198038")
+                        ax2 = ax1.twinx()
+                        ax2.plot([multiplier*i for i in range(min, max+1, step)], validation_losses, color="#1192e8")
+                        ax2.set_ylabel('Validation loss', color="#1192e8")
+                        plt.title(str(model_type)+" "+str(title))
+                        plt.xlabel(" ".join([str(item) for item in change]))
+                </code></pre>
+            </div>
 
             <!-- Template:
             <div class="code-snippet">
