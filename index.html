@@ -511,7 +511,7 @@
 
         <!-- STRONA HUBERTA M. -->
         <div class="wrapper page">
-            <h3>SOM - Palmer Penguin</h3>
+            <h2>SOM - Palmer Penguin</h3>
 			<div class="plot plot-small-height"><img src="img/penguins_logo.png"></img></div>
 			<h2>Opis zbioru danych & Przygotowanie danych</h2>
 			<p>Zawarty na stronie Piotra Dziedzica
@@ -573,6 +573,14 @@
 			<p>
 			<p>
 			<p><b>Dostrajanie Parametrów:</b><p>
+			<p> Za pomocą testów udało nam się wywnioskować że zmiana learning rate z 50% do 90% skutkuje zmniejszeniem dokładności w każdym z eksperymentów. Jest to bardzo zauważalne w eksperymencie bez płci i masy ciała, gdzie % trafionych zgadnięć schodzi z 53% do 36%. Jest jednak jeden wyjątek do tego, albowiem model bez masy ciała i długości płetwy zwiększył swoją dokładność z 36% do 67%.
+			<div class="plot plot-small-width"><img src="img/som_penguins/BeforeLearningRate09.png"></img></div>
+			<div class="plot plot-small-width"><img src="img/som_penguins/AfterLearningRate09.png"></img></div>
+			<p>
+			<p> Postanowiliśmy także przetestować zmniejszenie learning rate z 50% do 5%. Tutaj wyniki są o wiele bardziej pozytywne. Każdy z eksperymentów oprócz pierwszego miał zwiększony wskaźnik trafności. Najwiekszą różnicę można zauważyć było w eksperymencie bez atrybutu płci i masy ciała, gdzie trafność zwiększyła się do 73%.
+			<div class="plot plot-small-width"><img src="img/som_penguins/AfterLearningRate005.png"></img></div>
+			<p>
+			<p> Spróbowaliśmy zwiększyć rozmiar mapy do 20x20, ale to poskutkowało zmniejszeniem trafności do 28-36% w każdym z przypadków.  
         </div>
 
 
@@ -869,7 +877,8 @@
             <p>Zbiór danych <b><a href="https://archive.ics.uci.edu/dataset/45/heart+disease">
             "Heart Disease (Cleveland Clinic)"</a></b> dotyczy pacjentów, część z których ma chorobę serca.
             Mamy do dyspozycji 303 instancje zawierające 14 atrybutów numerycznych i kategorialnych.
-            W trakcie dokonywania krótkiej analizy (<a href='https://colab.research.google.com/drive/1dRjVmMjxnA88s9SXnwcu2DvbYx6zUVKu?usp=sharing'>notatnik Jupyter, Google Colab)</a> podczas pracy naszego zespołu nad pierwszą częścią
+            W trakcie dokonywania krótkiej analizy (<a href='https://colab.research.google.com/drive/1dRjVmMjxnA88s9SXnwcu2DvbYx6zUVKu?usp=sharing'>notatnik Jupyter, Google Colab)</a> 
+            podczas pracy naszego zespołu nad pierwszą częścią
             projektu zauważyliśmy dosyć nierównomierny rozkład poszczególnych atrybutów. Na szczęście
             dla wielu kolumn mamy rozkłady zbliżone do normalnych, więc po standaryzacji danych cały zbiór
             będzie wyglądał sensownie z punktu widzenia trenowania sieci. 
@@ -916,15 +925,15 @@
             <p>Złą wiadomością jest to, że zbiór, który i tak zawiera za dużo atrybutów i za małą
                 liczbę instancji, posiada rekordy cechujące się obecnością brakujących wartości
                 w poszczególnych kolumnach (<code>ca</code> oraz <code>thal</code>). Mamy 2 rekordy z
-                z wartościami <code>NaN</code> (Not a Number) w kolumnie <code>ca</code> oraz 4 rekordy, które
+                wartościami <code>NaN</code> (Not a Number) w kolumnie <code>ca</code> oraz 4 rekordy, które
                 są wypełniony tymi samymi pseudo-wartościami w kolumnie <code>thal</code>.
             </p>
             <p>Dobrą wiadomością jest stosunek liczby osób chorych do zdrowych. Mamy
-                prawie że idealny rozbicie na <b>2 połówki (54% zdrowych i 46% chorych)</b>, więc
+                prawie że idealne rozbicie na <b>2 połówki (54% zdrowych i 46% chorych)</b>, więc
                 nie musimy zastanawiać się nad metodami redukcji uprzedzeń występujących w zbiorze
                 danych treningowych (idealnie oczywiście jest mieć w pełnie równomierny rozkład
                 wartości przewidywanych w klasyfikacji binarnej, gdyż łatwiej będzie określić
-                najniższy próg dokładności).
+                najniższy próg skutecznej dokładności).
             </p>
             <p>Rozważmy teraz opis każdego z atrybutów danych wejściowych, które zostały dołączone
                 do plików źródłowych autorów tego zbioru, gdyż w kolejnym etapie nam to się przyda:
@@ -954,13 +963,13 @@
                     <li><u>restecq</u> - spoczynkowe wyniki elektrokardiograficzne 
                         (0 - norma, 1 - anomalia, 2 - hipertrofia);</li>
                     <li><u>slope</u> - nachylenie szczytowego odcinka ST podczas wysiłku 
-                        (0 - wznoszące się, 2 - płaskie, 3 - opadający).</li>
+                        (0 - wznoszące się, 2 - płaskie, 3 - opadające).</li>
                 </ul>
     
                 <b>Stricte kategorialne</b>:
                 <ul>
                     <li><u>cp</u> - rodzaj bólu w klatce piersiowej (cztery typy);</li>
-                    <li><u>thal</u> - thal = niedokrwistość tarczowatokrwinkowa (trzy typy).</li>
+                    <li><u>thal</u> = niedokrwistość tarczowatokrwinkowa (trzy typy).</li>
                 </ul>
             </p>
             <p>Oczywiscie, niektóre atrybute są bardziej istotne, inne mniej. Teraz
@@ -999,7 +1008,7 @@
                     X.loc[:, ('ca', 'thal')] = imputed_X_columns
                 </code></pre>
             </div>
-            <p>Kolejna rzecz, którą musimy załatwić, polega na przerzucenia wartości przewidywanego
+            <p>Kolejna rzecz, którą musimy załatwić, polega na przerzuceniu wartości przewidywanego
                 atrybutu na liczby 0 i 1, gdyż wszystko powyżej 0 wskazuje na obecność choroby i nie 
                 dodaje żadnego innego znaczenia. Zróbmy to teraz:
             </p>
@@ -1009,7 +1018,7 @@
                     y.loc[y['num'] > 0, 'num'] = 1.0
                 </code></pre>
             </div>
-            </p>Następnie na naszej liście zadań do zrobienia mamy oczwywiście przetworzenie atrybutów
+            </p>Następnie na naszej liście zadań do zrobienia mamy oczywiście przetworzenie atrybutów
             kategorialnych. Tak jak wspomnieliśmy wcześniej, niektóre z nich są binarne, więc z nimi
             nie będzie żadnego problemu, gdyż mieszczą się w przedziale od 0 do 1. Inne mają porządek
             semantyczny i określają stopień konkretnej cechy, więc też je możemy bezpiecznie zostawić, a
@@ -1037,7 +1046,7 @@
                     print(X_cp_1hot.toarray())
                 </code></pre>
                 <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
-    [[1. 0. 0. 0.]
+   [[1. 0. 0. 0.]
     [0. 0. 0. 1.]
     [0. 0. 0. 1.]
     ...
@@ -1083,7 +1092,7 @@
                 y_train = y_train.to_numpy()
             </code></pre></div>
             <p>Jeśli chodzi o dane do walidacji, to sensownym rozwiązaniem wydaje się być
-                stosowanie K-składową walidacji krzyżowej (z ang. <b>K-Fold Cross Validation</b>):
+                stosowanie K-składowej walidacji krzyżowej (z ang. <b>K-Fold Cross Validation</b>):
                 <div class="plot"><img src="img/som_hd/k_fold_validation.png"></img></div>
                 <div class="code-snippet"><pre class="line-numbers"><code class="language-python">
                     k_folds = 5
@@ -1122,15 +1131,15 @@
             <h2>Struktura sieci SOM</h2>
             <p>Wiemy, oczywiście, że mamy do czynienia z problemem klasyfikacji, więc moglibyśmy 
                 od razu w przestrzeni neuronów ustawić tylko dwie jednostki (jedna odpowiadałaby
-                wówczas za osób chorych, inny za zdrowych). Jednak nie będzie to
+                wówczas za osobe chore, inny za zdrowe). Jednak nie będzie to
                 prawdziwa SOM, tylko zwyczajne wykonanie algorytmu LVQ, stosując uczenie nadzorowane.
         
             <p>Spróbujmy zatem postąpić inaczej. Wyobraźmy sobie, że nie wiemy, że mamy dane naszych 
                 pacjęntów i nie wiemy, czy wgl oni się wyodrębniają w jakieś osobne kategorie czy nie. 
                 Wtedy mamy uczenie nienadzorowane, więc klastry "osoby chore" i "osoby zdrowe" 
-                powstaną naturalnie (co najmniej w teorii, bo możliwe, że sięc nam zamiast tego np.
+                powstaną naturalnie (co najmniej w teorii, bo możliwe, że siec nam zamiast tego np.
                 rozdzieli ludzi na kobiet i mężczyzn, ale to jest mniej prawdopodobne, bo 17 kolumn 
-                wskazują prawdopodobnie na to, że płeć nie stanowi za dużą różnicę w przypadku danych
+                wskazują raczej na to, że płeć nie stanowi za dużej różnicy w przypadku danych
                 medycznych dotyczących chorób serca).
 
             <p><b>Architektura sieci:</b><p>
@@ -1139,7 +1148,7 @@
                 <li><u>Liczba neuronów</u> - 81 (zasada heurystyczna dla treningowego zbioru danych
                     o rozmiarze 272 rekordy);</li>
                 <li><u>Wymiar wektorów wag</u> - 18 (co odpowiada liczbie atrybutów);</li>
-                <li><u>Odległość</u> - metryka Euklidesowa</li>
+                <li><u>Odległość</u> - metryka Euklidesowa;</li>
                 <li><u>Liczenie sąsiedztwa</u> - metryka Manhattan;</li>
                 <li><u>Redukcja współczynników</u> - zależy od maksymalnych wartości oraz całkowitej
                 liczby iteracji.</li>
@@ -1167,15 +1176,15 @@
             </p>
             <h2>Uczenie sieci</h2>
                 <p>Algorytmów do wyboru w przypadku sieci SOM nie mamy za dużo. Z definicji sieci
-                    jest to tzw. Online learning. Czyli dokładamy siatki neuronów o losowo zainincjalizowanych
-                    wagach kolejne próbki i wyłuskujemy neurona-zwycięzcę (mierzymy to za pomocą metryki
-                    Euklidesowe: (przypisane wagi neuronu, atrybuty/kolumny próbki)). Może jedyna rzecz,
-                    na którą warto zwrócić uwagę to to, że obszar sąsiedztwa operuje nie w przestrzenie wag
+                    jest to tzw. Online learning. Czyli dokładamy do siatki neuronów o losowo zainincjalizowanych
+                    wagach kolejne próbki i wyłuskujemy neuron-zwycięzcę (mierzymy to za pomocą metryki
+                    Euklidesowej: (przypisane wagi neuronu, atrybuty/kolumny próbki)). Może jedyna rzecz,
+                    na którą warto zwrócić uwagę, jest taka że, że obszar sąsiedztwa operuje nie na przestrzeni wag
                     neuronów (de facto przestrzeni danych wejściowych), tylko na samej siatce, która jest 
                     statyczna, czyli położenie neuronów się nigdy nie zmienia. Na wielu wizualizacjach dostępnych
                     w Internecie często pokazuje się, jak siatka ta rozciąga się i przyjmuje kształt danych wejściowych.
                     Oczywiście w taki sposób należy rozumieć zmianę/dostrajanie wag. Natomiast tak wizualnie, to jest
-                    raczej na odwrót. To próbki są rozpinane na siatce rzucane w taki sposób, że każdy rekord z X znajdzie
+                    raczej na odwrót. To próbki są rozpinane na siatce i rzucane w taki sposób, że każdy rekord z X znajdzie
                     swój neuron w Y. Później patrzymy na siatkę i widzimy (co najmniej mamy taką nadzieję) klastry.
                 </p>
                 <p><b>Wybrane parametry:</b>
@@ -1183,13 +1192,13 @@
                 <ul>
                     <li><u>Learning rate</u> - 0.9;</li>
                     <li><u>Maksymalny promień obszaru sąsiedztwa</u> - 10;</li>
-                    <li><u>Liczba iteracji ("epoki" * liczba_próbek)</u> - 6528;</li>
+                    <li><u>Liczba iteracji ("epoki" * liczba próbek)</u> - 6528;</li>
                 </ul>
                 <div class="code-snippet">
                     <pre class="line-numbers"><code class="language-python">
                         def train_SOM(n_epochs, X_part, y_part, weights, n_dimensions, grid_size, show_plots=False,
                                     progress_bar=False, max_lr=.9, max_ds=10):
-                            # Hyperparametry modelu
+                            # Hiperparametry modelu
                             max_learning_rate = max_lr
                             learning_rate = max_learning_rate
 
@@ -1219,7 +1228,7 @@
                                 # Liczenie odległości od wszystkich neuronów
                                 distances = [[euclidian_distance(sample, weights[i, j]) for j in range(grid_size)] for i in range(grid_size)]
 
-                                # Znalezienie neurona-zwycięzcy
+                                # Znalezienie neuronu-zwycięzcy
                                 winner_index = np.argmin(distances)
 
                                 # Wyłuskanie indeksu zwycięzcy
@@ -1244,14 +1253,15 @@
                                 # Zliczanie liczby iteracji
                                 step=step + 1 
                         
-                        # Zwrócenie macierzy, którą będziemy mogli wykorzystać do predykcji return np.copy(weights),
+                        # Zwrócenie macierzy, którą będziemy mogli wykorzystać do predykcji 
+                        return np.copy(weights),
                         get_prediction_matrix(grid_size, weights, X_part, y_part, majority_voting=True)
                     </code></pre>
                 </div>
-                    <p>Oczywiście dostrajaliśmy parametry, o czym powiemy później. W trakcie trenowani odwołaliśmy się
+                    <p>Oczywiście dostrajaliśmy parametry, o czym powiemy później. W trakcie trenowania odwoływaliśmy się
                         do własnych zdefiniowanych funkcji, które rysowały nam odpowiednie wykresy. Najpierw
-                        po każdej iteracji kolorowaliśmy stany neuronów (czerowny - trafił chory pacjent, niebieski - 
-                        trafił zdrowy pacjent, szary - jeszcze nikt nie trafił i wagi neurona nie są zmieniane):
+                        po każdej iteracji kolorowaliśmy stany neuronów (czerwony - trafił chory pacjent, niebieski - 
+                        trafił zdrowy pacjent, szary - jeszcze nikt nie trafił i wagi neuronu nie są zmieniane):
                     </p>
                     <div class="row-with-images">
                         <div><img src="img/som_hd/1.png"></img></div>
@@ -1297,7 +1307,7 @@
                     </div>
                     <h2>Dostrajanie parametrów</h2>
                     <p>Stosujemy algorytm zmniejszenia współczynnika uczenia się oraz dystansu. Prędkość zależy
-                        od liczby iteracji. Zatem zakodowane te dwa hyperparametry w tę liczbę, która zmienia nam
+                        od liczby iteracji. Zatem zakodowane są te dwa hiperparametry w tej liczbie, która zmienia nam
                         wyniki walidacji i pozwala wykryć, kiedy należy się zatrzymać, by uniknąć nadmiernego dopasowania.
                     </p> 
                     <div class="plot plot-small-width"><img src="img/som_hd/7.png"></img></div>
