@@ -70,7 +70,7 @@
             <p>Google Colab</p>
             <ol>
                 <li><a href="https://colab.research.google.com/drive/1baNi0ls9fdn9ztc2AR0PuS4e6hMK1em0?usp=sharing">FFNN Palmer Penguins</a></li>
-                <li><a href="https://drive.google.com/file/d/1a0LBpjsay0yh0vT-q_0nN08VPGyCgo8C/view?usp=sharing">SOM Palmer Penguins</a></li>
+                <li><a href="https://colab.research.google.com/drive/1E5rqWA-NZe-8QkHHYTKL1LNFD2nP7Il9?usp=sharing">SOM Palmer Penguins</a></li>
                 <li><a href="#">FFNN Heart Disease</a></li>
                 <li><a href="https://colab.research.google.com/drive/1aFp_SQcUAk8FIX2B24jQNYbMutnl50P_?usp=sharing">SOM Heart Disease</a></li>
             </ol>
@@ -82,32 +82,32 @@
                             oraz inżynieria cech pozwoliły na uzyskanie ciekawych wyników.</li><br>
                         <li><b>Sieć SOM & zbiór Health Disease:</b> zaprojektowaliśmy i zaimplementowaliśmy całą architekturę od zera, nie korzystając z
                             żadnych bibliotek. Udało się wyodrębnić dane i utworzyć dwa klastry. Dzięki temu, że zbadaliśmy wygląd macierzy
-                            odległości, mogliśmy zaobserwować tworzenie "ścian" separujących próbki i wykrywających pewne prawdopodobieństwo.
+                            odległości, mogliśmy zaobserwować tworzenie "ścian" separujących próbki i wykrywających pewne zależności.
                             Na szczęście właściwe klastry, które zostały wykryty, zostały później skutecznie rozpoznane jako osoby zdrowe i chore.
                             Później zastosowaliśmy wyuczone neurony do klasyfikacji binarnej i uzyskaliśmy po 6k iteracji dokładność na poziomie <b>81%</b>.
                         </li><br>
                         <li><b>Sieć SOM & zbiór Palmer Penguin:</b> zaprojektowaliśmy sieć, a następnie zaimplementowaliśmy, korzystajć z biblioteki minisom.
                             Wizualizacja macierzy odległości złączonej z macierzą odzwierciedlającą zaznaczone przez nas próbki pozwoliły na zaobserwowanie
                             trzech powstałych grup. Każda z tych grup reprezentowała konkretny gatunek pingwina. Właśnie tego się spodziewaliśmy.
-                            Stosując 5-składową walidację krzyżową oraz siatkę o rozmiarze 10x10 nie mieliśmy zbyt dużo czasu, na znalezienie
-                            optymalnych hyperparametrów. Niemniej jednak, uzyskaliśmy dokładność na poziomie <b>63%</b>. 
+                            Stosując 5-składową walidację krzyżową oraz siatkę o rozmiarze 10x10 uzyskaliśmy dokładność na poziomie <b>73%</b>. 
                         </li><br>
                         <li><b>Sieć FFNN & zbiór Health Disease:</b> sieć dobrze sprawdziła się w przypadku klasyfikacji biarnej. Próbowaliśmy
                         na różne sposoby uzyskać jak najszybszą zbieżność i równocześnie uniknąć nadmiernego dopasowania. Stosowanie takich
-                        metod jak wprowadzenie warstwy odrzucania (Dropout Layer) pomagało utrzymywać dokładność i precyzję klasyfikacji zarówno
-                        na zbiorze testowym, jak i walidacyjnym. Dzięki temu ostateczny model osiągnął ponad 90% dokłądności, mimo że wyuczony
+                        metod jak wprowadzenie warstwy odrzucania (Dropout Layer) pomagało utrzymywać wysoką dokładność i precyzję klasyfikacji zarówno
+                        na zbiorze testowym, jak i walidacyjnym. Dzięki temu ostateczny model osiągnął dokładność na poziomie <b>90%</b>, mimo że wyuczony
                         został na bardzo małej liczbie danych i małej liczbie parametrów.</li><br>
                         <li><b>Sieć FFNN & zbiór Palmer Penguin:</b> sieć, która posiada zaledwie 10 neuronów w jednej warstwie ukrytej, potrafiła
-                            osiągnąć <b>100%</b> dokładność, próbując rozwiązać problem klasyfikacji wieloklasowej. Taka sieć nie jest złożona i nie 
+                            osiągnąć <b>100%</b> dokładność, próbując rozwiązać problem klasyfikacji wieloklasowej. Taka sieć nie jest złożona ani nie 
                             posiada za dużo parametrów, więc jak najbardziej nadała się do małego zbioru danych, wykazując się zdolnością do
-                            generalizacji. Wszystkie hyperparametry w tym eksperymencie zostały uważnie dobrane. Stosowanie optymalizatora Adam
+                            generalizacji. Wszystkie hiperparametry w tym eksperymencie zostały uważnie dobrane. Stosowanie optymalizatora Adam
                             opierającego się o liczenie pędu wektorów gradientu pozwoliło na szybkie znalezienie minimum funkcji straty określoną
                             przez entropię krzyżową. Krzywe ROC są idealne, co może wynikać z tego, że podczas ewaluacji sieci na zbiorze testowym
                             model miał pewność, że rozpoznaje właściwy gatunek pingwina. Innymi słowy, mieliśmy dobrą precyzję.</li><br>
                         <li><b>Sieć FFNN vs sieć SOM:</b> w trakcie eksperymentów zobaczyliśmy, że nie zawsze jest sens stosować mapy samoorganizujące się
                             do klasyfikacji bądź innych metod opartych na <b>uczeniu nadzorowanym</b>. Radzą sobie dobrze w przypadku surowej eksploracji
-                            danych - czyli w uczeniu <b>nienadzorowanym</b>(np. widzieliśmy, jak ze zbioru Heart Disease powstają klastry, a nie wiemy, czy na pewno chodzi sieci o 
-                            obecność choroby). Sieci FFNN są bardziej uniwersalne, ale z kolei w ramach naszych eksperymentów nie wychodziły poza
+                            danych - czyli w uczeniu <b>nienadzorowanym</b> (np. widzieliśmy, jak ze zbioru Heart Disease powstają klastry, 
+                            a nie wiemy, czy na pewno chodziło o obecność choroby). 
+                            Sieci FFNN są bardziej uniwersalne, ale z kolei w ramach naszych eksperymentów nie wychodziły poza
                             obszar uczenia nadzorowanego. Sieci gęsto połączone poradziły sobie dobrze (mając przy tym bardzo małe wymagania
                             obliczeniowe oraz ograniczony zestaw parametrów) w obydwu przypadkach. Oczywiście głównym zadaniem dla nas było też
                             kontrolowanie całego procesu uczenia się, gdyż sieć mogła w dowolnej chwili zapamiętać na sztywno dane wejściowe,
