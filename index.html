@@ -755,7 +755,7 @@
                 </code></pre>
             </div>
             <div class="plot"><img src="img/ff_hd/first_network.png"></img></div>
-            <p>Widocznie mieliśmy szczęście z domyślnymi hiperparametrami, ponieważ już teraz sieć rozpoznaje około 85% przypadków. Poniżej jest zdjęcie ze strony zbioru, dzięki czemu teraz i na końcu będziemy mogli porównać nasz model z tym, co jest uważane za przedział dokładności dla klasyfikacyjnej sieci neuronowej.</p>
+            <p>Widocznie mieliśmy szczęście z tym konkretnym uruchomieniem oraz domyślnymi hiperparametrami, ponieważ już teraz sieć rozpoznaje około 85% przypadków. Poniżej jest zdjęcie ze strony zbioru, dzięki czemu teraz i na końcu będziemy mogli porównać nasz model z tym, co jest uważane za przedział dokładności dla klasyfikacyjnej sieci neuronowej.</p>
             <div class="plot"><img src="img/ff_hd/baseline_model_performance.png"></img></div>
             <h2>Results analysis</h2>
             <p>Z pierwszego treningu wynika, że sieć się nie douczyła, ponieważ Training Loss > Validation Loss oraz Training Accuracy < Validation Accuracy. Jednakże od około połowy epochs widzimy więcej fluktuacji, niż trendu zmian w związku z czym może trzeba będzie poprawić np. batch_size lub learning_rate.</p>
@@ -924,7 +924,7 @@
                 </pre>
             </div>
             <div class="plot"><img src="img/ff_hd/final.png"></img></div>
-            <p>Ostateczne accuracy na zbiorze testowym wynosi 89.13%, co porównując do wykresu ze strony zbioru wygląda bardzo dobrze.</p>
+            <p>Ostateczne accuracy na zbiorze testowym wynosi 89.13%, co porównując do wykresu ze strony zbioru wygląda bardzo dobrze. Co ciekawe ten wynik jest lepszy, niż to, co widzimy na wykresie dla training i validation data, co oznacza, że mieliśmy "szczęście", co zdarza się tym częściej im mnieszy jest zbiór testowy.</p>
 
             <!-- Template:
             <div class="code-snippet">
