@@ -11,6 +11,12 @@ a {
     font-weight: bold;
 }
 
+#main_logo a {
+    color: none;
+    text-decoration: none;
+    font-weight: none;
+}
+
 ol li {
     padding: 5px 0 5px 0;
 }

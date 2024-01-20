@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <title>EA Experiments</title>
+    <link rel="icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="style/styles.css">
+    <link rel="stylesheet" href="style/prism.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nova+Square">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body>
+    <header>
+        <div class="wrapper">
+            <div class="main_header">
+                <div id="main_logo"><a href="index.html"><img src="img/uj_logo_white.png"></img></a></div>
+                <div>
+                    <h1>Inteligencja obliczeniowa</h1>
+                    <p>Grupa 1.</p>
+                </div>
+            </div>
+            <div class="menu">
+                <p class="menu-item-on menu-item">Zadania</p>
+                <p class="menu-item-off menu-item">Reprezentacja</p>
+                <p class="menu-item-off menu-item">Operatory</p>
+                <p class="menu-item-off menu-item">Dopasowanie</p>
+                <p class="menu-item-off menu-item">Eksperymenty</p>
+                <span class="material-symbols-outlined" id="font-changer">custom_typography</span>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <!-- GŁÓWNA STRONA -->
+        <div class="wrapper page" id="main-page">
+            <h2>Zadania</h2>
+            
+            <p>Spróbować rozwiązać problem rozmieszczenia kontenerów za pomocą algorytmu ewolucyjnego.</p>
+            <p><b>Na wejściu</b> - zadany jest obszar, na którym należy umieścić kontenery o znormalizowanych wymiarach, prostokątnych. 4 typy
+            kontenerów – mieszkalny, kuchnia, sanitariaty, przestrzeń wspólna.
+            <p><b>Na wejściu</b> – należy narysować rozmieszczenie kontenerów w zadanym obszarze, tak aby zmieścić jak najwięcej modułów
+            mieszkalnych, i jednocześnie zapewnić jak najlepszy dostęp do modułów sanitarnych, kuchni oraz wspólnych, oraz do
+            przestrzeni pustej.
+            <p><b>Ułatwienie</b>wszystkie prostokąty maja ten sam rozmiar, można je ustawiać w dowolny sposób, powinna być przestrzeń pusta
+            (przejścia) między modułami. Można ustalić na której ścianie są drzwi, pozostałe ściany mogą do siebie przylegać.</p>
+            
+            <ol>
+                <li>Zaproponować reprezentację;</li>
+                <li>zdefiniować operatory (lub wybrać ze standardowych), ustalić ich parametry;</li>
+                <li>zdefiniować metody selekcji;</li>
+                <li>zdefiniować funkcję dopasowania (oceniającą poszczególne rozwiązania);</li>
+                <li>ustalić warunek stopu;</li>
+                <li>przeprowadzić eksperymenty przy różnych parametrach dla operatorów, selekcji, ewentualnie modyfikacji funkcji oceny;
+                przedstawić wnioski.</li>
+            </ol>
+            <h2>Notatniki Jupyter</h2>
+            <p>Google Colab</p>
+            <ol>
+                <li><a href="#">DODAĆ LINK DO PROTOTYPU</a></li>
+            </ol>
+        </div>
+
+        <!-- Reprezentacja -->
+        <div class="wrapper page">
+            <h2>Reprezentacja osobników</h2>
+        </div>
+ 
+        <!-- Operatory -->
+        <div class="wrapper page">
+            <h2>Operator mutacji</h2>
+            <h2>Operator krzyżowania</h2>
+            <h2>Operator selekcji</h2>
+        </div>
+
+        <!-- Dopasowanie -->
+        <div class="wrapper page">
+            <h2>Funkcja dopasowania</h2>
+        </div>
+ 
+        <!-- Eksperymenty -->
+        <div class="wrapper page"d>
+            <h2>Wyniki eksperymentów</h2>
+        </div>
+    </div>
+
+    <footer>
+        <div class="wrapper">
+            <p>&copy; 2023 Piotr Dziedzic, Hubert Musiał, Hubert Pamuła, Tair Yerniyazov</p>
+        </div>
+    </footer>
+
+    <script src="script/script.js"></script>
+    <script src="script/prism.js"></script>
+</body>
+
+</html>
