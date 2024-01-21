@@ -59,11 +59,8 @@
                 <li>przeprowadzić eksperymenty przy różnych parametrach dla operatorów, selekcji, ewentualnie modyfikacji funkcji oceny;
                 przedstawić wnioski.</li>
             </ol>
-            <h2>Notatniki Jupyter</h2>
-            <p>Google Colab</p>
-            <ol>
-                <li><a href="#">DODAĆ LINK DO PROTOTYPU</a></li>
-            </ol>
+            <h2>Notatnik Jupyter</h2>
+            <p>Google Colab - <a href="https://colab.research.google.com/drive/1554AG13tgEZ_VHPIezl42kesmRPk1zlE?usp=sharing">kod źródłowy</a>.
             <div class="plot"><img src="img/ea_main/colab.png" style="border: 1px solid black;"></img></div>
         </div>
 
@@ -274,15 +271,51 @@ Zakodowany typ:   0.0
  
         <!-- Eksperymenty -->
         <div class="wrapper page"d>
-            <h2>Wyniki eksperymentów</h2>
-            <h3>Przykładowe uruchomienie<h3>
+            <h2>Przykłady</h2>
+            <p><b>Inicjalizacja:</b> początkowo generujemy 10% modułów niezainicjalizowanych (obszary puste), 90% modułów zainicjalizowanych
+                losowo, z których mamy 50% na kontenery mieszkalne i 50% na inne. Dzięki mutacjom oraz krzyżowaniu
+                algorytm potrafi samodzielnie dobrać optymalną liczbę potrzebnych kontenerów
+            <div class="plot plot-tiny-width"><img src="img/ea_experiments/0.png"></img></div>
+            <p>Na obrazku widzimy przykładowy wynik po zaledwie 1000 pokoleniach. Nawet w środowisku Colab da się
+            otrzymać całkiem sensowne, choć niedealne wyniki w ciągu kilku minut:
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/1.png"></img></div>
+            <p>Kolejny przykład (3000 pokoleń):</p>
+            <div class="plot plot-tiny-width"><img src="img/ea_experiments/2.gif"></img></div>
+            <p>I jeszcze inny przykład (90,000 pokoleń, ale tu widoczne są pierwsze 30,000. Dalej już
+                nie zaobserwowaliśmy istotnych zmian):</p>
+            <div class="plot plot-tiny-width"><img src="img/ea_experiments/3.gif"></img></div>
+            <p><b>Warunek stopu:</b> jak widać, nie zawsze jest sens polegać tylko na górne ograczenie na maksymalną 
+                liczbę pokoleń. Dlatego postanowiliśmy definiować parametr "epsilon" opisujący minimalny próg, 
+                który kolejne pokolenia powinno przejść, by udowodnić, że udało im się czymś wyróżnić. 
+                Oprócz tego mamy parametr "no_change", który pokazuje ile pokoleń wcześniej powinna być 
+                taka sama wartość dopasowania (np. jak 100 pokoleń mamy to samo, to mamy no_change=100)</p>
+            <div class="plot"><img src="img/ea_experiments/stop.png"></img></div>
             <h3>Wysoka częstotliwość mutacji</h3>
+            <p>Ogólnie rzecz biorąc, wysokie prawdopodobieństwo mutacji pomagało nam w każdym eksperymencie,
+            gdyż zapewniało to eksplorację nowych możliwości. Wynika to głównie z faktu, że dostępna liczba
+            wszystkich możliwych kontenerów razem z ich konfiguracją nie zmienia się po krzyżowaniu, ponieważ
+            stosujemy krzyżowanie w obrębie czwórek liczb, czyli wymieniamy się kontenerami, nie ich parametrami.
+            Zatem to mutacja w sposób bezpieczny (bo tak ją zdefiniowaliśmy) udostępnia nam nowe kombinacje.
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/High_MutationRate.gif"></img></div>
             <h3>Niska częstotliwość krzyżowania</h3>
+            <p>Przy niskim prawdopodbieństwu krzyżowania obserwujemy bardzo małe zmiany. Wynika to z faktu, 
+                że raz ustalone kontenery już nie są wymieniane pomiędzy osobnikami i najlepszy osobnik
+                zostaje najlepszym. Jedynie mutacje wpływają na jego wynik, co widać tu w postaci losowego 
+                przemieszczenia/zamiany jednego z kontenerów.
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/LowMateRate.gif"></img></div>
             <h3>Nietrywialny pomysł</h3>
+            <p>Przy tym eksperymencie penalizowane jest nie tyle samo przecięcie, co pole całego przecięcia. 
+                Szansa na mutację jest 60% a szansa na mutację danego osobnika to zaledwie 2%. Z 2% które 
+                wylosują mutację, kolejne 5% z nich może zmienić swój typ konteneru</p>
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/new_idea.gif"></img></div>
+            <h3>Zbiezność</h3>
+            <p>Poniżej przestawione są wyniki jednego z pierwszych wykonywanych przez nas prototypów. Na wykresach widać
+            zbieżność algorytmu.
+            <div class="plot plot-tiny-width"><img src="img/ea_experiments/convergence_1.png"></img></div>
+            <div class="plot plot-tiny-width"><img src="img/ea_experiments/convergence_2.png"></img></div>
+            <div class="plot plot-tiny-width"><img src="img/ea_experiments/convergence_3.png"></img></div>
+            <p>Zwrócmy uwagę na to, że odległość może najpierw gwałtownie wzrastać ze względu na dodawanie dodatkowych modułów pomocniczych w trakcie pierwszych kilkuset iteracji. Później, kiedy już mamy dobrą liczbę łazienek, kuchni oraz przestrzeni publicznych, zaczyna się wolny proces minimalizacji odległości: kontenery mieszkalne zaczynają zmieniać swoje położenie, żeby zbliżyć się jak najbardziej do najbliższej np. łazienki. Taki sam proces zachodzi dla modułów pomocniczych, które przesuwają się do kontenerów mieszkalnych.
+            <br>
         </div>
     </div>
 
