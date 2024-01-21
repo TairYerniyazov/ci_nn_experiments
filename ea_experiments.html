@@ -142,9 +142,30 @@ Zakodowany typ:   0.0
         <!-- Operatory -->
         <div class="wrapper page">
             <h2>Operator mutacji</h2>
+            <p>Uwzględniając reprezentację osobników, zdefiniowaliśmy operator mutacji, który ponownie generuje
+                losowe liczby z dopuszczalnych zakresów. Mutowanie odbywa się za pomocą funkcji random.uniform()
+                oraz random.int(), które są dostępne w bibliotece standardowej Python (moduł random). Warto
+                Mutujemy liczby zarówno zmiennoprzecinkowe jak i całkowite z rozkładu jednorodnego. W wersjach roboczych 
+                notatnika zawierającego kod źródłowy próbowaliśmy mutować liczbę z pewnym odchyleniem od wartości pierwotnej 
+                zamiast generować liczbę z określonego przedziału od zera. Zbiezność wówczas znacznie się spowolniła.
+            </p>
+            <div class="plot plot-small-height"><img src="img/ea_operators/2.png"></img></div>
             <h2>Operator krzyżowania</h2>
+            <p>Mamy własny operator krzyżowania oparty o krzyżowanie dwupunktowe, tylko że z tą różnicą, że osobniki 
+                wymieniają się kontenerami, zachowując poprawność czwórek liczb, w których zakodowane są parametry opisujące 
+                wygląd, typ oraz położenie kontenerów. </p>
+                <div class="plot plot-small-height"><img src="img/ea_operators/1.png"></img></div>
             <h2>Operator selekcji</h2>
+            Stosujemy selekcję na podstawie turneju o zmiennej liczbie uczestników (jeden z hiperparametrów). Skorzystaliśmy
+            z gotowej implementacji dostępnej w bibliotece DEAP: <b>tools.selTournament</b>. 
+            
+            <p>Przetestowaliśmy oprócz tego
+            operatory które są kompatybilne z naszą reprezentacją: <b>tools.selBest()</b> oraz <b>tools.selRandom()</b>.
+            Nie przyniosło to wtedy pozytywnych wyników, gdyż algorytm zaczynał się cechować rozbieżnością ze względu 
+            na całkowitą liczbę przecięć występujących na zrzutowanym planie. 
+            <br>
         </div>
+
 
         <!-- Dopasowanie -->
         <div class="wrapper page">
