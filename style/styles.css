@@ -41,6 +41,7 @@ p, h1 {
     max-width: 1000px;
     padding: 0px 20px 0 20px;
     margin: 0 auto;
+    overflow: hidden;
 }
 
 header {
@@ -264,12 +265,18 @@ footer p {
     }
 
     #main_logo {
-      padding: 10px 5px 0 0;  
+      padding: 10px 5px 0 0; 
+    }
+}
+
+@media screen and (max-width: 500px) {
+    #main_logo {
+        margin-bottom: 10px;
     }
 
     .main_header h1 {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
-        margin-top: 20px;
+        margin-top: 16px;
     }
 }
