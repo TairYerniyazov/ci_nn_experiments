@@ -158,6 +158,10 @@ footer p {
     max-height: 400px;
 }
 
+.plot-tiny-height {
+    max-height: 300px;
+}
+
 .plot-small-width {
     max-width: 800px;
 }

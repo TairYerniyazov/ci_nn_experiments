@@ -47,9 +47,9 @@
             <p><b>Na wejściu</b> – należy narysować rozmieszczenie kontenerów w zadanym obszarze, tak aby zmieścić jak najwięcej modułów
             mieszkalnych, i jednocześnie zapewnić jak najlepszy dostęp do modułów sanitarnych, kuchni oraz wspólnych, oraz do
             przestrzeni pustej.
-            <p><b>Ułatwienie</b>wszystkie prostokąty maja ten sam rozmiar, można je ustawiać w dowolny sposób, powinna być przestrzeń pusta
+            <p><b>Ułatwienie</b> - wszystkie prostokąty maja ten sam rozmiar, można je ustawiać w dowolny sposób, powinna być przestrzeń pusta
             (przejścia) między modułami. Można ustalić na której ścianie są drzwi, pozostałe ściany mogą do siebie przylegać.</p>
-            
+            <div class="plot"><img src="img/ea_main/container.png"></img></div>
             <ol>
                 <li>Zaproponować reprezentację;</li>
                 <li>zdefiniować operatory (lub wybrać ze standardowych), ustalić ich parametry;</li>
@@ -64,11 +64,79 @@
             <ol>
                 <li><a href="#">DODAĆ LINK DO PROTOTYPU</a></li>
             </ol>
+            <div class="plot"><img src="img/ea_main/colab.png" style="border: 1px solid black;"></img></div>
         </div>
 
         <!-- Reprezentacja -->
         <div class="wrapper page">
             <h2>Reprezentacja osobników</h2>
+            <p>Na wejściu podajemy specyfikujemy następujące parametry:</p>
+            <div class="code-snippet">
+                <pre class="line-numbers">
+                    <code class="language-python">
+                        # Przygotowanie przykładowych stałych parametrów wejściowych
+                            example_input = [
+                                20, 20,             # wymiary obszaru (N x M)
+                                3, 6,               # wymiary kontenera (X x Y)
+                                'vertical'          # położenie drzwi ('vertical', 'horizontal')
+                            ]
+                    </code>
+                </pre>
+            </div>
+            <p>Każdy osobnik to wektor składający się z ciągu czwórek liczb zmiennoprzecinkowych oraz całkowitych. Każda czwórka 
+                reprezentuje parametry potrzebne do określenia pojedynczego kontenera. 
+            <div class="plot plot-tiny-width"><img src="img/ea_representation/1.png"></img></div>
+            <p>Zakładamy, że kontenery mają ustandaryzowany kształt (prostokąt z dołączonymi drzwiami znajdującymi się po 
+                środku któregoś z boków) i zadany niezmienny po odczytu danych wejściowych rozmiar. Jeden taki moduł możemy 
+                opisać, precyzując współrzędne środku prostokąta, kąt obrotu (z krokiem w 90°) oraz typ kontenera (mieszkalny, 
+                łazienki, kuchnia, przestrzeń wspólna).
+            <div class="plot"><img src="img/ea_representation/4.png"></img></div>
+            <p>Za pomocą takiej reprezentacji bardzo łatwo jesteśmy w stanie wygenerować populację, korzystając
+                z narzędzi dostępnych w bibliotece DEAP oraz definiując funkcję generującą kolejne liczby do gotowych czwórek:
+            <div class="code-snippet">
+                <pre class="line-numbers">
+                    <code class="language-python">
+                        # Funkcja generująca kolejne liczby cykilcznie (generator czwórek, z których składa się pojedynczy osobnik)
+                        generator_counter = 0
+                        angle = -1
+                        
+                        def create_individual():
+                            global generator_counter
+                            global angle
+                            r = generator_counter % 4
+                            generator_counter += 1
+                            ... 
+                            return float(random.randint(1, 3))
+
+                        example_container = []
+                        for i in range(4):
+                            example_container.append(create_individual())
+                        print(f"""...""")
+                    </code>
+                </pre>
+                <pre class="command-line" data-filter-output="(out)" data-continuation-str="\">
+============================================================
+Przykładowy kontener:
+============================================================
+Środek kontenera: (6.62737274990303, 4.998759202209863);
+Zakodowany kąt:   3.0;
+Zakodowany typ:   0.0
+                </pre>
+            </div>                
+            <p>Rozmieszczając kontenery na podanym obszarze (o określonych na wejściu wymiarach) możemy napotkać na 
+                różnego rodzaju problemy związane z ograniczonym dostępem do kontenerów na zewnątrz obszaru oraz 
+                utrudnionym bądź w ogóle zablokowanym dostępem do drzwi.
+            Postanowiliśmy z tego powodu uwzględniać położenie drzwi, które rozszerzają teren zajmowany przez 
+            kontener o dodatkowy cienki pasek, podczas sprawdzenia warunku braku nakładających się na siebie prostokątów. 
+            <div class="plot plot-small-height"><img src="img/ea_representation/2.png"></img></div>
+            <p>Oczywiście, w zależności od tego, ile możemy mieć kontenerów, różni nam się maksymalna liczba 
+                możliwych przecięć prostokątów. Może ona się przydać podczas testowania skuteczności działania 
+                algorytmu z punktu widzenia składowej funkcji dopasowania odpowiedzialnej za zapobieganie takim przypadkom.
+            <div class="plot plot-tiny-height"><img src="img/ea_representation/3.png"></img></div>
+            <p>Przykładowo, jeżeli mamy 16 kontenerów, to liczba błędnych rozmieszczeń spowodowanych przecięciem 
+                prostokątów nie może być większa od 120. Wiedząc, jakie jest górne ograniczenie, oraz to, 
+                ile punktów odejmuje za to funkcja dopasowania, możemy łatwo dobierać hiperparametry 
+                algorytmu w trakcie wykonywania eksperymentów.
         </div>
  
         <!-- Operatory -->
