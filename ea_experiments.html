@@ -67,7 +67,7 @@
         <!-- Reprezentacja -->
         <div class="wrapper page">
             <h2>Reprezentacja osobników</h2>
-            <p>Na wejściu podajemy specyfikujemy następujące parametry:</p>
+            <p>Na wejściu podajemy następujące parametry:</p>
             <div class="code-snippet">
                 <pre class="line-numbers">
                     <code class="language-python">
@@ -84,7 +84,7 @@
                 reprezentuje parametry potrzebne do określenia pojedynczego kontenera. 
             <div class="plot plot-tiny-width"><img src="img/ea_representation/1.png"></img></div>
             <p>Zakładamy, że kontenery mają ustandaryzowany kształt (prostokąt z dołączonymi drzwiami znajdującymi się po 
-                środku któregoś z boków) i zadany niezmienny po odczytu danych wejściowych rozmiar. Jeden taki moduł możemy 
+                środku któregoś z boków) i zadany niezmienny po odczycie danych wejściowych rozmiar. Jeden taki moduł możemy 
                 opisać, precyzując współrzędne środku prostokąta, kąt obrotu (z krokiem w 90°) oraz typ kontenera (mieszkalny, 
                 łazienki, kuchnia, przestrzeń wspólna).
             <div class="plot"><img src="img/ea_representation/4.png"></img></div>
@@ -141,7 +141,7 @@ Zakodowany typ:   0.0
             <h2>Operator mutacji</h2>
             <p>Uwzględniając reprezentację osobników, zdefiniowaliśmy operator mutacji, który ponownie generuje
                 losowe liczby z dopuszczalnych zakresów. Mutowanie odbywa się za pomocą funkcji random.uniform()
-                oraz random.int(), które są dostępne w bibliotece standardowej Python (moduł random). Warto
+                oraz random.int(), które są dostępne w bibliotece standardowej Python (moduł random). 
                 Mutujemy liczby zarówno zmiennoprzecinkowe jak i całkowite z rozkładu jednorodnego. W wersjach roboczych 
                 notatnika zawierającego kod źródłowy próbowaliśmy mutować liczbę z pewnym odchyleniem od wartości pierwotnej 
                 zamiast generować liczbę z określonego przedziału od zera. Zbiezność wówczas znacznie się spowolniła.
@@ -157,7 +157,7 @@ Zakodowany typ:   0.0
             z gotowej implementacji dostępnej w bibliotece DEAP: <b>tools.selTournament</b>. 
             
             <p>Przetestowaliśmy oprócz tego
-            operatory które są kompatybilne z naszą reprezentacją: <b>tools.selBest()</b> oraz <b>tools.selRandom()</b>.
+            operatory, które są kompatybilne z naszą reprezentacją: <b>tools.selBest()</b> oraz <b>tools.selRandom()</b>.
             Nie przyniosło to wtedy pozytywnych wyników, gdyż algorytm zaczynał się cechować rozbieżnością ze względu 
             na całkowitą liczbę przecięć występujących na zrzutowanym planie. 
             <br>
@@ -167,7 +167,7 @@ Zakodowany typ:   0.0
         <!-- Dopasowanie -->
         <div class="wrapper page">
             <h2>Funkcja dopasowania</h2>
-            <p>Zwraca n_intersection, n_initialised_containers, n_living_containers, distance_to_auxilary_modules</p>
+            <p>Zwraca n_intersection, n_initialised_containers, n_living_containers, distance_to_auxilary_modules.</p>
             <div class="code-snippet">
                 <pre class="line-numbers">
                     <code class="language-python">
@@ -263,10 +263,9 @@ Zakodowany typ:   0.0
             <h3>n_initialised_containers</h3>
             <p>Liczba kontenerów. Jeśli występuje kara w poprzedniej kategorii, ten parametr jest ustawiany na 0.</p>
             <h3>n_living_containers</h3>
-            <p>Liczba kontenerów mieszkalnych. Są uwzględniane osobno, ponieważ są chcemy ich więcej, niż pozostałych kontenerów.</p>
+            <p>Liczba kontenerów mieszkalnych. Są uwzględniane osobno, ponieważ chcemy ich więcej, niż pozostałych kontenerów.</p>
             <h3>distance_to_auxilary_modules</h3>
             <p>Dla każdego konteneru mieszkalnego odległość do najbliższych kontenerów niemieszkalnych.</p>
-            <!-- <div class="plot plot-tiny-width"><img src="img/ea_representation/1.png"></img></div> -->
         </div>
  
         <!-- Eksperymenty -->
@@ -274,7 +273,7 @@ Zakodowany typ:   0.0
             <h2>Przykłady</h2>
             <p><b>Inicjalizacja:</b> początkowo generujemy 10% modułów niezainicjalizowanych (obszary puste), 90% modułów zainicjalizowanych
                 losowo, z których mamy 50% na kontenery mieszkalne i 50% na inne. Dzięki mutacjom oraz krzyżowaniu
-                algorytm potrafi samodzielnie dobrać optymalną liczbę potrzebnych kontenerów
+                algorytm potrafi samodzielnie dobrać optymalną liczbę potrzebnych kontenerów.
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/0.png"></img></div>
             <p>Na obrazku widzimy przykładowy wynik po zaledwie 1000 pokoleniach. Nawet w środowisku Colab da się
             otrzymać całkiem sensowne, choć niedealne wyniki w ciągu kilku minut:
@@ -286,7 +285,7 @@ Zakodowany typ:   0.0
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/3.gif"></img></div>
             <p><b>Warunek stopu:</b> jak widać, nie zawsze jest sens polegać tylko na górne ograczenie na maksymalną 
                 liczbę pokoleń. Dlatego postanowiliśmy definiować parametr "epsilon" opisujący minimalny próg, 
-                który kolejne pokolenia powinno przejść, by udowodnić, że udało im się czymś wyróżnić. 
+                który kolejne pokolenie powinno przejść, by udowodnić, że udało mu się czymś wyróżnić. 
                 Oprócz tego mamy parametr "no_change", który pokazuje ile pokoleń wcześniej powinna być 
                 taka sama wartość dopasowania (np. jak 100 pokoleń mamy to samo, to mamy no_change=100)</p>
             <div class="plot"><img src="img/ea_experiments/stop.png"></img></div>
@@ -306,10 +305,10 @@ Zakodowany typ:   0.0
             <h3>Nietrywialny pomysł</h3>
             <p>Przy tym eksperymencie penalizowane jest nie tyle samo przecięcie, co pole całego przecięcia. 
                 Szansa na mutację jest 60% a szansa na mutację danego osobnika to zaledwie 2%. Z 2% które 
-                wylosują mutację, kolejne 5% z nich może zmienić swój typ konteneru</p>
+                wylosują mutację, kolejne 5% z nich może zmienić swój typ konteneru.</p>
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/new_idea.gif"></img></div>
-            <h3>Zbiezność</h3>
-            <p>Poniżej przestawione są wyniki jednego z pierwszych wykonywanych przez nas prototypów. Na wykresach widać
+            <h3>Zbieżność</h3>
+            <p>Poniżej przestawione są wyniki jednego z pierwszych wykonywanych przez nas eksperymentów. Na wykresach widać
             zbieżność algorytmu.
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/convergence_1.png"></img></div>
             <div class="plot plot-tiny-width"><img src="img/ea_experiments/convergence_2.png"></img></div>
